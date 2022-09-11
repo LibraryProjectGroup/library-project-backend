@@ -1,5 +1,6 @@
 # library-project-backend
 
+<<<<<<< HEAD
 ### Note:
 
 The backend server is run during development with [ts-node](https://www.npmjs.com/package/ts-node). Ts-node is now included in development dependencies, and the server can be started with `npm start`. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
@@ -165,3 +166,8 @@ Response schema:
     }
 }
 ```
+=======
+# Docker Help
+Building the docker image: `docker image build .`  
+Running the docker image: `docker run -p 3000:3000 <docker image>`
+>>>>>>> f2af363 (Created basic docker file, and added some examples to readme.md)

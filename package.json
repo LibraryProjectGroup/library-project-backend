@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "ts-node ./src/server.ts",
     "test": "jest"
+=======
+    "build": "tsc"
+>>>>>>> f2af363 (Created basic docker file, and added some examples to readme.md)
   },
   "author": "",
   "license": "ISC",

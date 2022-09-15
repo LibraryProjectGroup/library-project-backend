@@ -5,7 +5,35 @@ Use **ts-node** to run the server. <br> ts-node is not included in package.json.
 
 🚧 //Under construction// 🚧
 <br>
+
+## Enpoints
+
+
+
+Endpoint : **user/{}
+Endpoint: **book/{author}&{title}**
+
+
+Example response
+<br>
+Response schema: 
 Endpoint: **books**
+```JSON
+{   
+    "title": "Book",
+    "description": "Book",
+    "type": "object",
+    "properties":{
+      "libraryUser":{"type":"User"},
+      "topic":{"type":"Topic"},
+      "title":{"type":"string"},
+      "author":{"type":"string"},
+      "isbn":{"type":"string"},
+      "location":{"type":"string"}
+    }
+}
+```
+
 
 Example response: 
 <br>
@@ -25,6 +53,5 @@ Response schema:
       "isbn":{"type":"string"},
       "location":{"type":"string"}
     }
-    
 }
 ```

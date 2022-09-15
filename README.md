@@ -10,14 +10,13 @@ Use **ts-node** to run the server. <br> ts-node is not included in package.json.
 
 
 
-Endpoint : **user/{}
+Endpoint : **user/{??}
 Endpoint: **book/{author}&{title}**
 
 
-Example response
+Example response:
 <br>
 Response schema: 
-Endpoint: **books**
 ```JSON
 {   
     "title": "Book",
@@ -34,7 +33,7 @@ Endpoint: **books**
 }
 ```
 
-
+Endpoint: **books**
 Example response: 
 <br>
 Response schema: 

@@ -10,7 +10,7 @@ Use **ts-node** to run the server. <br> ts-node is not included in package.json.
 
 
 
-
+### Book
 #### /book?{id} (GET)
 
 Response schema: 
@@ -97,7 +97,7 @@ Response schema:
     }
 }
 ```
-
+### User
 #### /user?{id} (GET)
 
 Response schema: 

@@ -53,3 +53,43 @@ Response schema:
     }
 }
 ```
+
+#### Endpoint: **GET user/{userId}**
+<br>
+Example response:
+<br>
+Response schema: 
+```JSON
+{   
+    "type":"array",
+  "items": {
+    "title": "User",
+    "description": "User",
+    "type": "object",
+    "properties":{
+      "libraryBook":{"type":"Book"},
+      "userId":{"type":"string"},
+      "userName":{"type":"string"},
+    }
+}
+```
+
+Endpoint: **/users**
+<br>
+Example response: 
+<br>
+Response schema: 
+```JSON
+{
+  "type":"array",
+  "items": {
+    "title": "User",
+    "description": "User",
+    "type": "object",
+    "properties":{
+      "libraryBook":{"type":"Book"},
+      "userId":{"type":"string"},
+      "userName":{"type":"string"},
+    }
+}
+```

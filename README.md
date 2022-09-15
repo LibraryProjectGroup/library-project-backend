@@ -6,14 +6,12 @@ Use **ts-node** to run the server. <br> ts-node is not included in package.json.
 🚧 //Under construction// 🚧
 <br>
 
-## Enpoints
+## Endpoints
 
 
 
-Endpoint : **user/{??}
-Endpoint: **book/{author}&{title}**
-
-
+#### Endpoint: **GET book/{author}&{title}**
+<br>
 Example response:
 <br>
 Response schema: 
@@ -33,7 +31,8 @@ Response schema:
 }
 ```
 
-Endpoint: **books**
+Endpoint: **/books**
+<br>
 Example response: 
 <br>
 Response schema: 

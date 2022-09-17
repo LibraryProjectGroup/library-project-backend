@@ -1,7 +1,8 @@
-import express, { Express, Request, Response } from 'express'
+import express, { Express, Request, response, Response } from 'express'
 import cors from 'cors'
 import mysql from "mysql"
 import Book from './interfaces/book.interface'
+
 
 const DATABASE_NAME = 'efilibrarydb'
 const DATABASE_USER = 'root'
@@ -18,35 +19,61 @@ const EXAMPLE_BOOK: Book = {
 const app: Express = express()
 app.use(cors())
 
-const dbConnection = mysql.createConnection({
+const pool = mysql.createPool({
     host: 'localhost',
     user: DATABASE_USER,
     password: DATABASE_PASSWORD,
     database: DATABASE_NAME
 })
 
-//------------- Endpoints ------------
+//------------ Responses -----------
+// Queries in mysql library don't return a promise, so responses have to be handled in a callback function.
+
+const responseAllBooks = async(res:Response) => {
+    pool.query("SELECT * FROM book", (error, result, fields)=>{
+        if (error) throw error;
+        sendResponse(res, result)
+    })
+}
+
+const responseBook = async(res:Response, id:string, requestMethod:string) => {
+    pool.query("SELECT * FROM book WHERE book.id = ?", [id], (error, result, fields)=>{
+        if (error) throw error;
+        if(result.length === 1){
+            sendResponse(res, result[0])
+        } else{
+            sendResponse(res, {"result":"null"})
+        }
+    })
+}
+
+const sendResponse = async(res: Response, queryResult: any) => {
+    res.json(queryResult)
+}
+
+//------------- Endpoints -----------
+
+app.get('/allbooks', function (req: Request, res: Response) {
+    responseAllBooks(res)
+})
+
+app.get('/book', function (req: Request, res: Response) {
+    responseBook(res, req.query.id as string, "get")
+})
+
+/* TODO: 
+app.post('/book', function (req: Request, res: Response) {
+    responseBook(res, req, "post")
+})
+*/
+
 app.get('/example', function (req: Request, res: Response) {
-    console.log(`Got request from ${req.get("origin")}. Yay!`);
+    console.log(`Got a request from ${req.get("origin")}. Yay!`);
     res.json(EXAMPLE_BOOK)
 })
 
-app.get('/allbooks', function (req: Request, res: Response) {
-
-    let queryResult = null
-    dbConnection.connect()
-    dbConnection.query('SELECT * FROM book', (err, rows, fields) => {
-        if (err) throw err
-        queryResult = rows
-        console.log(rows)
-    })
-    dbConnection.end()
-    // Because of asynchronicity, this will log first and res.json will respond with queryValue that is null.
-    // TODO: asynchronous response.
-    console.log(queryResult)
-    res.json(queryResult)
-})
-  
 
 app.listen(3001)
 console.log("Server running on port 3001")
+
+

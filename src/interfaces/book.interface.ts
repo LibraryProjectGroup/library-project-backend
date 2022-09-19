@@ -1,5 +1,7 @@
 interface Book {
-    owner: string,
+    id?: number,
+    // TODO: User interface
+    library_user?: string,
     title: string,
     author: string,
     topic: string,

@@ -53,12 +53,14 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
                     sendResponse(res, {'result':'null'})
                 }
             })
+            break;
 
         case 'delete':
             pool.query('DELETE FROM book WHERE id=?', [bookId], (error, result, fields)=>{
                 if (error) throw error;
                 sendResponse(res, {'status':'ok'})
             })
+            break;
 
         case 'post':
             // Temporary fix for DB not having auto incrementing id's. 
@@ -67,6 +69,7 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
                 if (error) throw error;
                 sendResponse(res, {'status':'ok'})
             })
+            break;
         
         case 'put':
             const sqlQuery = `UPDATE book set title='${editedBook?.title}', author='${editedBook?.author}', topic='${editedBook?.topic}', isbn='${editedBook?.isbn}', location='${editedBook?.location}' WHERE book.id=${bookId}`
@@ -104,6 +107,8 @@ app.post('/book', function (req: Request, res: Response) {
         isbn: req.query.isbn as string,
         location: req.query.location as string
     }
+    console.log("REQUEST")
+    console.log(req)
     responseBook(res, req.query.id as string , 'post', editedBook)
 })
 
@@ -116,6 +121,8 @@ app.put('/book', function (req: Request, res: Response) {
         isbn: req.query.isbn as string,
         location: req.query.location as string
     }
+    console.log("REQUEST")
+    console.log(req)
     responseBook(res, req.query.id as string , 'put', editedBook)
 })
 

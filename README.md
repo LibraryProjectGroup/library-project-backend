@@ -107,7 +107,7 @@ Response schema:
     }
 }
 ```
-### User **(not working yet)**
+### User **(⚠ not working yet)**
 #### /user?id={id} (GET)
 
 Response schema: 

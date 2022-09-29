@@ -21,7 +21,7 @@ Database name, user, and password can be found on Discord.
 
 
 ### Book
-#### /book?{id} (GET)
+#### /book?id={id} (GET)
 
 Response schema: 
 
@@ -42,7 +42,7 @@ Response schema:
 }
 ```
 
-#### /book?{title}&{author}&{isbn}&{topic}&{location} (POST)
+#### /book?title={title}&author={author}&isbn={isbn}&topic={topic}&location={location} (POST)
 
 Response schema:
 
@@ -57,7 +57,7 @@ Response schema:
 }
 ```
 
-#### /book?{bookid}&{userid}&{title}&{author}&{isbn}&{topic}&{location} (PUT)
+#### /book?id={id}&title={title}&author={author}&isbn={isbn}&topic={topic}&location={location} (PUT)
 
 Response schema:
 
@@ -72,7 +72,7 @@ Response schema:
 }
 ```
 
-#### /book?{id} (DELETE)
+#### /book?id={id} (DELETE)
 
 Response schema:
 ```JSON
@@ -86,7 +86,7 @@ Response schema:
 }
 ```
 
-#### /books (GET)
+#### /allbooks (GET)
 
 Response schema: 
 
@@ -107,8 +107,8 @@ Response schema:
     }
 }
 ```
-### User
-#### /user?{id} (GET)
+### User **(not working yet)**
+#### /user?id={id} (GET)
 
 Response schema: 
 

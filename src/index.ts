@@ -2,11 +2,9 @@ import express, { Express, Request, response, Response } from 'express'
 import cors from 'cors'
 import mysql from "mysql"
 import Book from './interfaces/book.interface'
+import { DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } from './secrets'
 
 
-const DATABASE_NAME = 'efilibrarydb'
-const DATABASE_USER = 'root'
-const DATABASE_PASSWORD = 'superSecretPasswordInPlainText'
 const EXAMPLE_BOOK: Book = {
     id: 1,
     library_user: "John Doe",
@@ -34,11 +32,10 @@ const pool = mysql.createPool({
 // Queries in mysql library don't return a promise, so responses have to be handled in a callback function.
 
 const responseAllBooks = async(res:Response) => {
-    /*pool.query('SELECT * FROM book', (error, result, fields)=>{
+    pool.query('SELECT * FROM book', (error, result, fields)=>{
         if (error) throw error;
         sendResponse(res, result)
-    })*/
-    sendResponse(res, EXAMPLE_BOOKS)
+    })
 }
 
 const responseBook = async(res:Response, bookId:string, requestMethod:string, editedBook?:Book) => {
@@ -107,8 +104,6 @@ app.post('/book', function (req: Request, res: Response) {
         isbn: req.query.isbn as string,
         location: req.query.location as string
     }
-    console.log("REQUEST")
-    console.log(req)
     responseBook(res, req.query.id as string , 'post', editedBook)
 })
 
@@ -121,8 +116,6 @@ app.put('/book', function (req: Request, res: Response) {
         isbn: req.query.isbn as string,
         location: req.query.location as string
     }
-    console.log("REQUEST")
-    console.log(req)
     responseBook(res, req.query.id as string , 'put', editedBook)
 })
 
@@ -133,7 +126,7 @@ app.get('/example', function (req: Request, res: Response) {
 })
 
 
-app.listen(3001)
-console.log("Server running on port 3001")
+app.listen(15001)
+console.log("Server running on port 15001")
 
 export default app

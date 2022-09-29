@@ -3,6 +3,17 @@
 ### Note:
 Use **ts-node** to run the server. <br> ts-node is not included in package.json. Instead, use *npm install -g ts-node* to install ts-node globally.
 
+### Note #2:
+Database connection doesn't work without **secrets.ts** in **/src** folder. secrets.ts is set to be ignored by git with .gitignore, so create secrets.ts locally. <br> secrets.ts is in the form of: <br>
+``` 
+    const DATABASE_NAME = ???
+    const DATABASE_USER = ???
+    const DATABASE_PASSWORD = ???
+    
+    export { DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD }
+```
+Database name, user, and password can be found on Discord.
+
 <br>
 
 ## Endpoints

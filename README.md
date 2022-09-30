@@ -6,11 +6,12 @@ Use **ts-node** to run the server. <br> ts-node is not included in package.json.
 ### Note #2:
 Database connection doesn't work without **secrets.ts** in **/src** folder. secrets.ts is set to be ignored by git with .gitignore, so create secrets.ts locally. <br> secrets.ts is in the form of: <br>
 ``` 
+    const DATABASE_SERVER = ???
     const DATABASE_NAME = ???
     const DATABASE_USER = ???
     const DATABASE_PASSWORD = ???
     
-    export { DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD }
+    export { DATABASE_SERVER, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD }
 ```
 Database name, user, and password can be found on Discord.
 

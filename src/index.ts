@@ -2,7 +2,7 @@ import express, { Express, Request, response, Response } from 'express'
 import cors from 'cors'
 import mysql from "mysql"
 import Book from './interfaces/book.interface'
-import { DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } from './secrets'
+import { DATABASE_SERVER, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } from './secrets'
 
 
 const EXAMPLE_BOOK: Book = {
@@ -22,7 +22,7 @@ const app: Express = express()
 app.use(cors())
 
 const pool = mysql.createPool({
-    host: 'localhost',
+    host: DATABASE_SERVER,
     user: DATABASE_USER,
     password: DATABASE_PASSWORD,
     database: DATABASE_NAME

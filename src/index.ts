@@ -126,7 +126,4 @@ app.get('/example', function (req: Request, res: Response) {
 })
 
 
-app.listen(15001)
-console.log("Server running on port 15001")
-
 export default app

@@ -1,7 +1,14 @@
 # library-project-backend
 
 ### Note:
-Use **ts-node** to run the server. <br> ts-node is not included in package.json. Instead, use *npm install -g ts-node* to install ts-node globally.
+
+The backend server is run during development with [ts-node](https://www.npmjs.com/package/ts-node). Ts-node is now included in development dependencies, and the server can be started with `npm start`. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
+
+```sh
+$ npm install
+$ npm start
+# open http://localhost:3000
+```
 
 ### Note #2:
 Database connection doesn't work without **secrets.ts** in **/src** folder. secrets.ts is set to be ignored by git with .gitignore, so create secrets.ts locally. <br> secrets.ts is in the form of: <br>

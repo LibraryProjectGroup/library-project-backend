@@ -19,6 +19,25 @@
 CREATE DATABASE IF NOT EXISTS `efilibrarydb` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `efilibrarydb`;
 
+-- Dumping structure for table efilibrarydb.library_user
+CREATE TABLE IF NOT EXISTS `library_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `passw` varchar(150) NOT NULL,
+  `administrator` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UQ_libary_user_username` (`username`),
+  CONSTRAINT `CHK_libary_user_username_not_empty` CHECK (char_length(`username`) > 0)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table efilibrarydb.library_user: ~4 rows (approximately)
+INSERT INTO `library_user` (`id`, `username`, `passw`, `administrator`) VALUES
+	(3, 'hemuli', 'qweqweqwe', 0),
+	(4, 'joonajoo', 'soin5oeran', 1),
+	(5, 'mikkoR', '4egdv3a453', 0),
+	(6, 'Erika', 'h4whs54htrh', 1);
+
+
 -- Dumping structure for table efilibrarydb.book
 CREATE TABLE IF NOT EXISTS `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -60,23 +79,6 @@ INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, 
 	(6, 5, 5, '2022-08-18', '2022-08-11', b'1'),
 	(7, 4, 6, '2022-09-29', '2022-09-22', b'0');
 
--- Dumping structure for table efilibrarydb.library_user
-CREATE TABLE IF NOT EXISTS `library_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `passw` varchar(150) NOT NULL,
-  `administrator` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UQ_libary_user_username` (`username`),
-  CONSTRAINT `CHK_libary_user_username_not_empty` CHECK (char_length(`username`) > 0)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-
--- Dumping data for table efilibrarydb.library_user: ~4 rows (approximately)
-INSERT INTO `library_user` (`id`, `username`, `passw`, `administrator`) VALUES
-	(3, 'hemuli', 'qweqweqwe', 0),
-	(4, 'joonajoo', 'soin5oeran', 1),
-	(5, 'mikkoR', '4egdv3a453', 0),
-	(6, 'Erika', 'h4whs54htrh', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

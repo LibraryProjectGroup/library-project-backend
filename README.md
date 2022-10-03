@@ -11,7 +11,7 @@ $ npm start
 ```
 
 ### Note #2:
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. <br> secrets.ts is in the form of: <br>
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. <br> .env is in the form of: <br>
 ``` 
     DATABASE_SERVER = ???
     DATABASE_NAME = ???

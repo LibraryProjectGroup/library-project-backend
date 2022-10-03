@@ -1,9 +1,19 @@
+import "dotenv/config"
 import express, { Express, Request, response, Response } from 'express'
 import cors from 'cors'
 import mysql from "mysql"
 import Book from './interfaces/book.interface'
-import { DATABASE_SERVER, DATABASE_NAME, DATABASE_USER, DATABASE_PASSWORD } from './secrets'
 
+declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            DATABASE_SERVER: string
+            DATABASE_NAME: string
+            DATABASE_USER: string
+            DATABASE_PASSWORD: string
+        }
+    }
+}
 
 const EXAMPLE_BOOK: Book = {
     id: 1,
@@ -22,10 +32,10 @@ const app: Express = express()
 app.use(cors())
 
 const pool = mysql.createPool({
-    host: DATABASE_SERVER,
-    user: DATABASE_USER,
-    password: DATABASE_PASSWORD,
-    database: DATABASE_NAME
+    host: process.env.DATABASE_SERVER,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
 })
 
 //------------ Responses -----------

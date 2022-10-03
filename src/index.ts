@@ -43,7 +43,10 @@ const pool = mysql.createPool({
 
 const responseAllBooks = async(res:Response) => {
     pool.query('SELECT * FROM book', (error, result, fields)=>{
-        if (error) throw error;
+        if (error) {
+            sendError(res, error, 500)
+            return
+        }
         sendResponse(res, result)
     })
 }
@@ -53,7 +56,10 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
 
         case 'get':
             pool.query('SELECT * FROM book WHERE book.id = ?', [bookId], (error, result, fields)=>{
-                if (error) throw error;
+                if (error) {
+                    sendError(res, error, 500)
+                    return
+                }
                 if(result.length === 1){
                     sendResponse(res, result[0])
                 } else{
@@ -64,7 +70,10 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
 
         case 'delete':
             pool.query('DELETE FROM book WHERE id=?', [bookId], (error, result, fields)=>{
-                if (error) throw error;
+                if (error) {
+                    sendError(res, error, 500)
+                    return
+                }
                 sendResponse(res, {'status':'ok'})
             })
             break;
@@ -73,7 +82,10 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
             // Temporary fix for DB not having auto incrementing id's. 
             const randomId = Math.floor(Math.random() * 99999);
             pool.query('INSERT INTO book (id, library_user, title, author, topic, isbn, location) VALUES (?)', [[randomId,1, editedBook?.title,editedBook?.author, editedBook?.topic, editedBook?.isbn, editedBook?.location]], (error, result, fields)=>{
-                if (error) throw error;
+                if (error) {
+                    sendError(res, error, 500)
+                    return
+                }
                 sendResponse(res, {'status':'ok'})
             })
             break;
@@ -81,7 +93,10 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
         case 'put':
             const sqlQuery = `UPDATE book set title='${editedBook?.title}', author='${editedBook?.author}', topic='${editedBook?.topic}', isbn='${editedBook?.isbn}', location='${editedBook?.location}' WHERE book.id=${bookId}`
             pool.query(sqlQuery, (error, result, fields)=>{
-                if (error) throw error;
+                if (error) {
+                    sendError(res, error, 500)
+                    return
+                }
                 sendResponse(res, {'status':'ok'})
             })
     }
@@ -89,6 +104,11 @@ const responseBook = async(res:Response, bookId:string, requestMethod:string, ed
 
 const sendResponse = async(res: Response, queryResult: any) => {
     res.json(queryResult)
+}
+
+const sendError = async(res: Response, error: any, code: number) => {
+    console.error(error)
+    sendResponse(res, {'status':code})
 }
 
 //------------- Endpoints -----------

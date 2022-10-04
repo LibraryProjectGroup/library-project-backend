@@ -9,6 +9,7 @@ import {
     DATABASE_PASSWORD,
 } from './secrets';
 import routeBook from './routes/book';
+import routeUser from './routes/user';
 
 const EXAMPLE_BOOK: Book = {
     id: 1,
@@ -38,5 +39,6 @@ const pool = mysql.createPool({
 });
 
 routeBook(app, pool);
+routeUser(app, pool);
 
 export default app;

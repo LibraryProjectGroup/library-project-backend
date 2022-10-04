@@ -9,9 +9,7 @@ import {
 } from '../queries/userQueries';
 import User from '../interfaces/user.interface';
 
-const routeBook = (app: Express, pool: Pool) => {
-    const route = '/book';
-
+const routeUser = (app: Express, pool: Pool) => {
     app.get('/allusers', async (req: Request, res: Response) => {
         const usersResult = await querySelectAllUsers(pool);
         res.json(usersResult);
@@ -52,4 +50,4 @@ const routeBook = (app: Express, pool: Pool) => {
     });
 };
 
-export default routeBook;
+export default routeUser;

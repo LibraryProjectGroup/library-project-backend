@@ -10,8 +10,6 @@ import {
 import Book from '../interfaces/book.interface';
 
 const routeBook = (app: Express, pool: Pool) => {
-    const route = '/book';
-
     app.get('/allbooks', async (req: Request, res: Response) => {
         const booksResult = await querySelectAllBooks(pool);
         res.json(booksResult);

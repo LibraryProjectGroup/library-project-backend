@@ -3,7 +3,7 @@ interface User {
     email?: string;
     username: string;
     password: string;
-    administrator: boolean;
+    administrator: boolean | number;
 }
 
 export default User;

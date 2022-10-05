@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
   `book` int(11) NOT NULL,
   `dueDate` date NOT NULL,
   `borrowDate` date NOT NULL,
-  `returned` bit(1) NOT NULL,
+  `returned` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `library_user` (`library_user`),
   KEY `book` (`book`),

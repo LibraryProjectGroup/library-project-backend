@@ -45,8 +45,8 @@ const routeUser = (app: Express, pool: Pool) => {
             password: req.query.password as string,
             administrator: parseInt(req.query.administrator as any) as number,
         };
-        const insertResult = await queryUpdateUser(pool, user);
-        res.json({ ok: insertResult });
+        const updateResult = await queryUpdateUser(pool, user);
+        res.json({ ok: updateResult });
     });
 };
 

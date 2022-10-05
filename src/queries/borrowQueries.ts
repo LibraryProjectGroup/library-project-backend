@@ -14,7 +14,6 @@ const querySelectBorrow = async (pool: Pool, borrowingId: string) => {
         'SELECT * FROM borrowing WHERE id = ?',
         [borrowingId]
     );
-    console.log(rows);
     const resultBorrow: Borrow = JSON.parse(JSON.stringify(rows))[0] as Borrow;
     return resultBorrow;
 };
@@ -54,9 +53,31 @@ const queryInsertBorrow = async (pool: Pool, borrow: Borrow) => {
     }
 };
 
+const queryUpdateBorrow = async (pool: Pool, borrow: Borrow) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        'UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?) WHERE id=(?)',
+        [
+            borrow.user,
+            borrow.book,
+            borrow.borrowDate,
+            borrow.dueDate,
+            borrow.returned,
+            borrow.id,
+        ]
+    );
+    const rowsObject = JSON.parse(JSON.stringify(rows));
+    if (rowsObject.affectedRows != 0) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 export {
     queryInsertBorrow,
     querySelectAllBorrows,
     querySelectBorrow,
     queryDeleteBorrow,
+    queryUpdateBorrow,
 };

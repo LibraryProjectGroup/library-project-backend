@@ -5,6 +5,7 @@ import {
     querySelectAllBorrows,
     querySelectBorrow,
     queryDeleteBorrow,
+    queryUpdateBorrow,
 } from '../queries/borrowQueries';
 import Borrow from '../interfaces/borrow.interface';
 
@@ -33,6 +34,18 @@ const routeBorrow = (app: Express, pool: Pool) => {
         };
         const insertResult = await queryInsertBorrow(pool, borrow);
         res.json({ ok: insertResult });
+    });
+    app.put('/borrow', async (req: Request, res: Response) => {
+        const borrow: Borrow = {
+            id: parseInt(req.query.id as any) as number,
+            user: parseInt(req.query.user as string),
+            book: parseInt(req.query.book as string),
+            borrowDate: req.query.borrowdate as any as Date,
+            dueDate: req.query.duedate as any as Date,
+            returned: req.query.returned as any as boolean,
+        };
+        const updateResult = await queryUpdateBorrow(pool, borrow);
+        res.json({ ok: updateResult });
     });
 };
 

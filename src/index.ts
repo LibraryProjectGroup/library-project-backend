@@ -11,6 +11,7 @@ import {
 import routeBook from './routes/book';
 import routeUser from './routes/user';
 import routeExample from './routes/example';
+import { routeBorrow } from './routes/borrow';
 
 const app: Express = express();
 app.use(cors());
@@ -24,6 +25,7 @@ const pool = mysql.createPool({
 
 routeBook(app, pool);
 routeUser(app, pool);
+routeBorrow(app, pool);
 routeExample(app);
 
 export default app;

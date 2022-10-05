@@ -11,17 +11,17 @@ import Borrow from '../interfaces/borrow.interface';
 const routeBorrow = (app: Express, pool: Pool) => {
     app.get('/allborrows', async (req: Request, res: Response) => {
         const booksResult = await querySelectAllBorrows(pool);
-        res.json(booksResult);
+        res.json({ ok: booksResult });
     });
     app.get('/borrow', async (req: Request, res: Response) => {
         const borrowId = req.query.id as string;
         const booksResult = await querySelectBorrow(pool, borrowId);
-        res.json(booksResult);
+        res.json({ ok: booksResult });
     });
     app.delete('/borrow', async (req: Request, res: Response) => {
         const borrowId = req.query.id as string;
         const booksResult = await queryDeleteBorrow(pool, borrowId);
-        res.json(booksResult);
+        res.json({ ok: booksResult });
     });
     app.post('/borrow', async (req: Request, res: Response) => {
         const borrow: Borrow = {

@@ -14,7 +14,8 @@ const querySelectBorrow = async (pool: Pool, borrowingId: string) => {
         'SELECT * FROM borrowing WHERE id = ?',
         [borrowingId]
     );
-    const resultBorrow: Borrow = JSON.parse(JSON.stringify(rows)[0]) as Borrow;
+    console.log(rows);
+    const resultBorrow: Borrow = JSON.parse(JSON.stringify(rows))[0] as Borrow;
     return resultBorrow;
 };
 

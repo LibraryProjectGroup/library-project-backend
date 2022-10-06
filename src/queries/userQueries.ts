@@ -1,70 +1,47 @@
-import { Pool } from 'mysql2';
+import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2';
 import User from '../interfaces/user.interface';
+import { pool } from '../index';
 
-// A hacky way to get an array of objects from a RowDataPacket. More appropriate way could be a todo.
-function rowDataPacketToObject(rowDataPacket: any): Array<object> {
-    return JSON.parse(JSON.stringify(rowDataPacket));
-}
-
-const querySelectAllUsers = async (pool: Pool) => {
+const querySelectAllUsers = async () => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query('SELECT * FROM library_user');
-    const resultBooks: Array<User> = rows as Array<User>;
-    return resultBooks;
+    return rows as Array<User>;
 };
 
-const querySelectUser = async (pool: Pool, userId: string) => {
+const querySelectUser = async (userId: string) => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query(
+    const [rows] = await promisePool.query<RowDataPacket[]>(
         'SELECT * FROM library_user WHERE id = ?',
         [userId]
     );
-    // Needs maybe another function to more reliably and ORMishly make rowDataPacket a Book?
-    const resultUser: User = rowDataPacketToObject(rows)[0] as User;
-    return resultUser;
+    return rows[0] as User;
 };
 
-const queryDeleteUser = async (pool: Pool, userId: string) => {
+const queryDeleteUser = async (userId: string) => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query(
+    const [rows] = await promisePool.query<ResultSetHeader>(
         'DELETE FROM library_user WHERE id=?',
         [userId]
-    ); // rows type is ResultSetHeader. (╯°□°)╯︵ ┻━┻
-    const rowsObject = JSON.parse(JSON.stringify(rows));
-    if (rowsObject.affectedRows != 0) {
-        return true;
-    } else {
-        return false;
-    }
+    );
+    return rows.affectedRows != 0;
 };
 
-const queryInsertUser = async (pool: Pool, user: User) => {
+const queryInsertUser = async (user: User) => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query(
+    const [rows] = await promisePool.query<ResultSetHeader>(
         'INSERT INTO library_user (username, passw, administrator) VALUES (?)',
         [[user.username, user.password, user.administrator]]
     );
-    // ditto
-    const rowsObject = JSON.parse(JSON.stringify(rows));
-    if (rowsObject.affectedRows != 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return rows.affectedRows != 0;
 };
 
-const queryUpdateUser = async (pool: Pool, user: User) => {
+const queryUpdateUser = async (user: User) => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query(
+    const [rows] = await promisePool.query<ResultSetHeader>(
         'UPDATE library_user SET username=(?), passw=(?), administrator=(?) WHERE id=(?)',
         [user.username, user.password, user.administrator, user.id]
     );
-    const rowsObject = JSON.parse(JSON.stringify(rows));
-    if (rowsObject.affectedRows != 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return rows.affectedRows != 0;
 };
 
 export {

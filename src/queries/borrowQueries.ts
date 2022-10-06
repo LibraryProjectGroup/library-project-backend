@@ -1,10 +1,20 @@
 import { Pool } from 'mysql2';
 import Borrow from '../interfaces/borrow.interface';
+import Book from '../interfaces/book.interface';
 
 const querySelectAllBorrows = async (pool: Pool) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query('SELECT * FROM borrowing');
     const resultBooks: Array<Borrow> = rows as Array<Borrow>;
+    return resultBooks;
+};
+
+const querySelectAllCurrentlyBorrowed = async (pool: Pool) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        'SELECT book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location FROM book INNER JOIN borrowing ON borrowing.book = book.id WHERE borrowing.returned = 0'
+    );
+    const resultBooks: Array<Book> = rows as Array<Book>;
     return resultBooks;
 };
 
@@ -80,4 +90,5 @@ export {
     querySelectBorrow,
     queryDeleteBorrow,
     queryUpdateBorrow,
+    querySelectAllCurrentlyBorrowed,
 };

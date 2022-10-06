@@ -6,12 +6,17 @@ import {
     querySelectBorrow,
     queryDeleteBorrow,
     queryUpdateBorrow,
+    querySelectAllCurrentlyBorrowed,
 } from '../queries/borrowQueries';
 import Borrow from '../interfaces/borrow.interface';
 
 const routeBorrow = (app: Express, pool: Pool) => {
     app.get('/allborrows', async (req: Request, res: Response) => {
         const booksResult = await querySelectAllBorrows(pool);
+        res.json({ ok: booksResult });
+    });
+    app.get('/currentborrows', async (req: Request, res: Response) => {
+        const booksResult = await querySelectAllCurrentlyBorrowed(pool);
         res.json({ ok: booksResult });
     });
     app.get('/borrow', async (req: Request, res: Response) => {

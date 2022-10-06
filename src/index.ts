@@ -1,10 +1,14 @@
 import 'dotenv/config';
-import express, { Express } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import mysql from 'mysql2';
+import cookieParser from 'cookie-parser';
+import authRouter from './routes/auth';
 import bookRouter from './routes/book';
 import userRouter from './routes/user';
 import exampleRouter from './routes/example';
+import Session from './interfaces/session.interface';
+import { querySelectSessionBySecret } from './queries/session';
 
 declare global {
     namespace NodeJS {
@@ -16,11 +20,32 @@ declare global {
             PORT: string;
         }
     }
+
+    namespace Express {
+        interface Request {
+            session: Session;
+        }
+    }
 }
 
 const app: Express = express();
 app.use(cors());
+app.use(cookieParser());
 
+app.use('/auth', authRouter);
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.cookies || !req.cookies.librarySession) return res.sendStatus(401);
+    try {
+        let session = await querySelectSessionBySecret(
+            req.cookies.librarySession
+        );
+        if (session == null) return res.sendStatus(401);
+        req.session = session;
+    } catch (err) {
+        console.error(err);
+    }
+    next();
+});
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
 app.use('/example', exampleRouter);

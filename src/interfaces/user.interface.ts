@@ -1,8 +1,8 @@
 interface User {
-    id?: number;
+    id: number;
     email?: string;
     username: string;
-    password: string;
+    passw: string;
     administrator: boolean | number;
 }
 

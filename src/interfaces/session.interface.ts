@@ -1,6 +1,6 @@
 interface Session {
     id: number;
-    user_id: number;
+    userId: number;
     secret: string;
     expires: number;
     invalidated: boolean;

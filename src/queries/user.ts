@@ -14,32 +14,51 @@ const querySelectUser = async (userId: string) => {
         'SELECT * FROM library_user WHERE id = ?',
         [userId]
     );
-    return rows[0] as User;
+    return rows.length > 0 ? (rows[0] as User) : null;
+};
+
+const querySelectUserByName = async (username: string) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        'SELECT * FROM library_user WHERE username = ?',
+        [username]
+    );
+    return rows.length > 0 ? (rows[0] as User) : null;
 };
 
 const queryDeleteUser = async (userId: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        'DELETE FROM library_user WHERE id=?',
+        'DELETE FROM library_user WHERE id = ?',
         [userId]
     );
     return rows.affectedRows != 0;
 };
 
-const queryInsertUser = async (user: User) => {
+const queryInsertUser = async (
+    username: string,
+    password: string,
+    isAdmin: boolean | number
+) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         'INSERT INTO library_user (username, passw, administrator) VALUES (?)',
-        [[user.username, user.password, user.administrator]]
+        [[username, password, isAdmin]]
     );
-    return rows.affectedRows != 0;
+    if (rows.affectedRows == 0) return null;
+    return {
+        id: rows.insertId,
+        username,
+        passw: password,
+        administrator: isAdmin,
+    } as User;
 };
 
 const queryUpdateUser = async (user: User) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         'UPDATE library_user SET username=(?), passw=(?), administrator=(?) WHERE id=(?)',
-        [user.username, user.password, user.administrator, user.id]
+        [user.username, user.passw, user.administrator, user.id]
     );
     return rows.affectedRows != 0;
 };
@@ -47,6 +66,7 @@ const queryUpdateUser = async (user: User) => {
 export {
     querySelectAllUsers,
     querySelectUser,
+    querySelectUserByName,
     queryDeleteUser,
     queryInsertUser,
     queryUpdateUser,

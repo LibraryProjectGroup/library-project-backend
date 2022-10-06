@@ -5,48 +5,40 @@ import {
     queryDeleteUser,
     queryInsertUser,
     queryUpdateUser,
-} from '../queries/userQueries';
+} from '../queries/user';
 import User from '../interfaces/user.interface';
 
 const router = Router();
 
 router.get('/all', async (req: Request, res: Response) => {
-    const usersResult = await querySelectAllUsers();
-    res.json(usersResult);
+    res.json(await querySelectAllUsers());
 });
 
 router.get('/', async (req: Request, res: Response) => {
     const userId = req.query.id as string;
-    const userResult = await querySelectUser(userId);
-    res.json(userResult);
+    res.json(await querySelectUser(userId));
 });
 
 router.delete('/', async (req: Request, res: Response) => {
     const userId = req.query.id as string;
-    const deleteResult = await queryDeleteUser(userId);
-    res.json({ ok: deleteResult });
+    res.json({ ok: await queryDeleteUser(userId) });
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const user: User = {
-        username: req.query.username as string,
-        password: req.query.password as string,
-        // Iffy parseInts here. TODO
-        administrator: parseInt(req.query.administrator as any) as number,
-    };
-    const insertResult = await queryInsertUser(user);
-    res.json({ ok: insertResult });
+    const username = req.query.username as string;
+    const password = req.query.password as string;
+    const administrator = parseInt(req.query.administrator as any) as number;
+    res.json({ ok: await queryInsertUser(username, password, administrator) });
 });
 
 router.put('/', async (req: Request, res: Response) => {
     const user: User = {
         id: parseInt(req.query.id as any) as number,
         username: req.query.username as string,
-        password: req.query.password as string,
+        passw: req.query.password as string,
         administrator: parseInt(req.query.administrator as any) as number,
     };
-    const insertResult = await queryUpdateUser(user);
-    res.json({ ok: insertResult });
+    res.json({ ok: await queryUpdateUser(user) });
 });
 
 export default router;

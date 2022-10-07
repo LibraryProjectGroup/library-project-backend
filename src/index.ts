@@ -41,10 +41,11 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
         );
         if (session == null) return res.sendStatus(401);
         req.session = session;
+        next();
     } catch (err) {
         console.error(err);
     }
-    next();
+    res.sendStatus(500);
 });
 app.use('/book', bookRouter);
 app.use('/user', userRouter);

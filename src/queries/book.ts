@@ -1,5 +1,6 @@
 import { Pool, ResultSetHeader, RowDataPacket } from 'mysql2';
 import Book from '../interfaces/book.interface';
+import User from '../interfaces/user.interface';
 import { pool } from '../index';
 
 const querySelectBook = async (bookId: string) => {

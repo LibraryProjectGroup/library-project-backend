@@ -5,26 +5,23 @@ import {
     queryDeleteBook,
     queryInsertBook,
     queryUpdateBook,
-} from '../queries/bookQueries';
+} from '../queries/book';
 import Book from '../interfaces/book.interface';
 
 const router = Router();
 
 router.get('/all', async (req: Request, res: Response) => {
-    const booksResult = await querySelectAllBooks();
-    res.json(booksResult);
+    res.json(await querySelectAllBooks());
 });
 
 router.get('/', async (req: Request, res: Response) => {
     const bookId = req.query.id as string;
-    const bookResult = await querySelectBook(bookId);
-    res.json(bookResult);
+    res.json(await querySelectBook(bookId));
 });
 
 router.delete('/', async (req: Request, res: Response) => {
     const bookId = req.query.id as string;
-    const deleteResult = await queryDeleteBook(bookId);
-    res.json({ ok: deleteResult });
+    res.json({ ok: await queryDeleteBook(bookId) });
 });
 
 router.post('/', async (req: Request, res: Response) => {
@@ -36,8 +33,7 @@ router.post('/', async (req: Request, res: Response) => {
         isbn: req.query.isbn as string,
         location: req.query.location as string,
     };
-    const insertResult = await queryInsertBook(book);
-    res.json({ ok: insertResult });
+    res.json({ ok: await queryInsertBook(book) });
 });
 
 router.put('/', async (req: Request, res: Response) => {
@@ -51,8 +47,7 @@ router.put('/', async (req: Request, res: Response) => {
         isbn: req.query.isbn as string,
         location: req.query.location as string,
     };
-    const insertResult = await queryUpdateBook(book);
-    res.json({ ok: insertResult });
+    res.json({ ok: await queryUpdateBook(book) });
 });
 
 export default router;

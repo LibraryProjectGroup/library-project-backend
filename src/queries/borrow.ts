@@ -1,14 +1,15 @@
 import { Pool } from 'mysql2';
 import Borrow from '../interfaces/borrow.interface';
+import { pool } from '../index';
 
-const querySelectAllBorrows = async (pool: Pool) => {
+const querySelectAllBorrows = async () => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query('SELECT * FROM borrowing');
     const resultBooks: Array<Borrow> = rows as Array<Borrow>;
     return resultBooks;
 };
 
-const querySelectBorrow = async (pool: Pool, borrowingId: string) => {
+const querySelectBorrow = async (borrowingId: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query(
         'SELECT * FROM borrowing WHERE id = ?',
@@ -18,7 +19,7 @@ const querySelectBorrow = async (pool: Pool, borrowingId: string) => {
     return resultBorrow;
 };
 
-const queryDeleteBorrow = async (pool: Pool, borrowingId: string) => {
+const queryDeleteBorrow = async (borrowingId: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query('DELETE FROM borrowing WHERE id=?', [
         borrowingId,
@@ -31,7 +32,7 @@ const queryDeleteBorrow = async (pool: Pool, borrowingId: string) => {
     }
 };
 
-const queryInsertBorrow = async (pool: Pool, borrow: Borrow) => {
+const queryInsertBorrow = async (borrow: Borrow) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query(
         'INSERT INTO borrowing (library_user, book, borrowDate, dueDate, returned) VALUES (?) ',
@@ -53,7 +54,7 @@ const queryInsertBorrow = async (pool: Pool, borrow: Borrow) => {
     }
 };
 
-const queryUpdateBorrow = async (pool: Pool, borrow: Borrow) => {
+const queryUpdateBorrow = async (borrow: Borrow) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query(
         'UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?) WHERE id=(?)',

@@ -11,40 +11,42 @@ $ npm start
 ```
 
 ### Note #2:
+
 Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. <br> .env is in the form of: <br>
-``` 
+
+```
     DATABASE_SERVER = ???
     DATABASE_NAME = ???
     DATABASE_USER = ???
     DATABASE_PASSWORD = ???
-    
+
 ```
+
 Database name, user, and password can be found on Discord at **#secrets**.
 
-### Note #3: 
-To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have *Host Name* set as **javaohjelmointi.net** and *Port* as **22**. Under *Connection-> SSH -> Tunnels*, set *Source port* as **3306** and *Destination* as **localhost:3306**. After that, select *Session* again, name the session under *Saved Session*, save it, select it from the list, and press **Open**. <br>
-After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306. 
+### Note #3:
 
+To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
+After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.
 
 ### Developing in a container
 
 The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
-[docker-compose.yml](.devcontainer/docker-compose.yml) file contains a container for both the Express application as well as the dabatase. Database initialization is handled automatically on creation using the *\*.sql* files in [sql/](./sql/) folder. [docker-compose.yml](.devcontainer/docker-compose.yml) contains also the database credentials for local development as environment variables. These must only be used for local development.
+[docker-compose.yml](.devcontainer/docker-compose.yml) file contains a container for both the Express application as well as the dabatase. Database initialization is handled automatically on creation using the _\*.sql_ files in [sql/](./sql/) folder. [docker-compose.yml](.devcontainer/docker-compose.yml) contains also the database credentials for local development as environment variables. These must only be used for local development.
 
 <br>
 
 ## Endpoints
 
-
-
 ### Book
+
 #### /book?id={id} (GET)
 
-Response schema: 
+Response schema:
 
 ```JSON
-{   
+{
     "title": "Book",
     "description": "Book",
     "type": "object",
@@ -65,7 +67,7 @@ Response schema:
 Response schema:
 
 ```JSON
-{   
+{
     "title": "Ok",
     "description": "Ok",
     "type": "object",
@@ -80,7 +82,7 @@ Response schema:
 Response schema:
 
 ```JSON
-{   
+{
     "title": "Ok",
     "description": "Ok",
     "type": "object",
@@ -93,8 +95,9 @@ Response schema:
 #### /book?id={id} (DELETE)
 
 Response schema:
+
 ```JSON
-{   
+{
     "title": "Ok",
     "description": "Ok",
     "type": "object",
@@ -104,9 +107,9 @@ Response schema:
 }
 ```
 
-#### /allbooks (GET)
+#### /book/all (GET)
 
-Response schema: 
+Response schema:
 
 ```JSON
 {
@@ -125,13 +128,15 @@ Response schema:
     }
 }
 ```
+
 ### User **(⚠ not working yet)**
+
 #### /user?id={id} (GET)
 
-Response schema: 
+Response schema:
 
 ```JSON
-{   
+{
     "title": "User",
     "description": "User",
     "type": "object",
@@ -142,9 +147,9 @@ Response schema:
 }
 ```
 
-#### /users (GET)
+#### /user/all (GET)
 
-Response schema: 
+Response schema:
 
 ```JSON
 {

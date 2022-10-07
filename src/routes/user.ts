@@ -1,53 +1,44 @@
-import { Express, Response, Request } from 'express';
-import { Pool } from 'mysql2';
+import { Response, Request, Router } from 'express';
 import {
     querySelectAllUsers,
     querySelectUser,
     queryDeleteUser,
     queryInsertUser,
     queryUpdateUser,
-} from '../queries/userQueries';
+} from '../queries/user';
 import User from '../interfaces/user.interface';
 
-const routeUser = (app: Express, pool: Pool) => {
-    app.get('/allusers', async (req: Request, res: Response) => {
-        const usersResult = await querySelectAllUsers(pool);
-        res.json(usersResult);
-    });
+const router = Router();
 
-    app.get('/user', async (req: Request, res: Response) => {
-        const userId = req.query.id as string;
-        const userResult = await querySelectUser(pool, userId);
-        res.json(userResult);
-    });
+router.get('/all', async (req: Request, res: Response) => {
+    res.json(await querySelectAllUsers());
+});
 
-    app.delete('/user', async (req: Request, res: Response) => {
-        const userId = req.query.id as string;
-        const deleteResult = await queryDeleteUser(pool, userId);
-        res.json({ ok: deleteResult });
-    });
+router.get('/', async (req: Request, res: Response) => {
+    const userId = req.query.id as string;
+    res.json(await querySelectUser(userId));
+});
 
-    app.post('/user', async (req: Request, res: Response) => {
-        const user: User = {
-            username: req.query.username as string,
-            password: req.query.password as string,
-            // Iffy parseInts here. TODO
-            administrator: parseInt(req.query.administrator as any) as number,
-        };
-        const insertResult = await queryInsertUser(pool, user);
-        res.json({ ok: insertResult });
-    });
+router.delete('/', async (req: Request, res: Response) => {
+    const userId = req.query.id as string;
+    res.json({ ok: await queryDeleteUser(userId) });
+});
 
-    app.put('/user', async (req: Request, res: Response) => {
-        const user: User = {
-            id: parseInt(req.query.id as any) as number,
-            username: req.query.username as string,
-            password: req.query.password as string,
-            administrator: parseInt(req.query.administrator as any) as number,
-        };
-        const updateResult = await queryUpdateUser(pool, user);
-        res.json({ ok: updateResult });
-    });
-};
+router.post('/', async (req: Request, res: Response) => {
+    const username = req.query.username as string;
+    const password = req.query.password as string;
+    const administrator = parseInt(req.query.administrator as any) as number;
+    res.json({ ok: await queryInsertUser(username, password, administrator) });
+});
 
-export default routeUser;
+router.put('/', async (req: Request, res: Response) => {
+    const user: User = {
+        id: parseInt(req.query.id as any) as number,
+        username: req.query.username as string,
+        passw: req.query.password as string,
+        administrator: parseInt(req.query.administrator as any) as number,
+    };
+    res.json({ ok: await queryUpdateUser(user) });
+});
+
+export default router;

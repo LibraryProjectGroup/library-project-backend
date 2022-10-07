@@ -50,7 +50,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 });
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
-app.use('borrow', borrowRouter);
+app.use('/borrow', borrowRouter);
 app.use('/example', exampleRouter);
 
 const pool = mysql.createPool({

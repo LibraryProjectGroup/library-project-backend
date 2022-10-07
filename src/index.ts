@@ -42,6 +42,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
         if (session == null) return res.sendStatus(401);
         req.session = session;
         next();
+        return;
     } catch (err) {
         console.error(err);
     }

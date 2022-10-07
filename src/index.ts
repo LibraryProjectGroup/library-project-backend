@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth';
 import bookRouter from './routes/book';
 import userRouter from './routes/user';
+import borrowRouter from './routes/borrow';
 import exampleRouter from './routes/example';
 import Session from './interfaces/session.interface';
 import { querySelectSessionBySecret } from './queries/session';
@@ -49,6 +50,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 });
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
+app.use('borrow', borrowRouter);
 app.use('/example', exampleRouter);
 
 const pool = mysql.createPool({

@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
   `book` int(11) NOT NULL,
   `dueDate` date NOT NULL,
   `borrowDate` date NOT NULL,
-  `returned` bit(1) NOT NULL,
+  `returned` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `library_user` (`library_user`),
   KEY `book` (`book`),
@@ -78,9 +78,9 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
 
 -- Dumping data for table efilibrarydb.borrowing: ~3 rows (approximately)
 INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, `returned`) VALUES
-	(1, 1, 2, '2022-08-20', '2022-08-13', b'1'),
-	(2, 3, 3, '2022-08-18', '2022-08-11', b'1'),
-	(3, 2, 1, '2022-09-29', '2022-09-22', b'0');
+	(1, 1, 2, '2022-08-20', '2022-08-13', 0),
+	(2, 3, 3, '2022-08-18', '2022-08-11', 0),
+	(3, 2, 1, '2022-09-29', '2022-09-22', 1);
 
 
 

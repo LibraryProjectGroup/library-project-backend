@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth';
 import bookRouter from './routes/book';
 import userRouter from './routes/user';
+import borrowRouter from './routes/borrow';
 import exampleRouter from './routes/example';
 import Session from './interfaces/session.interface';
 import { querySelectSessionBySecret } from './queries/session';
@@ -30,6 +31,7 @@ declare global {
 
 const app: Express = express();
 app.use(cors());
+app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', authRouter);
@@ -48,8 +50,10 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     }
     res.sendStatus(500);
 });
+
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
+app.use('/borrow', borrowRouter);
 app.use('/example', exampleRouter);
 
 const pool = mysql.createPool({

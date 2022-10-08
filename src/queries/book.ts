@@ -42,7 +42,7 @@ const queryUpdateBook = async (book: Book) => {
         'UPDATE book SET title=(?), author=(?), topic=(?), isbn=(?), location=(?) WHERE id=(?)',
         [book.title, book.author, book.topic, book.isbn, book.location, book.id]
     );
-    return rows.affectedRows != 0;
+    return rows.changedRows != 0;
 };
 
 export {

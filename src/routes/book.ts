@@ -25,28 +25,12 @@ router.delete('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const book: Book = {
-        library_user: 1,
-        title: req.query.title as string,
-        author: req.query.author as string,
-        topic: req.query.topic as string,
-        isbn: req.query.isbn as string,
-        location: req.query.location as string,
-    };
+    const book: Book = req.body;
     res.json({ ok: await queryInsertBook(book) });
 });
 
 router.put('/', async (req: Request, res: Response) => {
-    const book: Book = {
-        // Iffy parseInt here. TODO
-        id: parseInt(req.query.id as any) as number,
-        library_user: 1,
-        title: req.query.title as string,
-        author: req.query.author as string,
-        topic: req.query.topic as string,
-        isbn: req.query.isbn as string,
-        location: req.query.location as string,
-    };
+    const book: Book = req.body;
     res.json({ ok: await queryUpdateBook(book) });
 });
 

@@ -9,4 +9,18 @@ describe('testing app get example', () => {
     .expect("Content-Type", /json/)
     .expect(200)
   });
+
+  describe("User routes", () => {
+    test("Get example book user", async () => {
+      const res = await request(app).get("/example");
+      expect(res.body.library_user).toEqual("John Doe");
+    });
+  });
+
+  describe("User routes", () => {
+    test("Get example book user", async () => {
+      const res = await request(app).get("/allbooks");
+      expect(res.body.library_user).toEqual([]);
+    });
+  });
 });

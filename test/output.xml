@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0.1 (Python 3.10.7 on win32)" generated="20221011 13:25:19.668" rpa="false" schemaversion="3">
+<suite id="s1" name="Trialtests" source="C:\Users\mike7\MDS_Project\library-project-backend\test\trialtests.robot">
+<test id="s1-t1" name="Get Request Test" line="10">
+<kw name="GET" library="RequestsLibrary">
+<var>${response}</var>
+<arg>http://javaohjelmointi.net:15001/book/all</arg>
+<doc>Sends a GET request.</doc>
+<msg timestamp="20221011 13:25:19.939" level="INFO">GET Request : url=http://javaohjelmointi.net:15001/book/all 
+ path_url=/book/all 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20221011 13:25:19.939" level="INFO">GET Response : url=http://javaohjelmointi.net:15001/book/all 
+ status=200, reason=OK 
+ headers={'X-Powered-By': 'Express', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '395', 'ETag': 'W/"18b-ZZMHxpg+mUEwj7vw3d1FmppSlko"', 'Date': 'Tue, 11 Oct 2022 10:25:20 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body=[{"id":1,"library_user":1,"title":"JS for Dummies","author":"Mikko Möllikäs","isbn":"123-456-789","topic":"JS","location":"Nevada"},{"id":2,"library_user":2,"title":"Java for Babies","author":"John Doe","isbn":"123-5223-789","topic":"Java","location":"Florida"},{"id":3,"library_user":3,"title":"Python for Pets","author":"S. Bonsaa","isbn":"123-456-5622","topic":"JS","location":"Hong Kong"}] 
+ </msg>
+<msg timestamp="20221011 13:25:19.939" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20221011 13:25:19.859" endtime="20221011 13:25:19.939"/>
+</kw>
+<status status="PASS" starttime="20221011 13:25:19.859" endtime="20221011 13:25:19.939"/>
+</test>
+<test id="s1-t2" name="Quick Get A JSON Body Test" line="15">
+<kw name="GET" library="RequestsLibrary">
+<var>${response}</var>
+<arg>url=http://javaohjelmointi.net:15001/book?id=1</arg>
+<doc>Sends a GET request.</doc>
+<msg timestamp="20221011 13:25:20.011" level="INFO">GET Request : url=http://javaohjelmointi.net:15001/book?id=1 
+ path_url=/book?id=1 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20221011 13:25:20.011" level="INFO">GET Response : url=http://javaohjelmointi.net:15001/book?id=1 
+ status=200, reason=OK 
+ headers={'X-Powered-By': 'Express', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '132', 'ETag': 'W/"84-eotosUq6SJ5Z3U6dxSJ6u+AHZu0"', 'Date': 'Tue, 11 Oct 2022 10:25:20 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ body={"id":1,"library_user":1,"title":"JS for Dummies","author":"Mikko Möllikäs","isbn":"123-456-789","topic":"JS","location":"Nevada"} 
+ </msg>
+<msg timestamp="20221011 13:25:20.011" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20221011 13:25:19.947" endtime="20221011 13:25:20.011"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>JS for Dummies</arg>
+<arg>${response.json()}[title]</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" starttime="20221011 13:25:20.011" endtime="20221011 13:25:20.011"/>
+</kw>
+<status status="PASS" starttime="20221011 13:25:19.947" endtime="20221011 13:25:20.011"/>
+</test>
+<status status="PASS" starttime="20221011 13:25:19.668" endtime="20221011 13:25:20.019"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="Trialtests">Trialtests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

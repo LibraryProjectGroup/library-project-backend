@@ -15,15 +15,30 @@ import Borrow from '../interfaces/borrow.interface';
 const router = Router();
 
 router.get('/all', async (req: Request, res: Response) => {
-    res.json(await querySelectAllBorrows());
+    try {
+        res.json(await querySelectAllBorrows());
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 router.get('/', async (req: Request, res: Response) => {
     const borrowId = req.query.id as string;
-    res.json(await querySelectBorrow(borrowId));
+    try {
+        res.json(await querySelectBorrow(borrowId));
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 router.delete('/', async (req: Request, res: Response) => {
     const borrowId = req.query.id as string;
-    res.json({ ok: await queryDeleteBorrow(borrowId) });
+    try {
+        res.json({ ok: await queryDeleteBorrow(borrowId) });
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 router.post('/', async (req: Request, res: Response) => {
     let bookAvailable = await queryBookIsAvailable(req.body.book);

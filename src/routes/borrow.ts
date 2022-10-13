@@ -6,7 +6,7 @@ import {
     querySelectBorrow,
     queryDeleteBorrow,
     queryUpdateBorrow,
-    querySelectAllCurrentlyBorrowed,
+    querySelectAllCurrentBorrows,
     queryBookIsAvailable,
     queryReturnBorrow,
     queryBorrowsByUsername,
@@ -42,10 +42,12 @@ router.delete('/', async (req: Request, res: Response) => {
     }
 });
 router.post('/', async (req: Request, res: Response) => {
+    console.log('BORROW POST');
     let bookAvailable = await queryBookIsAvailable(req.body.book);
     if (bookAvailable) {
         try {
             const borrow: Borrow = { ...req.body, returned: 0 };
+            console.log(borrow);
             res.json({ ok: await queryInsertBorrow(borrow) });
         } catch {
             res.status(500).json({ ok: false });
@@ -61,9 +63,15 @@ router.put('/', async (req: Request, res: Response) => {
     const borrow: Borrow = req.body;
     res.json({ ok: await queryUpdateBorrow(borrow) });
 });
-router.get('/user', async (req: Request, res: Response) => {
-    const username: string = req.body.username;
-    res.json({ ok: await queryBorrowsByUsername(username) });
+
+router.get('/current', async (req: Request, res: Response) => {
+    const currentBorrows = await querySelectAllCurrentBorrows();
+    res.json(currentBorrows);
+});
+router.get('/current/user', async (req: Request, res: Response) => {
+    const username: string = req.query.username as string;
+    const currentBorrows = await queryBorrowsByUsername(username);
+    res.json(currentBorrows);
 });
 router.put('/return', async (req: Request, res: Response) => {
     try {

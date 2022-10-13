@@ -9,12 +9,12 @@ const querySelectAllBorrows = async () => {
     return rows as Array<Borrow>;
 };
 
-const querySelectAllCurrentlyBorrowed = async () => {
+const querySelectAllCurrentBorrows = async () => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query(
-        'SELECT book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location FROM book INNER JOIN borrowing ON borrowing.book = book.id WHERE borrowing.returned = 0'
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        'SELECT * FROM borrowing WHERE borrowing.returned = 0'
     );
-    return rows as Array<Book>;
+    return rows as Array<Borrow>;
 };
 
 const querySelectBorrow = async (borrowingId: string) => {
@@ -80,10 +80,10 @@ const queryBookIsAvailable = async (bookId: number) => {
 const queryBorrowsByUsername = async (username: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT borrowing.id, borrowing.library_user, borrowing.dueDate, borrowing.borrowDate, borrowing.returned FROM borrowing INNER JOIN library_user ON borrowing.library_user=library_user.id WHERE library_user.username=(?) AND returned=0',
+        'SELECT borrowing.id, borrowing.book, borrowing.library_user, borrowing.dueDate, borrowing.borrowDate, borrowing.returned FROM borrowing INNER JOIN library_user ON borrowing.library_user=library_user.id WHERE library_user.username=(?) AND returned=0',
         [username]
     );
-    return rows.length == 0 ? true : false;
+    return rows as Array<Borrow>;
 };
 
 const queryReturnBorrow = async (borrowId: number) => {
@@ -105,7 +105,7 @@ export {
     querySelectBorrow,
     queryDeleteBorrow,
     queryUpdateBorrow,
-    querySelectAllCurrentlyBorrowed,
+    querySelectAllCurrentBorrows,
     queryBookIsAvailable,
     queryReturnBorrow,
     queryBorrowsByUsername,

@@ -16,4 +16,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Run the project
-CMD ["node", "build/index.js"]
+CMD ["node", "build/server.js"]

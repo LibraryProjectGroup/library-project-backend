@@ -1,10 +1,10 @@
-FROM node
+FROM node:latest
 
 WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --omit=dev
 
 # Copy project to docker
 COPY . .
@@ -16,4 +16,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Run the project
-CMD ["node", "index.js"]
+CMD ["node", "build/index.js"]

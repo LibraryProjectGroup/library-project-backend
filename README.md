@@ -62,7 +62,7 @@ Response schema:
 }
 ```
 
-#### /book?title={title}&author={author}&isbn={isbn}&topic={topic}&location={location} (POST)
+#### /book (POST)
 
 Response schema:
 
@@ -77,7 +77,7 @@ Response schema:
 }
 ```
 
-#### /book?id={id}&title={title}&author={author}&isbn={isbn}&topic={topic}&location={location} (PUT)
+#### /book (PUT)
 
 Response schema:
 

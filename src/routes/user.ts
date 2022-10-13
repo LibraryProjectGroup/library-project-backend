@@ -5,6 +5,7 @@ import {
     queryDeleteUser,
     queryInsertUser,
     queryUpdateUser,
+    querySelectUserByName,
 } from '../queries/user';
 import User from '../interfaces/user.interface';
 
@@ -23,6 +24,15 @@ router.get('/', async (req: Request, res: Response) => {
     const userId = req.query.id as string;
     try {
         res.json(await querySelectUser(userId));
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
+});
+
+router.get('/username', async (req: Request, res: Response) => {
+    try {
+        res.json(await querySelectUserByName(req.query.username as string));
     } catch (error) {
         console.error(error);
         res.json({ ok: false, status: 500 });

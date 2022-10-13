@@ -35,7 +35,7 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 
 app.use('/auth', authRouter);
-/*app.use(async (req: Request, res: Response, next: NextFunction) => {
+app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.cookies || !req.cookies.librarySession) return res.sendStatus(401);
     try {
         let session = await querySelectSessionBySecret(
@@ -49,7 +49,7 @@ app.use('/auth', authRouter);
         console.error(err);
     }
     res.sendStatus(500);
-});*/
+});
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
 app.use('/borrow', borrowRouter);

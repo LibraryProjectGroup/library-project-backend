@@ -6,6 +6,10 @@ import {
     querySelectBorrow,
     queryDeleteBorrow,
     queryUpdateBorrow,
+    querySelectAllCurrentlyBorrowed,
+    queryBookIsAvailable,
+    queryReturnBorrow,
+    queryBorrowsByUsername,
 } from '../queries/borrow';
 import Borrow from '../interfaces/borrow.interface';
 
@@ -38,34 +42,34 @@ router.delete('/', async (req: Request, res: Response) => {
     }
 });
 router.post('/', async (req: Request, res: Response) => {
-    const borrow: Borrow = {
-        user: parseInt(req.query.user as string),
-        book: parseInt(req.query.book as string),
-        borrowDate: req.query.borrowdate as any as Date,
-        dueDate: req.query.duedate as any as Date,
-        returned: false,
-    };
-    try {
-        res.json({ ok: await queryInsertBorrow(borrow) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    let bookAvailable = await queryBookIsAvailable(req.body.book);
+    if (bookAvailable) {
+        try {
+            const borrow: Borrow = { ...req.body, returned: 0 };
+            res.json({ ok: await queryInsertBorrow(borrow) });
+        } catch {
+            res.status(500).json({ ok: false });
+        }
+    } else {
+        return res.status(403).json({
+            ok: false,
+            message: 'Book not available for borrowing',
+        });
     }
 });
 router.put('/', async (req: Request, res: Response) => {
-    const borrow: Borrow = {
-        id: parseInt(req.query.id as any) as number,
-        user: parseInt(req.query.user as string),
-        book: parseInt(req.query.book as string),
-        borrowDate: req.query.borrowdate as any as Date,
-        dueDate: req.query.duedate as any as Date,
-        returned: req.query.returned as any as boolean,
-    };
+    const borrow: Borrow = req.body;
+    res.json({ ok: await queryUpdateBorrow(borrow) });
+});
+router.get('/user', async (req: Request, res: Response) => {
+    const username: string = req.body.username;
+    res.json({ ok: await queryBorrowsByUsername(username) });
+});
+router.put('/return', async (req: Request, res: Response) => {
     try {
-        res.json({ ok: await queryUpdateBorrow(borrow) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+        res.json({ ok: await queryReturnBorrow(req.body.borrowId) });
+    } catch {
+        res.status(500).json({ ok: false });
     }
 });
 

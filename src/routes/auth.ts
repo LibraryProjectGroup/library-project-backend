@@ -17,7 +17,7 @@ async function createSession(userId: number) {
     return await queryInsertSession(userId, secret, timeout);
 }
 
-router.get('/register', async (req: Request, res: Response) => {
+router.post('/register', async (req: Request, res: Response) => {
     const username = req.query.username as string;
     const password = req.query.password as string;
 
@@ -62,7 +62,6 @@ router.get('/register', async (req: Request, res: Response) => {
 router.get('/login', async (req: Request, res: Response) => {
     const username = req.query.username as string;
     const password = req.query.password as string;
-
     let user = await querySelectUserByName(username);
     if (user == null)
         return res.status(404).json({

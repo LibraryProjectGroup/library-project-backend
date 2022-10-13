@@ -68,6 +68,37 @@ const queryUpdateBorrow = async (borrow: Borrow) => {
     return rows.affectedRows != 0;
 };
 
+const queryBookIsAvailable = async (bookId: number) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        'SELECT * FROM borrowing WHERE book=(?) AND returned=0',
+        [bookId]
+    );
+    return rows.length == 0 ? true : false;
+};
+
+const queryBorrowsByUsername = async (username: string) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        'SELECT borrowing.id, borrowing.library_user, borrowing.dueDate, borrowing.borrowDate, borrowing.returned FROM borrowing INNER JOIN library_user ON borrowing.library_user=library_user.id WHERE library_user.username=(?) AND returned=0',
+        [username]
+    );
+    return rows.length == 0 ? true : false;
+};
+
+const queryReturnBorrow = async (borrowId: number) => {
+    const promisePool = pool.promise();
+    try {
+        const [rows] = await promisePool.query<ResultSetHeader>(
+            'UPDATE borrowing SET returned=1 WHERE id=(?)',
+            [borrowId]
+        );
+        return rows.affectedRows != 0;
+    } catch {
+        return false;
+    }
+};
+
 export {
     queryInsertBorrow,
     querySelectAllBorrows,
@@ -75,4 +106,7 @@ export {
     queryDeleteBorrow,
     queryUpdateBorrow,
     querySelectAllCurrentlyBorrowed,
+    queryBookIsAvailable,
+    queryReturnBorrow,
+    queryBorrowsByUsername,
 };

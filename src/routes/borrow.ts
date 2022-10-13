@@ -9,6 +9,7 @@ import {
     querySelectAllCurrentlyBorrowed,
     queryBookIsAvailable,
     queryReturnBorrow,
+    queryBorrowsByUsername,
 } from '../queries/borrow';
 import Borrow from '../interfaces/borrow.interface';
 
@@ -44,6 +45,10 @@ router.post('/', async (req: Request, res: Response) => {
 router.put('/', async (req: Request, res: Response) => {
     const borrow: Borrow = req.body;
     res.json({ ok: await queryUpdateBorrow(borrow) });
+});
+router.get('/user', async (req: Request, res: Response) => {
+    const username: string = req.body.username;
+    res.json({ ok: await queryBorrowsByUsername(username) });
 });
 router.put('/return', async (req: Request, res: Response) => {
     try {

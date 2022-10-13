@@ -77,6 +77,15 @@ const queryBookIsAvailable = async (bookId: number) => {
     return rows.length == 0 ? true : false;
 };
 
+const queryBorrowsByUsername = async (username: string) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        'SELECT borrowing.id, borrowing.library_user, borrowing.dueDate, borrowing.borrowDate, borrowing.returned FROM borrowing INNER JOIN library_user ON borrowing.library_user=library_user.id WHERE library_user.username=(?) AND returned=0',
+        [username]
+    );
+    return rows.length == 0 ? true : false;
+};
+
 const queryReturnBorrow = async (borrowId: number) => {
     const promisePool = pool.promise();
     try {
@@ -99,4 +108,5 @@ export {
     querySelectAllCurrentlyBorrowed,
     queryBookIsAvailable,
     queryReturnBorrow,
+    queryBorrowsByUsername,
 };

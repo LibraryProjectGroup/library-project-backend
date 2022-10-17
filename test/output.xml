@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 5.0.1 (Python 3.10.7 on win32)" generated="20221013 13:19:15.974" rpa="false" schemaversion="3">
-<suite id="s1" name="Trialtests" source="C:\Users\mike7\MDS_Project\library-project-backend\test\trialtests.robot">
+<robot generator="Robot 5.0.1 (Python 3.10.7 on win32)" generated="20221013 14:53:53.802" rpa="false" schemaversion="3">
+<suite id="s1" name="Trialtests" source="C:\Users\Default User.DESKTOP-6H6NIQ4\Downloads\PROJECTO\library-project-backend\test\trialtests.robot">
 <test id="s1-t1" name="Get Request Test" line="10">
 <kw name="GET" library="RequestsLibrary">
 <var>${response}</var>
 <arg>http://javaohjelmointi.net:15001/book/all</arg>
 <doc>Sends a GET request.</doc>
-<msg timestamp="20221013 13:19:16.316" level="INFO">GET Request : url=http://javaohjelmointi.net:15001/book/all 
+<msg timestamp="20221013 14:53:54.567" level="INFO">GET Request : url=http://javaohjelmointi.net:15001/book/all 
  path_url=/book/all 
  headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
  body=None 
  </msg>
-<msg timestamp="20221013 13:19:16.316" level="INFO">GET Response : url=http://javaohjelmointi.net:15001/book/all 
+<msg timestamp="20221013 14:53:54.567" level="INFO">GET Response : url=http://javaohjelmointi.net:15001/book/all 
  status=200, reason=OK 
- headers={'X-Powered-By': 'Express', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '889', 'ETag': 'W/"379-odOAV53O5MUyCfeVn9Wq1mqSpus"', 'Date': 'Thu, 13 Oct 2022 10:19:16 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ headers={'X-Powered-By': 'Express', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '889', 'ETag': 'W/"379-odOAV53O5MUyCfeVn9Wq1mqSpus"', 'Date': 'Thu, 13 Oct 2022 11:53:54 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
  body=[{"id":1,"library_user":1,"title":"JS for Bunnies","author":"Mikko Möllikäs","isbn":"123-456-789","topic":"A test has edited this field","location":"Here"},{"id":3,"library_user":3,"title":"Python for Pets","author":"S. Bonsaaa","isbn":"123-456-5622","topic":"JS","location":"Hong Kong"},{"id":20,"library_user":1,"title":"post","author":"monfdg","isbn":"i134-2456","topic":"postmon","location":"loc"},{"id":40,"library_user":1,"title":"Me","author":"Me","isbn":"asdfasdf","topic":"Me","location":"My home"},{"id":42,"library_user":1,"title":"Python Machine Learning: Machine Learning and Deep Learning with Python, scikit-learn, and TensorFlow 2, 3rd Edition","author":"Klabnik, Steve","isbn":"9781492032649","topic":"Machine Learning","location":"Helsinki"},{"id":59,"library_user":1,"title":"How to do","author":"Minä","isbn":"22133213321","topic":"Lifehacks","location":"Helsinki"}] 
  </msg>
-<msg timestamp="20221013 13:19:16.317" level="INFO">${response} = &lt;Response [200]&gt;</msg>
-<status status="PASS" starttime="20221013 13:19:16.186" endtime="20221013 13:19:16.317"/>
+<msg timestamp="20221013 14:53:54.575" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20221013 14:53:54.122" endtime="20221013 14:53:54.575"/>
 </kw>
-<status status="PASS" starttime="20221013 13:19:16.186" endtime="20221013 13:19:16.318"/>
+<status status="PASS" starttime="20221013 14:53:54.121" endtime="20221013 14:53:54.578"/>
 </test>
 <test id="s1-t2" name="Quick Get A JSON Body Test" line="13">
 <kw name="GET" library="RequestsLibrary">
 <var>${response}</var>
 <arg>url=http://javaohjelmointi.net:15001/example</arg>
 <doc>Sends a GET request.</doc>
-<msg timestamp="20221013 13:19:16.379" level="INFO">GET Request : url=http://javaohjelmointi.net:15001/example 
+<msg timestamp="20221013 14:53:54.661" level="INFO">GET Request : url=http://javaohjelmointi.net:15001/example 
  path_url=/example 
  headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
  body=None 
  </msg>
-<msg timestamp="20221013 13:19:16.379" level="INFO">GET Response : url=http://javaohjelmointi.net:15001/example 
+<msg timestamp="20221013 14:53:54.661" level="INFO">GET Response : url=http://javaohjelmointi.net:15001/example 
  status=200, reason=OK 
- headers={'X-Powered-By': 'Express', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '561', 'ETag': 'W/"231-o5rrnnXNN6dQ4HOqnRzHXjI37mw"', 'Date': 'Thu, 13 Oct 2022 10:19:16 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
+ headers={'X-Powered-By': 'Express', 'Vary': 'Origin', 'Access-Control-Allow-Credentials': 'true', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '561', 'ETag': 'W/"231-o5rrnnXNN6dQ4HOqnRzHXjI37mw"', 'Date': 'Thu, 13 Oct 2022 11:53:54 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'} 
  body=[{"id":1,"library_user":"John Doe","title":"Python Machine Learning: Machine Learning and Deep Learning with Python, scikit-learn, and TensorFlow 2, 3rd Edition","author":"Klabnik, Steve","topic":"Machine Learning","isbn":"9781492032649","location":"Helsinki"},{"id":2,"library_user":"John Doe","title":"Book 2","author":"Klabnik, Steve","topic":"Machine Learning","isbn":"9781492032649","location":"Helsinki"},{"id":3,"library_user":"John Doe","title":"Book 3","author":"Klabnik, Steve","topic":"Machine Learning","isbn":"9781492032649","location":"Helsinki"}] 
  </msg>
-<msg timestamp="20221013 13:19:16.379" level="INFO">${response} = &lt;Response [200]&gt;</msg>
-<status status="PASS" starttime="20221013 13:19:16.320" endtime="20221013 13:19:16.379"/>
+<msg timestamp="20221013 14:53:54.662" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20221013 14:53:54.586" endtime="20221013 14:53:54.662"/>
 </kw>
 <kw name="Should Be Equal As Strings" library="BuiltIn">
 <arg>Python Machine Learning: Machine Learning and Deep Learning with Python, scikit-learn, and TensorFlow 2, 3rd Edition</arg>
 <arg>${response.json()}[0][title]</arg>
 <doc>Fails if objects are unequal after converting them to strings.</doc>
-<status status="PASS" starttime="20221013 13:19:16.379" endtime="20221013 13:19:16.387"/>
+<status status="PASS" starttime="20221013 14:53:54.664" endtime="20221013 14:53:54.671"/>
 </kw>
-<status status="PASS" starttime="20221013 13:19:16.319" endtime="20221013 13:19:16.387"/>
+<status status="PASS" starttime="20221013 14:53:54.583" endtime="20221013 14:53:54.673"/>
 </test>
-<status status="PASS" starttime="20221013 13:19:15.974" endtime="20221013 13:19:16.387"/>
+<status status="PASS" starttime="20221013 14:53:53.806" endtime="20221013 14:53:54.681"/>
 </suite>
 <statistics>
 <total>

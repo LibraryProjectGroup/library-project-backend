@@ -26,6 +26,15 @@ const querySelectUserByName = async (username: string) => {
     return rows.length > 0 ? (rows[0] as User) : null;
 };
 
+const querySelectUserBySessionId = async (id: number) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        'SELECT * FROM library_user WHERE id = (SELECT userId FROM sessions WHERE id = ?)',
+        [id]
+    );
+    return rows.length > 0 ? (rows[0] as User) : null;
+};
+
 const queryDeleteUser = async (userId: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
@@ -67,7 +76,9 @@ export {
     querySelectAllUsers,
     querySelectUser,
     querySelectUserByName,
+    querySelectUserBySessionId,
     queryDeleteUser,
     queryInsertUser,
     queryUpdateUser,
+
 };

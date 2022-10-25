@@ -39,6 +39,10 @@ router.get('/username', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/session', async (req: Request, res: Response) => {
+    res.json(req.sessionUser);
+});
+
 router.delete('/', async (req: Request, res: Response) => {
     const userId = req.query.id as string;
     try {

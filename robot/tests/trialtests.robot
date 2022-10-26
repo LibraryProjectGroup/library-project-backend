@@ -9,7 +9,7 @@ ${URL}         https://libraryproject.ddns.net
 *** test cases ***
 
 Get Request Test
-    ${response}=    GET  ${URL} 
+    ${response}=    GET  ${URL}    expected_status=401
 
 Quick Get A JSON Body Test
       ${response}=    GET  url=${URL}/example

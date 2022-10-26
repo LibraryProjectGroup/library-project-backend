@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./src/server.ts",
-    "test": "robot --outputdir robot/results robot/tests"
+
+    "test": "robot --outputdir robot/results robot/tests",
+    "build": "tsc"
+
   },
   "author": "",
   "license": "ISC",

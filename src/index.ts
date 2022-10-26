@@ -10,6 +10,8 @@ import borrowRouter from './routes/borrow';
 import exampleRouter from './routes/example';
 import Session from './interfaces/session.interface';
 import { querySelectSessionBySecret } from './queries/session';
+import User from './interfaces/user.interface';
+import { querySelectUserBySessionId } from './queries/user';
 
 declare global {
     namespace NodeJS {
@@ -25,24 +27,27 @@ declare global {
     namespace Express {
         interface Request {
             session: Session;
+            sessionUser: User;
         }
     }
 }
 
 const app: Express = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.cookies || !req.cookies.librarySession) return res.sendStatus(401);
     try {
-        let session = await querySelectSessionBySecret(
-            req.cookies.librarySession
-        );
-        if (session == null) return res.sendStatus(401);
+        let session = await querySelectSessionBySecret(req.cookies.librarySession);
+        if(session == null) return res.sendStatus(401);
         req.session = session;
+        let user = await querySelectUserBySessionId(session.id);
+        if(user == null) return res.sendStatus(401);
+        req.sessionUser = user;
+
         next();
         return;
     } catch (err) {
@@ -50,7 +55,6 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     }
     res.sendStatus(500);
 });
-
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
 app.use('/borrow', borrowRouter);

@@ -6,42 +6,79 @@ import {
     querySelectBorrow,
     queryDeleteBorrow,
     queryUpdateBorrow,
+    querySelectAllCurrentBorrows,
+    queryBookIsAvailable,
+    queryReturnBorrow,
+    queryBorrowsByUsername,
 } from '../queries/borrow';
 import Borrow from '../interfaces/borrow.interface';
 
 const router = Router();
 
 router.get('/all', async (req: Request, res: Response) => {
-    res.json(await querySelectAllBorrows());
+    try {
+        res.json(await querySelectAllBorrows());
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 router.get('/', async (req: Request, res: Response) => {
     const borrowId = req.query.id as string;
-    res.json(await querySelectBorrow(borrowId));
+    try {
+        res.json(await querySelectBorrow(borrowId));
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 router.delete('/', async (req: Request, res: Response) => {
     const borrowId = req.query.id as string;
-    res.json({ ok: await queryDeleteBorrow(borrowId) });
+    try {
+        res.json({ ok: await queryDeleteBorrow(borrowId) });
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 router.post('/', async (req: Request, res: Response) => {
-    const borrow: Borrow = {
-        user: parseInt(req.query.user as string),
-        book: parseInt(req.query.book as string),
-        borrowDate: req.query.borrowdate as any as Date,
-        dueDate: req.query.duedate as any as Date,
-        returned: false,
-    };
-    res.json({ ok: await queryInsertBorrow(borrow) });
+    console.log('BORROW POST');
+    let bookAvailable = await queryBookIsAvailable(req.body.book);
+    if (bookAvailable) {
+        try {
+            const borrow: Borrow = { ...req.body, returned: 0 };
+            console.log(borrow);
+            res.json({ ok: await queryInsertBorrow(borrow) });
+        } catch {
+            res.status(500).json({ ok: false });
+        }
+    } else {
+        return res.status(403).json({
+            ok: false,
+            message: 'Book not available for borrowing',
+        });
+    }
 });
 router.put('/', async (req: Request, res: Response) => {
-    const borrow: Borrow = {
-        id: parseInt(req.query.id as any) as number,
-        user: parseInt(req.query.user as string),
-        book: parseInt(req.query.book as string),
-        borrowDate: req.query.borrowdate as any as Date,
-        dueDate: req.query.duedate as any as Date,
-        returned: req.query.returned as any as boolean,
-    };
+    const borrow: Borrow = req.body;
     res.json({ ok: await queryUpdateBorrow(borrow) });
+});
+
+router.get('/current', async (req: Request, res: Response) => {
+    const currentBorrows = await querySelectAllCurrentBorrows();
+    res.json(currentBorrows);
+});
+router.get('/current/user', async (req: Request, res: Response) => {
+    const username: string = req.query.username as string;
+    const currentBorrows = await queryBorrowsByUsername(username);
+    res.json(currentBorrows);
+});
+router.put('/return', async (req: Request, res: Response) => {
+    try {
+        res.json({ ok: await queryReturnBorrow(req.body.borrowId) });
+    } catch {
+        res.status(500).json({ ok: false });
+    }
 });
 
 export default router;

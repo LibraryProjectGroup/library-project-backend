@@ -39,6 +39,43 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 
 ## Endpoints
 
+### Auth
+
+#### /auth/login?username={username}&password={password}
+
+Response schema:
+
+```JSON
+{
+  "ok": boolean,
+  "secret": ok ? string : undefined,
+  "message": string | undefined
+}
+```
+
+#### /auth/register?username={username}&password={password}
+
+Response schema:
+
+```JSON
+{
+  "ok": boolean,
+  "secret": ok ? string,
+  "message": !ok ? string
+}
+```
+
+#### /auth/logout
+
+Response schema:
+
+```JSON
+{
+  "ok": boolean,
+  "message": string | undefined
+}
+```
+
 ### Book
 
 #### /book?id={id} (GET)
@@ -165,3 +202,6 @@ Response schema:
     }
 }
 ```
+# Docker Help
+Building the docker image: `docker image build .`  
+Running the docker image: `docker run -p 3000:3000 <docker image>`

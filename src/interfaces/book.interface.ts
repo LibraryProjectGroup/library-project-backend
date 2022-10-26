@@ -3,7 +3,7 @@ import User from './user.interface';
 interface Book {
     id?: number;
     addedBy?: User;
-    library_user?: string | number;
+    library_user: number;
     title: string;
     author: string;
     topic: string;

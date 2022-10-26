@@ -7,7 +7,6 @@ import authRouter from './routes/auth';
 import bookRouter from './routes/book';
 import userRouter from './routes/user';
 import borrowRouter from './routes/borrow';
-import exampleRouter from './routes/example';
 import Session from './interfaces/session.interface';
 import { querySelectSessionBySecret } from './queries/session';
 import User from './interfaces/user.interface';
@@ -41,11 +40,13 @@ app.use('/auth', authRouter);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.cookies || !req.cookies.librarySession) return res.sendStatus(401);
     try {
-        let session = await querySelectSessionBySecret(req.cookies.librarySession);
-        if(session == null) return res.sendStatus(401);
+        let session = await querySelectSessionBySecret(
+            req.cookies.librarySession
+        );
+        if (session == null) return res.sendStatus(401);
         req.session = session;
         let user = await querySelectUserBySessionId(session.id);
-        if(user == null) return res.sendStatus(401);
+        if (user == null) return res.sendStatus(401);
         req.sessionUser = user;
 
         next();
@@ -58,7 +59,6 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 app.use('/book', bookRouter);
 app.use('/user', userRouter);
 app.use('/borrow', borrowRouter);
-app.use('/example', exampleRouter);
 
 const pool = mysql.createPool({
     host: process.env.DATABASE_SERVER,

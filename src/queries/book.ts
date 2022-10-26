@@ -31,7 +31,16 @@ const queryInsertBook = async (book: Book) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         'INSERT INTO book (library_user, title, author, topic, isbn, location) VALUES (?)',
-        [[1, book.title, book.author, book.topic, book.isbn, book.location]]
+        [
+            [
+                book.library_user,
+                book.title,
+                book.author,
+                book.topic,
+                book.isbn,
+                book.location,
+            ],
+        ]
     );
     return rows.affectedRows != 0;
 };

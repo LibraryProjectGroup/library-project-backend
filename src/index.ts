@@ -41,11 +41,13 @@ app.use('/auth', authRouter);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.cookies || !req.cookies.librarySession) return res.sendStatus(401);
     try {
-        let session = await querySelectSessionBySecret(req.cookies.librarySession);
-        if(session == null) return res.sendStatus(401);
+        let session = await querySelectSessionBySecret(
+            req.cookies.librarySession
+        );
+        if (session == null) return res.sendStatus(401);
         req.session = session;
         let user = await querySelectUserBySessionId(session.id);
-        if(user == null) return res.sendStatus(401);
+        if (user == null) return res.sendStatus(401);
         req.sessionUser = user;
 
         next();

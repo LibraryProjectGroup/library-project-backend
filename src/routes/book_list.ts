@@ -13,13 +13,23 @@ import Book_list from "../interfaces/book_list.interface";
 const router = Router();
 
 router.get('/all', async (req: Request, res: Response) => {
-    res.json(await querySelectAllLists());
+    try {
+        res.json(await querySelectAllLists());
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 
 router.get('/booklist/user', async (req: Request, res: Response) => {
     const username: string = req.query.username as string;
     const booklists = await querySelectListByUser(username);
-    res.json(booklists);
+    try {
+        res.json(booklists);
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 
 router.get('/', async (req: Request, res: Response) => {
@@ -34,12 +44,22 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.put('/', async (req: Request, res: Response) => {
     const list: Book_list = req.body;
-    res.json({ ok: await queryUpdateList(list) });
+    try {
+        res.json({ ok: await queryUpdateList(list) });
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 
 router.post('/', async (req: Request, res: Response) => {
     const list: Book_list = {...req.body};
-    res.json({ ok: await queryInsertNewList(list) });
+    try {
+        res.json({ ok: await queryInsertNewList(list) });
+    } catch (error) {
+        console.error(error);
+        res.json({ ok: false, status: 500 });
+    }
 });
 
 router.delete('/', async (req: Request, res: Response) => {

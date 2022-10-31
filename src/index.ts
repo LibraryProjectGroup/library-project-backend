@@ -9,6 +9,7 @@ import userRouter from './routes/user';
 import borrowRouter from './routes/borrow';
 import exampleRouter from './routes/example';
 import book_listRouter from './routes/book_list';
+import book_list_entryRouter from './routes/book_list_entry';
 import Session from './interfaces/session.interface';
 import { querySelectSessionBySecret } from './queries/session';
 import User from './interfaces/user.interface';
@@ -61,6 +62,7 @@ app.use('/user', userRouter);
 app.use('/borrow', borrowRouter);
 app.use('/example', exampleRouter);
 app.use('/booklist', book_listRouter);
+app.use('/booklistentry', book_list_entryRouter)
 
 
 const pool = mysql.createPool({

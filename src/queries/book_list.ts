@@ -13,7 +13,7 @@ const querySelectAllLists = async () => {
 const querySelectListByUser = async (username: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT book_list.name, book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location FROM book INNER JOIN book_list_entry ON book.id = book_list_entry.book INNER JOIN book_list ON book_list_entry.list = book_list.id INNER JOIN library_user ON book_list.user = library_user.id WHERE library.user.username = (?)',
+        'SELECT book_list.name, book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location FROM book INNER JOIN book_list_entry ON book.id = book_list_entry.book INNER JOIN book_list ON book_list_entry.list = book_list.id INNER JOIN library_user ON book_list.user = library_user.id WHERE library_user.username = (?)',
         [username]
     );
     return rows as Array<Book_list>;

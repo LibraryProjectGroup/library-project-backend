@@ -11,7 +11,9 @@ import {
     queryReturnBorrow,
     queryBorrowsByUsername,
 } from '../queries/borrow';
+
 import Borrow from '../interfaces/borrow.interface';
+import { querySelectUserBySessionId } from '../queries/user';
 
 const router = Router();
 
@@ -32,15 +34,23 @@ router.get('/', async (req: Request, res: Response) => {
         res.json({ ok: false, status: 500 });
     }
 });
+
+
 router.delete('/', async (req: Request, res: Response) => {
     const borrowId = req.query.id as string;
-    try {
-        res.json({ ok: await queryDeleteBorrow(borrowId) });
-    } catch (error) {
-        console.error(error);
+    if (querySelectUserBySessionId(req.query.userId) === req.query.library_user.id) {
+
+        try {
+            res.json({ ok: await queryDeleteBorrow(borrowId) });
+        } catch (error) {
+            console.error(error);
+            res.json({ ok: false, status: 500 });
+        }
+    } else {
         res.json({ ok: false, status: 500 });
-    }
+    };
 });
+
 router.post('/', async (req: Request, res: Response) => {
     console.log('BORROW POST');
     let bookAvailable = await queryBookIsAvailable(req.body.book);

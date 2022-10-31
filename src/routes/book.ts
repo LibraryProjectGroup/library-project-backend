@@ -31,8 +31,17 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.delete('/', async (req: Request, res: Response) => {
     const bookId = req.query.id as string;
+
     try {
-        res.json({ ok: await queryDeleteBook(bookId) });
+        const book = await querySelectBook(bookId);
+        if (
+            req.sessionUser.id == book.library_user ||
+            req.sessionUser.administrator
+        ) {
+            res.json({ ok: await queryDeleteBook(bookId) });
+        } else {
+            res.json({ ok: false });
+        }
     } catch (error) {
         console.error(error);
         res.json({ ok: false, status: 500 });
@@ -40,6 +49,7 @@ router.delete('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
+    req.body.library_user = req.sessionUser.id;
     const book: Book = req.body;
     try {
         res.json({ ok: await queryInsertBook(book) });
@@ -50,9 +60,22 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.put('/', async (req: Request, res: Response) => {
-    const book: Book = req.body;
+    req.body.library_user = req.sessionUser.id;
+    const updatedBook: Book = req.body;
+    if (!updatedBook.id) {
+        res.json({ ok: false });
+        return;
+    }
     try {
-        res.json({ ok: await queryUpdateBook(book) });
+        const book = await querySelectBook(updatedBook.id.toString());
+        if (
+            req.sessionUser.id == book.library_user ||
+            req.sessionUser.administrator
+        ) {
+            res.json({ ok: await queryUpdateBook(updatedBook) });
+        } else {
+            res.json({ ok: false });
+        }
     } catch (error) {
         console.error(error);
         res.json({ ok: false, status: 500 });

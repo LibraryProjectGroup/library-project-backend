@@ -5,7 +5,7 @@ const router = Router();
 
 const EXAMPLE_BOOK: Book = {
     id: 1,
-    library_user: 'John Doe',
+    library_user: 1,
     title: 'Python Machine Learning: Machine Learning and Deep Learning with Python, scikit-learn, and TensorFlow 2, 3rd Edition',
     author: 'Klabnik, Steve',
     topic: 'Machine Learning',

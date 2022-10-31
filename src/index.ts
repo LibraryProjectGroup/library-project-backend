@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import mysql from 'mysql2';
-import cookieParser from 'cookie-parser';
+import expressBearerToken from "express-bearer-token";
 import authRouter from './routes/auth';
 import bookRouter from './routes/book';
 import userRouter from './routes/user';
@@ -35,17 +35,17 @@ declare global {
 const app: Express = express();
 app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));
-app.use(cookieParser());
+app.use(expressBearerToken());
 
 app.use('/auth', authRouter);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.cookies || !req.cookies.librarySession) return res.sendStatus(401);
+    if (!req.token) return res.sendStatus(401);
     try {
-        let session = await querySelectSessionBySecret(req.cookies.librarySession);
-        if(session == null) return res.sendStatus(401);
+        let session = await querySelectSessionBySecret(req.token);
+        if (session == null) return res.sendStatus(401);
         req.session = session;
         let user = await querySelectUserBySessionId(session.id);
-        if(user == null) return res.sendStatus(401);
+        if (user == null) return res.sendStatus(401);
         req.sessionUser = user;
 
         next();

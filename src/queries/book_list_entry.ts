@@ -2,12 +2,12 @@ import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { pool } from '../index';
 import Book_list_entry from '../interfaces/book_list_entry.interface';
 
-/* needed?
+
 const querySelectAllEntries = async () => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query('SELECT * FROM book_list_entry');
     return rows as Array<Book_list_entry>;
-}; */
+}; 
 
 const querySelectEntry = async (entryId: string) => {
     const promisePool = pool.promise();
@@ -45,6 +45,6 @@ const queryRemoveFromList = async(entryId: string) => {
 export {
     queryInsertEntry,
     queryRemoveFromList,
-    //querySelectAllEntries,
+    querySelectAllEntries,
     querySelectEntry,
 };

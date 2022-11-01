@@ -1,16 +1,17 @@
-import { Response, Request, Router } from "express";
-import { 
+import { Response, Request, Router } from 'express';
+import {
     queryDeleteList,
     queryInsertNewList,
     querySelectAllLists,
     querySelectListByUser,
     querySelectList,
     queryUpdateList,
-} from "../queries/book_list";
-import Book_list from "../interfaces/book_list.interface";
-
+} from '../queries/book_list';
+import Book_list from '../interfaces/book_list.interface';
 
 const router = Router();
+
+// note(markus): tested these in postman
 
 router.get('/all', async (req: Request, res: Response) => {
     try {
@@ -23,8 +24,8 @@ router.get('/all', async (req: Request, res: Response) => {
 
 router.get('/booklist/user', async (req: Request, res: Response) => {
     const username: string = req.query.username as string;
-    const booklists = await querySelectListByUser(username);
     try {
+        const booklists = await querySelectListByUser(username);
         res.json(booklists);
     } catch (error) {
         console.error(error);
@@ -53,7 +54,7 @@ router.put('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
-    const list: Book_list = {...req.body};
+    const list: Book_list = { ...req.body };
     try {
         res.json({ ok: await queryInsertNewList(list) });
     } catch (error) {

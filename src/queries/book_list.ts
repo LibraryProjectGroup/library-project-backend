@@ -8,14 +8,12 @@ const querySelectAllLists = async () => {
     return rows as Array<Book_list>;
 };
 
-// is inner join correct here?
-// note(markus):    maybe just return the lists themselves as a list like above but limited to user;
-//                  then in front clicking a list name it shows the contents of that one list
-const querySelectListByUser = async (username: string) => {
+
+const querySelectListByUser = async (id: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT book_list.name, book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location FROM book INNER JOIN book_list_entry ON book.id = book_list_entry.book INNER JOIN book_list ON book_list_entry.list = book_list.id INNER JOIN library_user ON book_list.library_user = library_user.id WHERE library_user.username = (?)',
-        [username]
+        'SELECT * FROM book_list WHERE book_list.library_user = ?',
+        [id]
     );
     return rows as Array<Book_list>;
 };
@@ -23,7 +21,7 @@ const querySelectListByUser = async (username: string) => {
 const querySelectList = async (listId: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT * FROM book_list WHERE ID = ?',
+        'SELECT * FROM book_list WHERE id = ?',
         [listId]
     );
     return rows.length > 0 ? (rows[0] as Book_list) : null;

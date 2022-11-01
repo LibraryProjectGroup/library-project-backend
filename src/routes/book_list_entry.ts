@@ -9,8 +9,6 @@ import Book_list_entry from '../interfaces/book_list_entry.interface';
 
 const router = Router();
 
-// note(markus): not yet tested
-
 router.get('/all', async (req: Request, res: Response) => {
     try {
         res.json(await querySelectAllEntries());

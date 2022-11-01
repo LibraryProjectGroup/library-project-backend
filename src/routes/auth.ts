@@ -80,6 +80,7 @@ router.post('/login', async (req: Request, res: Response) => {
 
     res.json({
         ok: true,
+        userId: user.id,
         secret: session.secret,
     });
 });

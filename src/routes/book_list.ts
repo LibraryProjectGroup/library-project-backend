@@ -23,9 +23,9 @@ router.get('/all', async (req: Request, res: Response) => {
 });
 
 router.get('/booklist/user', async (req: Request, res: Response) => {
-    const username: string = req.query.username as string;
+    const userId: string = req.query.id as string;
     try {
-        const booklists = await querySelectListByUser(username);
+        const booklists = await querySelectListByUser(userId);
         res.json(booklists);
     } catch (error) {
         console.error(error);

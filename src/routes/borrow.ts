@@ -13,7 +13,7 @@ import {
 } from '../queries/borrow';
 
 import Borrow from '../interfaces/borrow.interface';
-import { querySelectUserBySessionId } from '../queries/user';
+
 
 const router = Router();
 
@@ -38,7 +38,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.delete('/', async (req: Request, res: Response) => {
     const borrowId = req.query.id as string;
-    if (querySelectUserBySessionId(req.query.userId) === req.query.library_user.id) {
+    if ((await querySelectBorrow(borrowId))?.user == req.sessionUser.id || req.sessionUser.administrator) {
 
         try {
             res.json({ ok: await queryDeleteBorrow(borrowId) });
@@ -69,9 +69,16 @@ router.post('/', async (req: Request, res: Response) => {
         });
     }
 });
+
 router.put('/', async (req: Request, res: Response) => {
     const borrow: Borrow = req.body;
-    res.json({ ok: await queryUpdateBorrow(borrow) });
+    const borrowId = req.query.id as string;
+    if ((await querySelectBorrow(borrowId))?.user == req.sessionUser.id || req.sessionUser.administrator) {
+        res.json({ ok: await queryUpdateBorrow(borrow) });
+    } else {
+        res.json({ ok: false, status: 500 });
+    };
+
 });
 
 router.get('/current', async (req: Request, res: Response) => {
@@ -83,12 +90,18 @@ router.get('/current/user', async (req: Request, res: Response) => {
     const currentBorrows = await queryBorrowsByUsername(username);
     res.json(currentBorrows);
 });
+
 router.put('/return', async (req: Request, res: Response) => {
-    try {
-        res.json({ ok: await queryReturnBorrow(req.body.borrowId) });
-    } catch {
-        res.status(500).json({ ok: false });
-    }
+    const borrowId = req.query.id as string;
+    if ((await querySelectBorrow(borrowId))?.user == req.sessionUser.id || req.sessionUser.administrator) {
+        try {
+            res.json({ ok: await queryReturnBorrow(req.body.borrowId) });
+        } catch {
+            res.status(500).json({ ok: false });
+        }
+    } else {
+        res.json({ ok: false, status: 500 });
+    };
 });
 
 export default router;

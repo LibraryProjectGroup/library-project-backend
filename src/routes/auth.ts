@@ -86,10 +86,10 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 router.get('/logout', async (req: Request, res: Response) => {
-    if (!req.cookies || !req.cookies.librarySession)
+    if (!req.token)
         return res.status(400).json({ ok: false, message: 'No session' });
 
-    if (await queryInvalidateSession(req.cookies.librarySession)) {
+    if (await queryInvalidateSession(req.token)) {
         res.json({ ok: true });
     } else {
         res.status(404).json({ ok: false, message: 'Unknown session' });

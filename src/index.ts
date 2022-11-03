@@ -1,17 +1,16 @@
-import 'dotenv/config';
-import express, { Express, Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import mysql from 'mysql2';
+import "dotenv/config";
+import express, { Express, Request, Response, NextFunction } from "express";
+import cors from "cors";
+import mysql from "mysql2";
 import expressBearerToken from "express-bearer-token";
-import authRouter from './routes/auth';
-import bookRouter from './routes/book';
-import userRouter from './routes/user';
-import borrowRouter from './routes/borrow';
-import exampleRouter from './routes/example';
-import Session from './interfaces/session.interface';
-import { querySelectSessionBySecret } from './queries/session';
-import User from './interfaces/user.interface';
-import { querySelectUserBySessionId } from './queries/user';
+import authRouter from "./routes/auth";
+import bookRouter from "./routes/book";
+import userRouter from "./routes/user";
+import borrowRouter from "./routes/borrow";
+import Session from "./interfaces/session.interface";
+import { querySelectSessionBySecret } from "./queries/session";
+import User from "./interfaces/user.interface";
+import { querySelectUserBySessionId } from "./queries/user";
 
 declare global {
     namespace NodeJS {
@@ -37,7 +36,7 @@ app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));
 app.use(expressBearerToken());
 
-app.use('/auth', authRouter);
+app.use("/auth", authRouter);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.token) return res.sendStatus(401);
     try {
@@ -55,10 +54,16 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     }
     res.sendStatus(500);
 });
-app.use('/book', bookRouter);
-app.use('/user', userRouter);
-app.use('/borrow', borrowRouter);
-app.use('/example', exampleRouter);
+app.use("/book", bookRouter);
+app.use("/user", userRouter);
+app.use("/borrow", borrowRouter);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+    res.status(500).send({
+        ok: false,
+    });
+});
 
 const pool = mysql.createPool({
     host: process.env.DATABASE_SERVER,

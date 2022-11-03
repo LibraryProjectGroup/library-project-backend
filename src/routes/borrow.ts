@@ -1,5 +1,4 @@
-import { Express, Response, Request, Router } from 'express';
-import { Pool } from 'mysql2';
+import { Response, Request, Router, NextFunction } from "express";
 import {
     queryInsertBorrow,
     querySelectAllBorrows,
@@ -8,77 +7,123 @@ import {
     queryUpdateBorrow,
     querySelectAllCurrentBorrows,
     queryBookIsAvailable,
-    queryReturnBorrow,
-    queryBorrowsByUsername,
-} from '../queries/borrow';
-import Borrow from '../interfaces/borrow.interface';
+    queryBorrowsByUserId,
+} from "../queries/borrow";
+import Borrow from "../interfaces/borrow.interface";
+
+const BORROW_LENGTH = 10;
 
 const router = Router();
 
-router.get('/all', async (req: Request, res: Response) => {
+router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.json(await querySelectAllBorrows());
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
-});
-router.get('/', async (req: Request, res: Response) => {
-    const borrowId = req.query.id as string;
-    try {
-        res.json(await querySelectBorrow(borrowId));
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
-    }
-});
-router.delete('/', async (req: Request, res: Response) => {
-    const borrowId = req.query.id as string;
-    try {
-        res.json({ ok: await queryDeleteBorrow(borrowId) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
-    }
-});
-router.post('/', async (req: Request, res: Response) => {
-    console.log('BORROW POST');
-    let bookAvailable = await queryBookIsAvailable(req.body.book);
-    if (bookAvailable) {
-        try {
-            const borrow: Borrow = { ...req.body, returned: 0 };
-            console.log(borrow);
-            res.json({ ok: await queryInsertBorrow(borrow) });
-        } catch {
-            res.status(500).json({ ok: false });
-        }
-    } else {
-        return res.status(403).json({
-            ok: false,
-            message: 'Book not available for borrowing',
-        });
-    }
-});
-router.put('/', async (req: Request, res: Response) => {
-    const borrow: Borrow = req.body;
-    res.json({ ok: await queryUpdateBorrow(borrow) });
 });
 
-router.get('/current', async (req: Request, res: Response) => {
-    const currentBorrows = await querySelectAllCurrentBorrows();
-    res.json(currentBorrows);
-});
-router.get('/current/user', async (req: Request, res: Response) => {
-    const username: string = req.query.username as string;
-    const currentBorrows = await queryBorrowsByUsername(username);
-    res.json(currentBorrows);
-});
-router.put('/return', async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json({ ok: await queryReturnBorrow(req.body.borrowId) });
-    } catch {
-        res.status(500).json({ ok: false });
+        res.json(await querySelectBorrow(Number(req.query.id)));
+    } catch (err) {
+        next(err);
     }
 });
+
+router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.json({ ok: await queryDeleteBorrow(Number(req.query.id)) });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let bookAvailable = await queryBookIsAvailable(req.body.bookId);
+        if (bookAvailable) {
+            let dueDate = new Date();
+            dueDate.setDate(dueDate.getDate() + BORROW_LENGTH);
+            res.json({
+                ok: await queryInsertBorrow(
+                    req.sessionUser.id,
+                    req.body.bookId,
+                    new Date(),
+                    dueDate
+                ),
+            });
+        } else {
+            return res.status(403).json({
+                ok: false,
+                message: "Book not available for borrowing",
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.put("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const updatedBorrow: Borrow = req.body;
+        updatedBorrow.library_user = req.sessionUser.id;
+        const borrow = await querySelectBorrow(updatedBorrow.id);
+        if (
+            borrow &&
+            (borrow.library_user == req.sessionUser.id ||
+                req.sessionUser.administrator)
+        ) {
+            res.json({ ok: await queryUpdateBorrow(borrow) });
+        } else {
+            res.status(403).json({ ok: false });
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get(
+    "/current",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectAllCurrentBorrows());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/session",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryBorrowsByUserId(req.sessionUser.id));
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.put(
+    "/return",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const borrow = await querySelectBorrow(req.body.borrowId);
+            if (
+                borrow &&
+                (borrow.library_user == req.sessionUser.id ||
+                    req.sessionUser.administrator)
+            ) {
+                borrow.returned = true;
+                res.json({ ok: await queryUpdateBorrow(borrow) });
+            } else {
+                res.status(403).json({ ok: false });
+            }
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 export default router;

@@ -1,84 +1,104 @@
-import { Response, Request, Router } from 'express';
+import { Response, Request, Router, NextFunction } from "express";
 import {
     querySelectAllUsers,
     querySelectUser,
     queryDeleteUser,
     queryInsertUser,
     queryUpdateUser,
-    querySelectUserByName,
-} from '../queries/user';
-import User from '../interfaces/user.interface';
+} from "../queries/user";
+import User from "../interfaces/user.interface";
 
 const router = Router();
 
-router.get('/all', async (req: Request, res: Response) => {
+router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectAllUsers());
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+        const users = await querySelectAllUsers();
+        const formattedUsers = [];
+        for (const user of users) {
+            formattedUsers.push({
+                id: user.id,
+                username: user.username,
+                administrator: user.administrator,
+            });
+        }
+        res.json(formattedUsers);
+    } catch (err) {
+        next(err);
     }
 });
 
-router.get('/', async (req: Request, res: Response) => {
-    const userId = req.query.id as string;
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectUser(userId));
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+        const user = await querySelectUser(Number(req.query.id));
+        if (user) {
+            res.json({
+                id: user.id,
+                username: user.username,
+                administrator: user.administrator,
+            });
+        } else {
+            res.status(500).json({ ok: false });
+        }
+    } catch (err) {
+        next(err);
     }
 });
 
-router.get('/username', async (req: Request, res: Response) => {
-    try {
-        res.json(await querySelectUserByName(req.query.username as string));
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
-    }
-});
-
-router.get('/session', async (req: Request, res: Response) => {
-    res.json(req.sessionUser);
-});
-
-router.delete('/', async (req: Request, res: Response) => {
-    const userId = req.query.id as string;
-    try {
-        res.json({ ok: await queryDeleteUser(userId) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
-    }
-});
-
-router.post('/', async (req: Request, res: Response) => {
-    const username = req.query.username as string;
-    const password = req.query.password as string;
-    const administrator = parseInt(req.query.administrator as any) as number;
-    try {
+router.get(
+    "/session",
+    async (req: Request, res: Response, next: NextFunction) => {
         res.json({
-            ok: await queryInsertUser(username, password, administrator),
+            id: req.sessionUser.id,
+            username: req.sessionUser.username,
+            administrator: req.sessionUser.administrator,
         });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    }
+);
+
+router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (req.sessionUser.administrator) {
+            res.json({ ok: await queryDeleteUser(Number(req.body.id)) });
+        } else {
+            res.status(403).json({ ok: false });
+        }
+    } catch (err) {
+        next(err);
     }
 });
 
-router.put('/', async (req: Request, res: Response) => {
-    const user: User = {
-        id: parseInt(req.query.id as any) as number,
-        username: req.query.username as string,
-        passw: req.query.password as string,
-        administrator: parseInt(req.query.administrator as any) as number,
-    };
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json({ ok: await queryUpdateUser(user) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+        if (req.sessionUser.administrator) {
+            const username = req.query.username as string;
+            const password = req.query.password as string;
+            const administrator = Boolean(req.query.administrator);
+            res.json({
+                ok: await queryInsertUser(username, password, administrator),
+            });
+        } else {
+            res.status(403).json({ ok: false });
+        }
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.put("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (req.sessionUser.administrator) {
+            const user: User = {
+                id: Number(req.query.id),
+                username: req.query.username as string,
+                passw: req.query.password as string,
+                administrator: Boolean(req.query.administrator),
+            };
+            res.json({ ok: await queryUpdateUser(user) });
+        } else {
+            res.status(403).json({ ok: false });
+        }
+    } catch (err) {
+        next(err);
     }
 });
 

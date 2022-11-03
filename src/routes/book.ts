@@ -1,84 +1,81 @@
-import { Response, Request, Router } from 'express';
+import { Response, Request, Router, NextFunction } from "express";
 import {
     querySelectBook,
     querySelectAllBooks,
     queryDeleteBook,
     queryInsertBook,
     queryUpdateBook,
-} from '../queries/book';
-import Book from '../interfaces/book.interface';
+} from "../queries/book";
+import Book from "../interfaces/book.interface";
 
 const router = Router();
 
-router.get('/all', async (req: Request, res: Response) => {
+router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.json(await querySelectAllBooks());
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.get('/', async (req: Request, res: Response) => {
-    const bookId = req.query.id as string;
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectBook(bookId));
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+        res.json(await querySelectBook(Number(req.query.id)));
+    } catch (err) {
+        next(err);
     }
 });
 
-router.delete('/', async (req: Request, res: Response) => {
-    const bookId = req.query.id as string;
-
+router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const book = await querySelectBook(bookId);
+        const book = await querySelectBook(Number(req.query.id));
         if (
-            req.sessionUser.id == book.library_user ||
-            req.sessionUser.administrator
+            book &&
+            (req.sessionUser.id == book.library_user ||
+                req.sessionUser.administrator)
         ) {
-            res.json({ ok: await queryDeleteBook(bookId) });
+            res.json({ ok: await queryDeleteBook(book.id) });
         } else {
-            res.json({ ok: false });
+            res.status(403).json({ ok: false });
         }
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.post('/', async (req: Request, res: Response) => {
-    req.body.library_user = req.sessionUser.id;
-    const book: Book = req.body;
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json({ ok: await queryInsertBook(book) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+        res.json({
+            ok: await queryInsertBook(
+                req.sessionUser.id,
+                req.body.title,
+                req.body.author,
+                req.body.isbn,
+                req.body.topic,
+                req.body.location
+            ),
+        });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.put('/', async (req: Request, res: Response) => {
-    req.body.library_user = req.sessionUser.id;
-    const updatedBook: Book = req.body;
-    if (!updatedBook.id) {
-        res.json({ ok: false });
-        return;
-    }
+router.put("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const book = await querySelectBook(updatedBook.id.toString());
+        const updatedBook: Book = req.body;
+        updatedBook.library_user = req.sessionUser.id;
+        const book = await querySelectBook(updatedBook.id);
         if (
-            req.sessionUser.id == book.library_user ||
-            req.sessionUser.administrator
+            book &&
+            (req.sessionUser.id == book.library_user ||
+                req.sessionUser.administrator)
         ) {
             res.json({ ok: await queryUpdateBook(updatedBook) });
         } else {
-            res.json({ ok: false });
+            res.status(403).json({ ok: false });
         }
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 

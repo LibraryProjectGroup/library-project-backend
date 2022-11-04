@@ -1,6 +1,6 @@
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
-import Session from '../interfaces/session.interface';
-import { pool } from '../index';
+import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { pool } from "../index";
+import Session from "../interfaces/session.interface";
 
 async function queryInsertSession(
     userId: number,
@@ -10,7 +10,7 @@ async function queryInsertSession(
     const promisePool = pool.promise();
     const expires = new Date().getTime() / 1000 + length;
     const [res] = await promisePool.query<ResultSetHeader>(
-        'INSERT INTO sessions (userId, secret, expires) VALUES (?)',
+        "INSERT INTO sessions (userId, secret, expires) VALUES (?)",
         [[userId, secret, expires]]
     );
     if (res.affectedRows == 0) return null;
@@ -29,7 +29,7 @@ async function querySelectSessionBySecret(
     const promisePool = pool.promise();
     const currentTime = new Date().getTime() / 1000;
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT * FROM sessions WHERE secret = ? AND expires > ? AND invalidated = 0 LIMIT 1',
+        "SELECT * FROM sessions WHERE secret = ? AND expires > ? AND invalidated = 0 LIMIT 1",
         [secret, currentTime]
     );
     return rows.length > 0 ? (rows[0] as Session) : null;
@@ -38,7 +38,7 @@ async function querySelectSessionBySecret(
 async function queryInvalidateSession(secret: string): Promise<boolean> {
     const promisePool = pool.promise();
     const [res] = await promisePool.query<ResultSetHeader>(
-        'UPDATE sessions SET invalidated = 1 WHERE secret = ?',
+        "UPDATE sessions SET invalidated = 1 WHERE secret = ?",
         [secret]
     );
     return res.affectedRows != 0;

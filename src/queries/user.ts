@@ -39,10 +39,19 @@ const querySelectUserByUsername = async (
     return rows.length > 0 ? (rows[0] as User) : null;
 };
 
-const queryDeleteUser = async (userId: number): Promise<boolean> => {
+const queryHardDeleteUser = async (userId: number): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "DELETE FROM library_user WHERE id = ?",
+        [userId]
+    );
+    return rows.affectedRows != 0;
+};
+
+const querySoftDeleteUser = async (userId: number): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE library_user SET deleted=1 WHERE id=(?)",
         [userId]
     );
     return rows.affectedRows != 0;
@@ -81,7 +90,8 @@ export {
     querySelectUser,
     querySelectUserBySessionId,
     querySelectUserByUsername,
-    queryDeleteUser,
+    querySoftDeleteUser,
+    queryHardDeleteUser,
     queryInsertUser,
     queryUpdateUser,
 };

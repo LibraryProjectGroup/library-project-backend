@@ -17,13 +17,22 @@ const querySelectAllBooks = async (): Promise<Book[]> => {
     return rows as Book[];
 };
 
-const queryDeleteBook = async (bookId: number): Promise<boolean> => {
+const queryHardDeleteBook = async (bookId: number): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "DELETE FROM book WHERE id=?",
         [bookId]
     );
     return rows.affectedRows != 0;
+};
+
+const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE book SET deleted=1 WHERE id=(?)",
+        [bookId]
+    );
+    return rows.changedRows != 0;
 };
 
 const queryInsertBook = async (
@@ -54,7 +63,8 @@ const queryUpdateBook = async (book: Book): Promise<boolean> => {
 export {
     querySelectBook,
     querySelectAllBooks,
-    queryDeleteBook,
+    queryHardDeleteBook,
+    querySoftDeleteBook,
     queryInsertBook,
     queryUpdateBook,
 };

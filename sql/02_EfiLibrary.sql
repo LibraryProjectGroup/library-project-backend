@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `library_user` (
   `username` varchar(50) NOT NULL,
   `passw` varchar(150) NOT NULL,
   `administrator` tinyint(1) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQ_libary_user_username` (`username`),
   CONSTRAINT `CHK_libary_user_username_not_empty` CHECK (char_length(`username`) > 0)
@@ -49,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `isbn` varchar(20) NOT NULL,
   `topic` varchar(50) NOT NULL,
   `location` varchar(20) NOT NULL,
+  `deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `FK_book_library_user` (`library_user`),
   CONSTRAINT `FK_book_library_user` FOREIGN KEY (`library_user`) REFERENCES `library_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

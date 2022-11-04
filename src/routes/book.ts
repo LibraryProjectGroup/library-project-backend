@@ -2,7 +2,7 @@ import { Response, Request, Router, NextFunction } from "express";
 import {
     querySelectBook,
     querySelectAllBooks,
-    queryDeleteBook,
+    querySoftDeleteBook,
     queryInsertBook,
     queryUpdateBook,
 } from "../queries/book";
@@ -34,7 +34,7 @@ router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
             (req.sessionUser.id == book.library_user ||
                 req.sessionUser.administrator)
         ) {
-            res.json({ ok: await queryDeleteBook(book.id) });
+            res.json({ ok: await querySoftDeleteBook(book.id) });
         } else {
             res.status(403).json({ ok: false });
         }

@@ -2,7 +2,7 @@ import { Response, Request, Router, NextFunction } from "express";
 import {
     querySelectAllUsers,
     querySelectUser,
-    queryDeleteUser,
+    querySoftDeleteUser,
     queryInsertUser,
     queryUpdateUser,
 } from "../queries/user";
@@ -58,7 +58,7 @@ router.get(
 router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.sessionUser.administrator) {
-            res.json({ ok: await queryDeleteUser(Number(req.body.id)) });
+            res.json({ ok: await querySoftDeleteUser(Number(req.body.id)) });
         } else {
             res.status(403).json({ ok: false });
         }

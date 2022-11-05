@@ -2,7 +2,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Session from "../interfaces/session.interface";
 
-async function queryInsertSession(
+export async function queryInsertSession(
     userId: number,
     secret: string,
     length: number
@@ -23,7 +23,7 @@ async function queryInsertSession(
     };
 }
 
-async function querySelectSessionBySecret(
+export async function querySelectSessionBySecret(
     secret: string
 ): Promise<Session | null> {
     const promisePool = pool.promise();
@@ -35,7 +35,7 @@ async function querySelectSessionBySecret(
     return rows.length > 0 ? (rows[0] as Session) : null;
 }
 
-async function queryInvalidateSession(secret: string): Promise<boolean> {
+export async function queryInvalidateSession(secret: string): Promise<boolean> {
     const promisePool = pool.promise();
     const [res] = await promisePool.query<ResultSetHeader>(
         "UPDATE sessions SET invalidated = 1 WHERE secret = ?",
@@ -43,9 +43,3 @@ async function queryInvalidateSession(secret: string): Promise<boolean> {
     );
     return res.affectedRows != 0;
 }
-
-export {
-    queryInsertSession,
-    querySelectSessionBySecret,
-    queryInvalidateSession,
-};

@@ -50,7 +50,12 @@ router.post(
                     ok: false,
                     message: "Username is already taken",
                 });
-            let newUser = await queryInsertUser(username, password, false);
+            let newUser = await queryInsertUser(
+                username,
+                password,
+                false,
+                false
+            );
             if (newUser == null) return res.status(500).json({ ok: false });
 
             let session = await createSession(newUser.id);

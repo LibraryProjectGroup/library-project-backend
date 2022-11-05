@@ -8,12 +8,11 @@ const querySelectAllLists = async () => {
     return rows as Array<Book_list>;
 };
 
-
-const querySelectListByUser = async (id: string) => {
+const querySelectListByUser = async (userId: string) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT * FROM book_list WHERE book_list.library_user = ?',
-        [id]
+        'SELECT * FROM book_list WHERE library_user = ?',
+        [userId]
     );
     return rows as Array<Book_list>;
 };

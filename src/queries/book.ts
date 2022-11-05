@@ -13,6 +13,14 @@ export const querySelectBook = async (bookId: number): Promise<Book | null> => {
 
 export const querySelectAllBooks = async (): Promise<Book[]> => {
     const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT * FROM book WHERE deleted != 1"
+    );
+    return rows as Book[];
+};
+
+export const querySelectAllExistingBooks = async (): Promise<Book[]> => {
+    const promisePool = pool.promise();
     const [rows] = await promisePool.query("SELECT * FROM book");
     return rows as Book[];
 };

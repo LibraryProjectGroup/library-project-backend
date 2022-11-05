@@ -7,6 +7,8 @@ import authRouter from "./routes/auth";
 import bookRouter from "./routes/book";
 import userRouter from "./routes/user";
 import borrowRouter from "./routes/borrow";
+import book_listRouter from './routes/book_list';
+import book_list_entryRouter from './routes/book_list_entry';
 import Session from "./interfaces/session.interface";
 import { querySelectSessionBySecret } from "./queries/session";
 import User from "./interfaces/user.interface";
@@ -57,6 +59,8 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
 app.use("/book", bookRouter);
 app.use("/user", userRouter);
 app.use("/borrow", borrowRouter);
+app.use('/booklist', book_listRouter);
+app.use('/booklistentry', book_list_entryRouter)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err);

@@ -84,7 +84,28 @@ INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, 
 	(2, 3, 3, '2022-08-18', '2022-08-11', 0),
 	(3, 2, 1, '2022-09-29', '2022-09-22', 1);
 
+  DROP TABLE IF EXISTS `book_list`;
+  CREATE TABLE IF NOT EXISTS `book_list` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `library_user` int(11) NOT NULL,
+    `name` varchar(250),
+    PRIMARY KEY (`id`),
+    KEY `library_user` (`library_user`),
+    CONSTRAINT `FK_book_list_library_user` FOREIGN KEY (`library_user`) REFERENCES `library_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  );
 
+
+  DROP TABLE IF EXISTS `book_list_entry`;
+  CREATE TABLE IF NOT EXISTS `book_list_entry` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `list` int(11) NOT NULL,
+    `book` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `list` (`list`),
+    KEY `book` (`book`),
+    CONSTRAINT `FK_book_list_entry_list` FOREIGN KEY (`list`) REFERENCES `book_list` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `FK_book_list_entry_book` FOREIGN KEY (`book`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  );
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

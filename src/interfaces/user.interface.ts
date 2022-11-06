@@ -3,6 +3,7 @@ interface User {
     username: string;
     passw: string;
     administrator: boolean;
+    deleted: boolean;
 }
 
 export default User;

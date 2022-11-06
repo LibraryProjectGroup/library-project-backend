@@ -13,15 +13,7 @@ const router = Router();
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await querySelectAllUsers();
-        const formattedUsers = [];
-        for (const user of users) {
-            formattedUsers.push({
-                id: user.id,
-                username: user.username,
-                administrator: user.administrator,
-            });
-        }
-        res.json(formattedUsers);
+        res.json(users);
     } catch (err) {
         next(err);
     }
@@ -31,11 +23,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await querySelectUser(Number(req.query.id));
         if (user) {
-            res.json({
-                id: user.id,
-                username: user.username,
-                administrator: user.administrator,
-            });
+            res.json(user);
         } else {
             res.status(500).json({ ok: false });
         }
@@ -51,6 +39,7 @@ router.get(
             id: req.sessionUser.id,
             username: req.sessionUser.username,
             administrator: req.sessionUser.administrator,
+            deleted: req.sessionUser.deleted,
         });
     }
 );
@@ -73,8 +62,14 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
             const username = req.query.username as string;
             const password = req.query.password as string;
             const administrator = Boolean(req.query.administrator);
+            const deleted = false;
             res.json({
-                ok: await queryInsertUser(username, password, administrator),
+                ok: await queryInsertUser(
+                    username,
+                    password,
+                    administrator,
+                    deleted
+                ),
             });
         } else {
             res.status(403).json({ ok: false });
@@ -92,6 +87,7 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
                 username: req.query.username as string,
                 passw: req.query.password as string,
                 administrator: Boolean(req.query.administrator),
+                deleted: false,
             };
             res.json({ ok: await queryUpdateUser(user) });
         } else {

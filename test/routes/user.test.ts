@@ -22,6 +22,14 @@ describe('GET /user', () => {
             .expect(200);
     });
 
+    test('get /username', async () => {
+        return request(app)
+            .get('/user/username?username=t1')
+            .set('Authorization', `Bearer 123`)
+            .expect('Content-Type', /json/)
+            .expect(200);
+    });
+
     test('get /user/session', async () => {
         return request(app)
             .get('/user/session')

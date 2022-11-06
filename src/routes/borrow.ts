@@ -6,8 +6,10 @@ import {
     queryDeleteBorrow,
     queryUpdateBorrow,
     querySelectAllCurrentBorrows,
+    querySelectAllCurrentBorrows2,
     queryBookIsAvailable,
     queryBorrowsByUserId,
+    queryExpiredBorrows,
 } from "../queries/borrow";
 import Borrow from "../interfaces/borrow.interface";
 
@@ -88,6 +90,28 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json(await querySelectAllCurrentBorrows());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/current/admin",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectAllCurrentBorrows2());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/expired",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryExpiredBorrows());
         } catch (err) {
             next(err);
         }

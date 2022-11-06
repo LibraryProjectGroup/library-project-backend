@@ -98,3 +98,11 @@ export const queryBorrowsByUserId = async (
     );
     return rows as Borrow[];
 };
+
+export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM borrowing WHERE borrowing.dueDate < now() AND borrowing.returned = 0"
+    );
+    return rows as Borrow[];
+};

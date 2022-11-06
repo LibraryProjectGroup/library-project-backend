@@ -3,6 +3,7 @@ import request from 'supertest';
 import { app, pool } from '../../src';
 
 jest.mock('../../src/queries/session');
+jest.mock('../../src/queries/user');
 
 describe('GET /example', () => {
     test('get call should return 200 and content-type json', async () => {

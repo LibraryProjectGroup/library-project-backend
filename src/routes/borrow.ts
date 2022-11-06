@@ -6,6 +6,7 @@ import {
     queryDeleteBorrow,
     queryUpdateBorrow,
     querySelectAllCurrentBorrows,
+    querySelectAllCurrentBorrows2,
     queryBookIsAvailable,
     queryBorrowsByUserId,
 } from "../queries/borrow";
@@ -88,6 +89,17 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json(await querySelectAllCurrentBorrows());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/current/admin",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectAllCurrentBorrows2());
         } catch (err) {
             next(err);
         }

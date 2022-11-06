@@ -16,6 +16,15 @@ export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
     return rows as Borrow[];
 };
 
+// Better naming a TODO
+export const querySelectAllCurrentBorrows2 = async (): Promise<Borrow[]> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT library_user.username, book.title, borrowing.borrowDate, borrowing.dueDate, book.id FROM borrowing join book ON book.id = borrowing.book JOIN library_user ON library_user.id = borrowing.library_user WHERE borrowing.returned != 1"
+    );
+    return rows as Borrow[];
+};
+
 export const querySelectBorrow = async (
     borrowingId: number
 ): Promise<Borrow | null> => {

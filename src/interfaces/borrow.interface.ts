@@ -1,10 +1,7 @@
-import User from './user.interface';
-import Book from './book.interface';
-
 interface Borrow {
-    id?: number;
-    user: User | number;
-    book: Book | number;
+    id: number;
+    library_user: number;
+    book: number;
     borrowDate: Date;
     dueDate: Date;
     returned: boolean;

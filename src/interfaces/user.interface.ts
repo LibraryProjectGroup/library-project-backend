@@ -1,9 +1,9 @@
 interface User {
     id: number;
-    email?: string;
     username: string;
     passw: string;
-    administrator: boolean | number;
+    administrator: boolean;
+    deleted: boolean;
 }
 
 export default User;

@@ -1,63 +1,72 @@
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
-import Borrow from '../interfaces/borrow.interface';
-import Book from '../interfaces/book.interface';
-import { pool } from '../index';
+import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { pool } from "../index";
+import Borrow from "../interfaces/borrow.interface";
 
-const querySelectAllBorrows = async () => {
+export const querySelectAllBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query('SELECT * FROM borrowing');
-    return rows as Array<Borrow>;
+    const [rows] = await promisePool.query("SELECT * FROM borrowing");
+    return rows as Borrow[];
 };
 
-const querySelectAllCurrentBorrows = async () => {
+export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT * FROM borrowing WHERE borrowing.returned = 0'
+        "SELECT * FROM borrowing WHERE returned = 0"
     );
-    return rows as Array<Borrow>;
+    return rows as Borrow[];
 };
 
-const querySelectBorrow = async (borrowingId: string) => {
+// Better naming a TODO
+export const querySelectAllCurrentBorrows2 = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT * FROM borrowing WHERE id = ?',
+        "SELECT library_user.username, book.title, borrowing.borrowDate, borrowing.dueDate, book.id FROM borrowing join book ON book.id = borrowing.book JOIN library_user ON library_user.id = borrowing.library_user WHERE borrowing.returned != 1"
+    );
+    return rows as Borrow[];
+};
+
+export const querySelectBorrow = async (
+    borrowingId: number
+): Promise<Borrow | null> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM borrowing WHERE id = ?",
         [borrowingId]
     );
     return rows.length > 0 ? (rows[0] as Borrow) : null;
 };
 
-const queryDeleteBorrow = async (borrowingId: string) => {
+export const queryDeleteBorrow = async (
+    borrowingId: number
+): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        'DELETE FROM borrowing WHERE id=?',
+        "DELETE FROM borrowing WHERE id=?",
         [borrowingId]
     );
     return rows.affectedRows != 0;
 };
 
-const queryInsertBorrow = async (borrow: Borrow) => {
+export const queryInsertBorrow = async (
+    userId: number,
+    bookId: number,
+    dueDate: Date,
+    borrowDate: Date
+): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        'INSERT INTO borrowing (library_user, book, borrowDate, dueDate, returned) VALUES (?) ',
-        [
-            [
-                borrow.user,
-                borrow.book,
-                borrow.borrowDate,
-                borrow.dueDate,
-                borrow.returned,
-            ],
-        ]
+        "INSERT INTO borrowing (library_user, book, borrowDate, dueDate, returned) VALUES (?) ",
+        [[userId, bookId, dueDate, borrowDate, false]]
     );
     return rows.affectedRows != 0;
 };
 
-const queryUpdateBorrow = async (borrow: Borrow) => {
+export const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        'UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?) WHERE id=(?)',
+        "UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?) WHERE id=(?)",
         [
-            borrow.user,
+            borrow.library_user,
             borrow.book,
             borrow.borrowDate,
             borrow.dueDate,
@@ -68,45 +77,32 @@ const queryUpdateBorrow = async (borrow: Borrow) => {
     return rows.affectedRows != 0;
 };
 
-const queryBookIsAvailable = async (bookId: number) => {
+export const queryBookIsAvailable = async (
+    bookId: number
+): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT * FROM borrowing WHERE book=(?) AND returned=0',
+        "SELECT * FROM borrowing WHERE book=(?) AND returned = 0",
         [bookId]
     );
     return rows.length == 0 ? true : false;
 };
 
-const queryBorrowsByUsername = async (username: string) => {
+export const queryBorrowsByUserId = async (
+    userId: number
+): Promise<Borrow[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        'SELECT borrowing.id, borrowing.book, borrowing.library_user, borrowing.dueDate, borrowing.borrowDate, borrowing.returned FROM borrowing INNER JOIN library_user ON borrowing.library_user=library_user.id WHERE library_user.username=(?) AND returned=0',
-        [username]
+        "SELECT * FROM borrowing WHERE library_user = ? AND returned = 0",
+        [userId]
     );
-    return rows as Array<Borrow>;
+    return rows as Borrow[];
 };
 
-const queryReturnBorrow = async (borrowId: number) => {
+export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
-    try {
-        const [rows] = await promisePool.query<ResultSetHeader>(
-            'UPDATE borrowing SET returned=1 WHERE id=(?)',
-            [borrowId]
-        );
-        return rows.affectedRows != 0;
-    } catch {
-        return false;
-    }
-};
-
-export {
-    queryInsertBorrow,
-    querySelectAllBorrows,
-    querySelectBorrow,
-    queryDeleteBorrow,
-    queryUpdateBorrow,
-    querySelectAllCurrentBorrows,
-    queryBookIsAvailable,
-    queryReturnBorrow,
-    queryBorrowsByUsername,
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM borrowing WHERE borrowing.dueDate < now() AND borrowing.returned = 0"
+    );
+    return rows as Borrow[];
 };

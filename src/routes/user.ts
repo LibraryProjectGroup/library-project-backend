@@ -73,7 +73,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
         if (req.sessionUser.administrator) {
             const username = req.query.username as string;
             const password = req.query.password as string;
-            const administrator = Boolean(req.query.administrator);
+            const administrator = Boolean(Number(req.query.administrator));
             const deleted = false;
             res.json({
                 ok: await queryInsertUser(

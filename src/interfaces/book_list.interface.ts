@@ -1,8 +1,6 @@
-import User from './user.interface';
-
 interface Book_list {
-    id?: number;
-    user: User | number;
+    id: number;
+    user: number;
     name: string;
 }
 

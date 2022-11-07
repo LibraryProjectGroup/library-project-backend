@@ -47,37 +47,53 @@ describe('GET /user', () => {
     });
 
     test('post /user (for authorized user to use)', async () => {
-        return request(app)
-            .post('/user')
-            .send({
-                username: 'testy',
-                password: 'encrypted gibberish',
-                administrator: 0,
-            })
-            .set('Authorization', `Bearer 123`)
-            .expect(200)
-            .expect({
-                ok: {
-                    id: 3,
+        return (
+            request(app)
+                .post(
+                    '/user?username=testy&password=encrypted gibberish&administrator=0'
+                )
+                /* 
+                //replace above .post with this commented code to switch to using body
+                .post('/user')
+                .send({
                     username: 'testy',
-                    passw: 'encrypted gibberish',
+                    password: 'encrypted gibberish',
                     administrator: 0,
-                },
-            });
+                })
+        */
+                .set('Authorization', `Bearer 123`)
+                .expect(200)
+                .expect({
+                    ok: {
+                        id: 3,
+                        username: 'testy',
+                        passw: 'encrypted gibberish',
+                        administrator: 0,
+                    },
+                })
+        );
     });
 
     test('put /user', async () => {
-        return request(app)
-            .put('/user')
-            .send({
-                id: 1,
-                username: 'testy',
-                password: 'encrypted gibberish',
-                administrator: 0,
-            })
-            .set('Authorization', `Bearer 123`)
-            .expect(200)
-            .expect({ ok: true });
+        return (
+            request(app)
+                .put(
+                    '/user?id=1&username=testy&password=encrypted gibberish&administrator=0'
+                )
+                /* 
+                //replace above .put with this commented code to switch to using body
+                .put('/user')
+                .send({
+                    id: 1,
+                    username: 'testy',
+                    password: 'encrypted gibberish',
+                    administrator: 0,
+                })
+                */
+                .set('Authorization', `Bearer 123`)
+                .expect(200)
+                .expect({ ok: true })
+        );
     });
 });
 

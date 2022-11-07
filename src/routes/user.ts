@@ -13,7 +13,15 @@ const router = Router();
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await querySelectAllUsers();
-        res.json(users);
+        const formattedUsers = [];
+        for (const user of users) {
+            formattedUsers.push({
+                id: user.id,
+                username: user.username,
+                administrator: user.administrator,
+            });
+        }
+        res.json(formattedUsers);
     } catch (err) {
         next(err);
     }
@@ -23,7 +31,11 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await querySelectUser(Number(req.query.id));
         if (user) {
-            res.json(user);
+            res.json({
+                id: user.id,
+                username: user.username,
+                administrator: user.administrator,
+            });
         } else {
             res.status(500).json({ ok: false });
         }

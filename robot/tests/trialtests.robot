@@ -6,7 +6,7 @@ Library  RequestsLibrary
 
 ${URL}         http://localhost:3000
 ${bearerToken}    "Bearer c43223f5acd61b48a4c43e69bb07c4da"
-${params}    access_token="c43223f5acd61b48a4c43e69bb07c4da"
+${params}    access_token=a80de4d40fb275eaa3ed96b57ced45d0
 
 *** test cases ***
 
@@ -60,10 +60,10 @@ Verify user can logout
     Should Be True    ${response.json()['ok']}
 
 Verify that all books can be found
-    &{headers}=    Create dictionary    Authorization=${bearerToken}
-    ${response}=    GET     url=${URL}/book/all?access_token=98e329dceb954b39a75984879fce45a8    headers=${headers}    expected_status=200
+    # &{headers}=    Create dictionary    Authorization=${bearerToken}
+    ${response}=    GET     url=${URL}/book/all?${params}    expected_status=200
     Log    ${response}
-    #Should Be True    ${response.json()['ok']}
+    # Should Be True    ${response.json()['ok']}
     # Should Be Equal As Strings    XYZ    ${response.json()['message']}
 
 #Verify user can be deleted

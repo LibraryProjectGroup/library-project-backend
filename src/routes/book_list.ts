@@ -22,10 +22,9 @@ router.get('/all', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/booklist/user', async (req: Request, res: Response) => {
-    const userId: string = req.query.id as string;
+router.get('/user', async (req: Request, res: Response) => {
     try {
-        const booklists = await querySelectListByUser(userId);
+        const booklists = await querySelectListByUser(req.sessionUser.id);
         res.json(booklists);
     } catch (error) {
         console.error(error);

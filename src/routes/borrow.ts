@@ -10,6 +10,7 @@ import {
     queryBookIsAvailable,
     queryBorrowsByUserId,
     queryExpiredBorrows,
+    queryExpiredBorrows2,
 } from "../queries/borrow";
 import Borrow from "../interfaces/borrow.interface";
 
@@ -41,13 +42,15 @@ router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
             (borrow.library_user == req.sessionUser.id ||
                 req.sessionUser.administrator)
         ) {
-            res.json({ ok: await queryDeleteBorrow(Number(req.query.borrowId)) });
+            res.json({
+                ok: await queryDeleteBorrow(Number(req.query.borrowId)),
+            });
         } else {
             res.status(403).json({ ok: false });
         }
     } catch (err) {
         next(err);
-    };
+    }
 });
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
@@ -99,6 +102,17 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json(await querySelectAllCurrentBorrows());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/expired/admin",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryExpiredBorrows2());
         } catch (err) {
             next(err);
         }

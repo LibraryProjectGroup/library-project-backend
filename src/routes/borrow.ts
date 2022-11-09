@@ -10,7 +10,7 @@ import {
     queryBookIsAvailable,
     queryBorrowsByUserId,
     queryExpiredBorrows,
-    queryExpiredBorrows2,
+    queryDetailedExpiredBorrows,
 } from "../queries/borrow";
 import Borrow from "../interfaces/borrow.interface";
 
@@ -112,7 +112,7 @@ router.get(
     "/expired/admin",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.json(await queryExpiredBorrows2());
+            res.json(await queryDetailedExpiredBorrows());
         } catch (err) {
             next(err);
         }

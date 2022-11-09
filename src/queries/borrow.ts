@@ -1,6 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Borrow from "../interfaces/borrow.interface";
+import DetailedExpiredBorrow from "../interfaces/detailedExpiredBorrows.interface";
 
 export const querySelectAllBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
@@ -107,11 +108,12 @@ export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
     return rows as Borrow[];
 };
 
-// TODO: better naming and an interface?
-export const queryExpiredBorrows2 = async (): Promise<any[]> => {
+export const queryDetailedExpiredBorrows = async (): Promise<
+    DetailedExpiredBorrow[]
+> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
         "SELECT borrowing.dueDate, book.title, book.id AS bookId, library_user.username, library_user.id AS userId FROM borrowing JOIN library_user ON library_user.id = borrowing.library_user JOIN book ON book.id= borrowing.book WHERE borrowing.dueDate < now() AND borrowing.returned = 0;"
     );
-    return rows;
+    return rows as DetailedExpiredBorrow[];
 };

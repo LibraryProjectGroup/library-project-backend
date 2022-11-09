@@ -1,4 +1,5 @@
 interface DetailedExpiredBorrow {
+    borrowId: number;
     title: string;
     dueDate: Date;
     bookId: number;

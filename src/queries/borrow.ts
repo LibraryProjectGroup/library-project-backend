@@ -113,7 +113,7 @@ export const queryDetailedExpiredBorrows = async (): Promise<
 > => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        "SELECT borrowing.dueDate, book.title, book.id AS bookId, library_user.username, library_user.id AS userId FROM borrowing JOIN library_user ON library_user.id = borrowing.library_user JOIN book ON book.id= borrowing.book WHERE borrowing.dueDate < now() AND borrowing.returned = 0;"
+        "SELECT borrowing.id AS borrowId, borrowing.dueDate, book.title, book.id AS bookId, library_user.username, library_user.id AS userId FROM borrowing JOIN library_user ON library_user.id = borrowing.library_user JOIN book ON book.id= borrowing.book WHERE borrowing.dueDate < now() AND borrowing.returned = 0;"
     );
     return rows as DetailedExpiredBorrow[];
 };

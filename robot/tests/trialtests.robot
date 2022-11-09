@@ -76,6 +76,10 @@ Verify user can be deleted
     ${response}=    DELETE  url=${URL}/user/?id=12&${bearerToken}    expected_status=200
     Should Be True    ${response.json()['ok']}    
 
+Verify user can logout
+    &{headers}=    Create dictionary    Authorization=${bearerToken}
+    ${response}=    POST  ${URL}/auth/logout?${bearerToken}   expected_status=200
+    Should Be True    ${response.json()['ok']}
 
 
 
@@ -85,11 +89,7 @@ Verify user can be deleted
     #${response}=    GET     url=${URL}/user/?id=123456789&${bearerToken}    expected_status=200
     #Should Be Not True  ${response.json()['ok']} 
 
-    # THIS ONE WORKS BUT IT REMOVES THE TOKEN AUTH
- # Verify user can logout
-    # &{headers}=    Create dictionary    Authorization=${bearerToken}
-    # ${response}=    POST  ${URL}/auth/logout?${bearerToken}   expected_status=200
-    # Should Be True    ${response.json()['ok']}
+
     
 
 

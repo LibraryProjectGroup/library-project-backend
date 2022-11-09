@@ -1,10 +1,12 @@
 *** Settings ***
 
 Library    RequestsLibrary
+Library    String
 
 *** Variables ***
 
 ${URL}         http://localhost:3000
+
 
 *** test cases ***
 
@@ -41,13 +43,17 @@ Verify registration requires password over 3 characters
     Should Not Be True    ${response.json()['ok']}
     Should Be Equal As Strings    Password has to be between 3 and 50 characters    ${response.json()['message']}
 
+Create random username
+        ${RDMid}=      Generate random string    9    0123456789
+        Set Global Variable    ${randomUsername}    ${RDMid}
+
 Verify user can be created
-    &{data}=    Create dictionary    username=username123    password=password
+    &{data}=    Create dictionary    username=${randomUsername}    password=password
     ${response}=    POST  ${URL}/auth/register   json=${data}    expected_status=200
     Should Be True    ${response.json()['ok']}
 
 Verify user cannot be duplicated
-    &{data}=    Create dictionary    username=username    password=password
+    &{data}=    Create dictionary    username=${randomUsername}    password=password
     ${response}=    POST  ${URL}/auth/register   json=${data}    expected_status=400
     Log    ${response}
     Should Not Be True    ${response.json()['ok']}
@@ -72,22 +78,25 @@ Verify that user can check user by id
     ${response}=    GET     url=${URL}/user/?id=1&${bearerToken}    expected_status=200
     Should Be Equal    ${response.json()['id']}   ${1}
 
-Verify user can be deleted
-    ${response}=    DELETE  url=${URL}/user/?id=12&${bearerToken}    expected_status=200
-    Should Be True    ${response.json()['ok']}    
+#Verify user can be deleted
+#    &{data}=    Create dictionary    id=24
+#    ${response}=    DELETE  url=${URL}/user/?${bearerToken}    json=${data}    expected_status=200
+#    Should Be True    ${response.json()['ok']}    
+
+Verify non existing user can't be deleted
+    &{data}=    Create dictionary    id=-24
+    ${response}=    DELETE  url=${URL}/user/?${bearerToken}    json=${data}    expected_status=200
+    Should Not Be True    ${response.json()['ok']} 
+
+Verify that user cannot get a nonexisting user
+    ${response}=    GET     url=${URL}/user/?id=121&${bearerToken}    expected_status=404
+    Should Not Be True    ${response.json()['ok']}
 
 Verify user can logout
-    &{headers}=    Create dictionary    Authorization=${bearerToken}
     ${response}=    POST  ${URL}/auth/logout?${bearerToken}   expected_status=200
     Should Be True    ${response.json()['ok']}
 
 
-
-
-# This one gives status code 500?
-#Verify that user cannot get a nonexisting user
-    #${response}=    GET     url=${URL}/user/?id=123456789&${bearerToken}    expected_status=200
-    #Should Be Not True  ${response.json()['ok']} 
 
 
     

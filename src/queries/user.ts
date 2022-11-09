@@ -2,13 +2,21 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import User from "../interfaces/user.interface";
 
-const querySelectAllUsers = async (): Promise<User[]> => {
+export const querySelectAllExistingUsers = async (): Promise<User[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query("SELECT * FROM library_user");
     return rows as User[];
 };
 
-const querySelectUser = async (userId: number): Promise<User | null> => {
+export const querySelectAllUsers = async (): Promise<User[]> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT * FROM library_user WHERE deleted != 1"
+    );
+    return rows as User[];
+};
+
+export const querySelectUser = async (userId: number): Promise<User | null> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
         "SELECT * FROM library_user WHERE id = ?",
@@ -17,7 +25,7 @@ const querySelectUser = async (userId: number): Promise<User | null> => {
     return rows.length > 0 ? (rows[0] as User) : null;
 };
 
-const querySelectUserBySessionId = async (
+export const querySelectUserBySessionId = async (
     sessionId: number
 ): Promise<User | null> => {
     const promisePool = pool.promise();
@@ -28,7 +36,7 @@ const querySelectUserBySessionId = async (
     return rows.length > 0 ? (rows[0] as User) : null;
 };
 
-const querySelectUserByUsername = async (
+export const querySelectUserByUsername = async (
     username: string
 ): Promise<User | null> => {
     const promisePool = pool.promise();
@@ -39,7 +47,7 @@ const querySelectUserByUsername = async (
     return rows.length > 0 ? (rows[0] as User) : null;
 };
 
-const queryDeleteUser = async (userId: number): Promise<boolean> => {
+export const queryHardDeleteUser = async (userId: number): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "DELETE FROM library_user WHERE id = ?",
@@ -48,15 +56,25 @@ const queryDeleteUser = async (userId: number): Promise<boolean> => {
     return rows.affectedRows != 0;
 };
 
-const queryInsertUser = async (
+export const querySoftDeleteUser = async (userId: number): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE library_user SET deleted=1 WHERE id=(?)",
+        [userId]
+    );
+    return rows.affectedRows != 0;
+};
+
+export const queryInsertUser = async (
     username: string,
     password: string,
-    isAdmin: boolean
+    isAdmin: boolean,
+    deleted: boolean
 ): Promise<User | null> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "INSERT INTO library_user (username, passw, administrator) VALUES (?)",
-        [[username, password, isAdmin]]
+        "INSERT INTO library_user (username, passw, administrator, deleted) VALUES (?)",
+        [[username, password, isAdmin, deleted]]
     );
     if (rows.affectedRows == 0) return null;
     return {
@@ -64,24 +82,15 @@ const queryInsertUser = async (
         username,
         passw: password,
         administrator: isAdmin,
+        deleted: false,
     };
 };
 
-const queryUpdateUser = async (user: User): Promise<boolean> => {
+export const queryUpdateUser = async (user: User): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "UPDATE library_user SET username=(?), passw=(?), administrator=(?) WHERE id=(?)",
         [user.username, user.passw, user.administrator, user.id]
     );
     return rows.affectedRows != 0;
-};
-
-export {
-    querySelectAllUsers,
-    querySelectUser,
-    querySelectUserBySessionId,
-    querySelectUserByUsername,
-    queryDeleteUser,
-    queryInsertUser,
-    queryUpdateUser,
 };

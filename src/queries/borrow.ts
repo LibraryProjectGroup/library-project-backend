@@ -2,13 +2,13 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Borrow from "../interfaces/borrow.interface";
 
-const querySelectAllBorrows = async (): Promise<Borrow[]> => {
+export const querySelectAllBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query("SELECT * FROM borrowing");
     return rows as Borrow[];
 };
 
-const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
+export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
         "SELECT * FROM borrowing WHERE returned = 0"
@@ -16,7 +16,16 @@ const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
     return rows as Borrow[];
 };
 
-const querySelectBorrow = async (
+// Better naming a TODO
+export const querySelectAllCurrentBorrows2 = async (): Promise<Borrow[]> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT library_user.username, book.title, borrowing.borrowDate, borrowing.dueDate, book.id FROM borrowing join book ON book.id = borrowing.book JOIN library_user ON library_user.id = borrowing.library_user WHERE borrowing.returned != 1"
+    );
+    return rows as Borrow[];
+};
+
+export const querySelectBorrow = async (
     borrowingId: number
 ): Promise<Borrow | null> => {
     const promisePool = pool.promise();
@@ -27,7 +36,9 @@ const querySelectBorrow = async (
     return rows.length > 0 ? (rows[0] as Borrow) : null;
 };
 
-const queryDeleteBorrow = async (borrowingId: number): Promise<boolean> => {
+export const queryDeleteBorrow = async (
+    borrowingId: number
+): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "DELETE FROM borrowing WHERE id=?",
@@ -36,7 +47,7 @@ const queryDeleteBorrow = async (borrowingId: number): Promise<boolean> => {
     return rows.affectedRows != 0;
 };
 
-const queryInsertBorrow = async (
+export const queryInsertBorrow = async (
     userId: number,
     bookId: number,
     dueDate: Date,
@@ -50,7 +61,7 @@ const queryInsertBorrow = async (
     return rows.affectedRows != 0;
 };
 
-const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
+export const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?) WHERE id=(?)",
@@ -66,7 +77,9 @@ const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
     return rows.affectedRows != 0;
 };
 
-const queryBookIsAvailable = async (bookId: number): Promise<boolean> => {
+export const queryBookIsAvailable = async (
+    bookId: number
+): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
         "SELECT * FROM borrowing WHERE book=(?) AND returned = 0",
@@ -75,7 +88,9 @@ const queryBookIsAvailable = async (bookId: number): Promise<boolean> => {
     return rows.length == 0 ? true : false;
 };
 
-const queryBorrowsByUserId = async (userId: number): Promise<Borrow[]> => {
+export const queryBorrowsByUserId = async (
+    userId: number
+): Promise<Borrow[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
         "SELECT * FROM borrowing WHERE library_user = ? AND returned = 0",
@@ -84,13 +99,10 @@ const queryBorrowsByUserId = async (userId: number): Promise<Borrow[]> => {
     return rows as Borrow[];
 };
 
-export {
-    queryInsertBorrow,
-    querySelectAllBorrows,
-    querySelectBorrow,
-    queryDeleteBorrow,
-    queryUpdateBorrow,
-    querySelectAllCurrentBorrows,
-    queryBookIsAvailable,
-    queryBorrowsByUserId,
+export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM borrowing WHERE borrowing.dueDate < now() AND borrowing.returned = 0"
+    );
+    return rows as Borrow[];
 };

@@ -6,8 +6,10 @@ import {
     queryDeleteBorrow,
     queryUpdateBorrow,
     querySelectAllCurrentBorrows,
+    querySelectAllCurrentBorrows2,
     queryBookIsAvailable,
     queryBorrowsByUserId,
+    queryExpiredBorrows,
 } from "../queries/borrow";
 import Borrow from "../interfaces/borrow.interface";
 
@@ -33,10 +35,19 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
 router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json({ ok: await queryDeleteBorrow(Number(req.query.id)) });
+        const borrow = await querySelectBorrow(req.body.borrowId);
+        if (
+            borrow &&
+            (borrow.library_user == req.sessionUser.id ||
+                req.sessionUser.administrator)
+        ) {
+            res.json({ ok: await queryDeleteBorrow(Number(req.query.borrowId)) });
+        } else {
+            res.status(403).json({ ok: false });
+        }
     } catch (err) {
         next(err);
-    }
+    };
 });
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
@@ -88,6 +99,28 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json(await querySelectAllCurrentBorrows());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/current/admin",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectAllCurrentBorrows2());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/expired",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryExpiredBorrows());
         } catch (err) {
             next(err);
         }

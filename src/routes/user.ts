@@ -2,7 +2,7 @@ import { Response, Request, Router, NextFunction } from "express";
 import {
     querySelectAllUsers,
     querySelectUser,
-    queryDeleteUser,
+    querySoftDeleteUser,
     queryInsertUser,
     queryUpdateUser,
 } from "../queries/user";
@@ -51,6 +51,7 @@ router.get(
             id: req.sessionUser.id,
             username: req.sessionUser.username,
             administrator: req.sessionUser.administrator,
+            deleted: req.sessionUser.deleted,
         });
     }
 );
@@ -58,7 +59,7 @@ router.get(
 router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.sessionUser.administrator) {
-            res.json({ ok: await queryDeleteUser(Number(req.body.id)) });
+            res.json({ ok: await querySoftDeleteUser(Number(req.body.id)) });
         } else {
             res.status(403).json({ ok: false });
         }
@@ -72,9 +73,15 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
         if (req.sessionUser.administrator) {
             const username = req.query.username as string;
             const password = req.query.password as string;
-            const administrator = Boolean(req.query.administrator);
+            const administrator = Boolean(Number(req.query.administrator));
+            const deleted = false;
             res.json({
-                ok: await queryInsertUser(username, password, administrator),
+                ok: await queryInsertUser(
+                    username,
+                    password,
+                    administrator,
+                    deleted
+                ),
             });
         } else {
             res.status(403).json({ ok: false });
@@ -92,6 +99,7 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
                 username: req.query.username as string,
                 passw: req.query.password as string,
                 administrator: Boolean(req.query.administrator),
+                deleted: false,
             };
             res.json({ ok: await queryUpdateUser(user) });
         } else {

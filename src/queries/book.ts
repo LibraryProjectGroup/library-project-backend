@@ -2,7 +2,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Book from "../interfaces/book.interface";
 
-const querySelectBook = async (bookId: number): Promise<Book | null> => {
+export const querySelectBook = async (bookId: number): Promise<Book | null> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
         "SELECT * FROM book WHERE book.id = ?",
@@ -11,13 +11,21 @@ const querySelectBook = async (bookId: number): Promise<Book | null> => {
     return rows.length > 0 ? (rows[0] as Book) : null;
 };
 
-const querySelectAllBooks = async (): Promise<Book[]> => {
+export const querySelectAllBooks = async (): Promise<Book[]> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT * FROM book WHERE deleted != 1"
+    );
+    return rows as Book[];
+};
+
+export const querySelectAllExistingBooks = async (): Promise<Book[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query("SELECT * FROM book");
     return rows as Book[];
 };
 
-const queryDeleteBook = async (bookId: number): Promise<boolean> => {
+export const queryHardDeleteBook = async (bookId: number): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "DELETE FROM book WHERE id=?",
@@ -26,7 +34,16 @@ const queryDeleteBook = async (bookId: number): Promise<boolean> => {
     return rows.affectedRows != 0;
 };
 
-const queryInsertBook = async (
+export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE book SET deleted=1 WHERE id=(?)",
+        [bookId]
+    );
+    return rows.changedRows != 0;
+};
+
+export const queryInsertBook = async (
     userId: number,
     title: string,
     author: string,
@@ -42,19 +59,11 @@ const queryInsertBook = async (
     return rows.affectedRows != 0;
 };
 
-const queryUpdateBook = async (book: Book): Promise<boolean> => {
+export const queryUpdateBook = async (book: Book): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "UPDATE book SET title=(?), author=(?), topic=(?), isbn=(?), location=(?) WHERE id=(?)",
         [book.title, book.author, book.topic, book.isbn, book.location, book.id]
     );
     return rows.changedRows != 0;
-};
-
-export {
-    querySelectBook,
-    querySelectAllBooks,
-    queryDeleteBook,
-    queryInsertBook,
-    queryUpdateBook,
 };

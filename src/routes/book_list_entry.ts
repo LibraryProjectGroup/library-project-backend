@@ -19,7 +19,7 @@ router.get('/all', async (req: Request, res: Response) => {
 });
 
 router.get('/', async (req: Request, res: Response) => {
-    const entryId = req.query.id as string;
+    const entryId = req.body.id;
     try {
         res.json(await querySelectEntry(entryId));
     } catch (error) {
@@ -39,7 +39,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.delete('/', async (req: Request, res: Response) => {
-    const entryId = req.query.id as string;
+    const entryId = req.body.id;
     try {
         res.json({ ok: await queryRemoveFromList(entryId) });
     } catch (error) {

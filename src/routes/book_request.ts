@@ -35,12 +35,10 @@ router.post(
     "/updatestatus",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const request = await querySelectRequest(req.body.id);
-            if (!request) return res.status(404).json({ ok: false });
-            if (request.userId != req.sessionUser.id)
+            if (req.sessionUser.administrator)
                 return res.status(403).json({ ok: false });
             res.json({
-                ok: await queryUpdateRequest(request.id, req.body.status),
+                ok: await queryUpdateRequest(req.body.id, req.body.status),
             });
         } catch (err) {
             next(err);

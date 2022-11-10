@@ -8,6 +8,15 @@ export const querySelectAllEntries = async () => {
     return rows as Array<Book_list_entry>;
 };
 
+export const querySelectAllEntriesByList = async (listId: number) => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT * FROM book_list_entry WHERE list = ?",
+        [listId]
+    );
+    return rows as Array<Book_list_entry>;
+};
+
 export const querySelectEntry = async (entryId: number) => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(

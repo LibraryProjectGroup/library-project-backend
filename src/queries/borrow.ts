@@ -1,6 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Borrow from "../interfaces/borrow.interface";
+import DetailedExpiredBorrow from "../interfaces/detailedExpiredBorrows.interface";
 
 export const querySelectAllBorrows = async (): Promise<Borrow[]> => {
     const promisePool = pool.promise();
@@ -105,4 +106,14 @@ export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
         "SELECT * FROM borrowing WHERE borrowing.dueDate < now() AND borrowing.returned = 0"
     );
     return rows as Borrow[];
+};
+
+export const queryDetailedExpiredBorrows = async (): Promise<
+    DetailedExpiredBorrow[]
+> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT borrowing.id AS borrowId, borrowing.dueDate, book.title, book.id AS bookId, library_user.username, library_user.id AS userId FROM borrowing JOIN library_user ON library_user.id = borrowing.library_user JOIN book ON book.id= borrowing.book WHERE borrowing.dueDate < now() AND borrowing.returned = 0;"
+    );
+    return rows as DetailedExpiredBorrow[];
 };

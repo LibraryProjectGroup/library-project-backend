@@ -38,7 +38,9 @@ INSERT INTO `library_user` (`id`, `username`, `passw`, `administrator`) VALUES
 	(1, 'hemuli', 'qweqweqwe', 0),
 	(2, 'joonajoo', 'soin5oeran', 1),
 	(3, 'mikkoR', '4egdv3a453', 0),
-	(4, 'Erika', 'h4whs54htrh', 1);
+	(4, 'Erika', 'h4whs54htrh', 1),
+  (5, 'admin', 'admin', 1),
+  (6, 'rascal', 'heckthelibrarians', 0);
 
 -- Dumping structure for table efilibrarydb.book
 DROP TABLE IF EXISTS `book`;
@@ -60,7 +62,9 @@ CREATE TABLE IF NOT EXISTS `book` (
 INSERT INTO `book` (`id`, `library_user`, `title`, `author`, `isbn`, `topic`, `location`) VALUES
 	(1, 1, 'JS for Dummies', 'Mikko Mallikas', '123-456-789', 'JS', 'Nevada'),
 	(2, 2, 'Java for Babies', 'John Doe', '123-5223-789', 'Java', 'Florida'),
-	(3, 3, 'Python for Pets', 'S. Bonsai', '123-456-5623', 'JS', 'Hong Kong');
+	(3, 3, 'Python for Pets', 'S. Bonsai', '123-456-5623', 'JS', 'Hong Kong'),
+  (4, 5, 'Assembly for Infants', 'A. Einstein', '999-999-999', 'Assembly', 'Switzerland'),
+  (5, 5, 'Animal Pictures for Programmers', 'Oreally', '987-654-321', 'Safari', 'Pacific Ocean');
 
 -- Dumping structure for table efilibrarydb.borrowing
 DROP TABLE IF EXISTS `borrowing`;
@@ -82,7 +86,9 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
 INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, `returned`) VALUES
 	(1, 1, 2, '2022-08-20', '2022-08-13', 0),
 	(2, 3, 3, '2022-08-18', '2022-08-11', 0),
-	(3, 2, 1, '2022-09-29', '2022-09-22', 1);
+	(3, 2, 1, '2022-09-29', '2022-09-22', 1),
+  (4, 6, 4, '2020-01-08', '2020-01-01', 0),
+  (5, 6, 5, '2008-09-09', '2008-09-02', 0);
 
   DROP TABLE IF EXISTS `book_list`;
   CREATE TABLE IF NOT EXISTS `book_list` (

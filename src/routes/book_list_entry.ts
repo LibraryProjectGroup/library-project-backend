@@ -19,7 +19,6 @@ router.get("/all", async (req: Request, res: Response) => {
     }
 });
 
-//export const querySelectAllEntriesByList = async (listId: number) => {
 router.get("/list", async (req: Request, res: Response) => {
     try {
         res.json(await querySelectAllEntriesByList(Number(req.query.id)));

@@ -22,10 +22,9 @@ router.get('/all', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/booklist/user', async (req: Request, res: Response) => {
-    const userId: string = req.query.id as string;
+router.get('/user', async (req: Request, res: Response) => {
     try {
-        const booklists = await querySelectListByUser(userId);
+        const booklists = await querySelectListByUser(req.sessionUser.id);
         res.json(booklists);
     } catch (error) {
         console.error(error);
@@ -34,7 +33,7 @@ router.get('/booklist/user', async (req: Request, res: Response) => {
 });
 
 router.get('/', async (req: Request, res: Response) => {
-    const listId = req.query.id as string;
+    const listId = req.body.id ;
     try {
         res.json(await querySelectList(listId));
     } catch (error) {
@@ -56,7 +55,7 @@ router.put('/', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
     const list: Book_list = { ...req.body };
     try {
-        res.json({ ok: await queryInsertNewList(list) });
+        res.json({ ok: await queryInsertNewList(req.sessionUser.id, req.body.name), });
     } catch (error) {
         console.error(error);
         res.json({ ok: false, status: 500 });
@@ -64,7 +63,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 router.delete('/', async (req: Request, res: Response) => {
-    const listId = req.query.id as string;
+    const listId = req.body.id;
     try {
         res.json({ ok: await queryDeleteList(listId) });
     } catch (error) {

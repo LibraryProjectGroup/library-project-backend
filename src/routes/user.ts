@@ -98,7 +98,7 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
                 id: Number(req.query.id),
                 username: req.query.username as string,
                 passw: req.query.password as string,
-                administrator: Boolean(req.query.administrator),
+                administrator: req.query.administrator === "true" ? true : false,
                 deleted: false,
             };
             res.json({ ok: await queryUpdateUser(user) });

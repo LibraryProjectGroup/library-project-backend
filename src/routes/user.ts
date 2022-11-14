@@ -5,6 +5,7 @@ import {
     querySoftDeleteUser,
     queryInsertUser,
     queryUpdateUser,
+    queryAdminUpdateUser,
 } from "../queries/user";
 import User from "../interfaces/user.interface";
 
@@ -91,7 +92,6 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-// Password isn't always sent from frontend. Separate endpoint for password update?
 router.put("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.sessionUser.administrator) {
@@ -111,5 +111,29 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 });
+
+router.put(
+    "/admin",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            if (req.sessionUser.administrator) {
+                // Another new interface for this?
+                const user: User = {
+                    id: Number(req.query.id),
+                    username: req.query.username as string,
+                    passw: "null",
+                    administrator:
+                        req.query.administrator === "true" ? true : false,
+                    deleted: false,
+                };
+                res.json({ ok: await queryAdminUpdateUser(user) });
+            } else {
+                res.status(403).json({ ok: false });
+            }
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 export default router;

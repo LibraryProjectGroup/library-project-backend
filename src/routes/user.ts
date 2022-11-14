@@ -91,6 +91,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
+// Password isn't always sent from frontend. Separate endpoint for password update?
 router.put("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.sessionUser.administrator) {
@@ -98,7 +99,8 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
                 id: Number(req.query.id),
                 username: req.query.username as string,
                 passw: req.query.password as string,
-                administrator: req.query.administrator === "true" ? true : false,
+                administrator:
+                    req.query.administrator === "true" ? true : false,
                 deleted: false,
             };
             res.json({ ok: await queryUpdateUser(user) });

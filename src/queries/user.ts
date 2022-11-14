@@ -86,11 +86,12 @@ export const queryInsertUser = async (
     };
 };
 
+// Will not update password.
 export const queryUpdateUser = async (user: User): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "UPDATE library_user SET username=(?), passw=(?), administrator=(?) WHERE id=(?)",
-        [user.username, user.passw, user.administrator, user.id]
+        "UPDATE library_user SET username=(?), administrator=(?) WHERE id=(?)",
+        [user.username, user.administrator, user.id]
     );
     return rows.affectedRows != 0;
 };

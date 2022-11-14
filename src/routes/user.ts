@@ -37,7 +37,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
                 administrator: user.administrator,
             });
         } else {
-            res.status(500).json({ ok: false });
+            res.status(404).json({ ok: false });
         }
     } catch (err) {
         next(err);

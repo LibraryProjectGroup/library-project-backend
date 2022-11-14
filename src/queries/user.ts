@@ -94,3 +94,12 @@ export const queryUpdateUser = async (user: User): Promise<boolean> => {
     );
     return rows.affectedRows != 0;
 };
+
+export const queryAdminUpdateUser = async (user: User): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE library_user SET username=(?), administrator=(?) WHERE id=(?)",
+        [user.username, user.administrator, user.id]
+    );
+    return rows.affectedRows != 0;
+};

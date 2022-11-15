@@ -10,6 +10,7 @@ import borrowRouter from "./routes/borrow";
 import book_listRouter from "./routes/book_list";
 import book_list_entryRouter from "./routes/book_list_entry";
 import book_requestRouter from "./routes/book_request";
+import book_reservationRouter from "./routes/book_reservation";
 import Session from "./interfaces/session.interface";
 import { querySelectSessionBySecret } from "./queries/session";
 import User from "./interfaces/user.interface";
@@ -63,6 +64,7 @@ app.use("/borrow", borrowRouter);
 app.use("/booklist", book_listRouter);
 app.use("/booklistentry", book_list_entryRouter);
 app.use("/bookrequest", book_requestRouter);
+app.use("/bookreservation", book_reservationRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err);

@@ -49,7 +49,7 @@ describe("basic endpoint testing for /book", () => {
         return request(app)
             .put("/book")
             .send({
-                id: 2,
+                id: 3,
                 title: "editedtitle",
                 author: "editedauthor",
                 isbn: "editedisbn",

@@ -31,7 +31,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-router.post(
+router.put(
     "/updatestatus",
     async (req: Request, res: Response, next: NextFunction) => {
         try {

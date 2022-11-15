@@ -51,7 +51,13 @@ async function updateContainer(containerId) {
                 await image.remove();
                 await log("Old image removed");
 
-                const newContainer = await docker.createContainer(containerInfo.Config);
+                let config = containerInfo.Config;
+                config.HostConfig = { PortBindings: {} }
+                Object.keys(config.ExposedPorts).forEach((portProtocol) => {
+                    config.HostConfig.PortBindings[portProtocol] = [{ HostPort: portProtocol.split("/")[0] }]
+                });
+
+                const newContainer = await docker.createContainer(config);
                 const newContainerInfo = await newContainer.inspect();
                 await log(`Container ${newContainerInfo.Name} created`);
 

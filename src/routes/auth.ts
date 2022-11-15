@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { queryInsertUser, querySelectUserByUsername } from "../queries/user";
 import { queryInsertSession, queryInvalidateSession } from "../queries/session";
 import crypto from "crypto";
+import bcrypt from "bcrypt";
 
 const timeout = 60 * 60 * 24 * 7; // 7 days before user has to login again
 const minUsernameLength = 3;
@@ -47,7 +48,10 @@ router.post("/register", async (req: Request, res: Response) => {
             ok: false,
             message: "Username is already taken",
         });
-    let newUser = await queryInsertUser(username, password, false, false);
+
+    let hashedPassword = await bcrypt.hash(password, 8);
+
+    let newUser = await queryInsertUser(username, hashedPassword, false, false);
     if (newUser == null) return res.status(500).json({ ok: false });
 
     let session = await createSession(newUser.id);
@@ -69,7 +73,7 @@ router.post("/login", async (req: Request, res: Response) => {
             message: "No account by that username",
         });
 
-    if (user.passw != password)
+    if (!await bcrypt.compare(password, user.passw))
         return res.status(403).json({
             ok: false,
             message: "Invalid password",

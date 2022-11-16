@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS `library_user`;
 CREATE TABLE IF NOT EXISTS `library_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
+  `email` varchar(80) NOT NULL,
   `passw` varchar(150) NOT NULL,
   `administrator` tinyint(1) DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT 0,
@@ -34,14 +35,14 @@ CREATE TABLE IF NOT EXISTS `library_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table efilibrarydb.library_user: ~4 rows (approximately)
-INSERT INTO `library_user` (`id`, `username`, `passw`, `administrator`) VALUES
-	(1, 'hemuli', 'qweqweqwe', 0),
-	(2, 'joonajoo', 'soin5oeran', 1),
-	(3, 'mikkoR', '4egdv3a453', 0),
-	(4, 'Erika', 'h4whs54htrh', 1),
-  (5, 'admin', 'admin', 1),
-  (6, 'rascal', 'heckthelibrarians', 0);
-  (7, 'testityyppi', 'robotTests123#', 1);
+INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`) VALUES
+	(1, 'hemuli', 'hemuli@place.holder', 'qweqweqwe', 0),
+	(2, 'joonajoo', 'joonajoo@place.holder', 'soin5oeran', 1),
+	(3, 'mikkoR', 'mikkoR@place.holder', '4egdv3a453', 0),
+	(4, 'Erika', 'Erika@place.holder', 'h4whs54htrh', 1),
+  (5, 'admin', 'admin@place.holder', 'admin', 1),
+  (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0);
+  (7, 'testityyppi', 'testityyppi@testi.tyyppi', 'robotTests123#', 1);
 
 -- Dumping structure for table efilibrarydb.book
 DROP TABLE IF EXISTS `book`;

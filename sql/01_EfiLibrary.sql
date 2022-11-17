@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `library_user` (
   `deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQ_libary_user_username` (`username`),
+  UNIQUE KEY `UQ_libary_user_email` (`email`),
   CONSTRAINT `CHK_libary_user_username_not_empty` CHECK (char_length(`username`) > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 

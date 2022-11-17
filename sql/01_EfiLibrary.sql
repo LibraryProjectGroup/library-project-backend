@@ -42,7 +42,8 @@ INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`)
 	(4, 'Erika', 'Erika@place.holder', 'h4whs54htrh', 1),
   (5, 'admin', 'admin@place.holder', 'admin', 1),
   (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0),
-  (7, 'testityyppi', 'testityyppi@testi.tyyppi', 'robotTests123#', 1);
+  (7, 'testityyppi', 'testityyppi', '$2b$08$81Cv2lgk43p6EDHQ/qa3buFVcCMDtebDju4iAsoGOuRzAyqFnwHS6', 1),
+  (8, 'asd', 'asd@asd', '$2b$08$2okL0BPRzVnLKQujmmRK7u4NU/FyeAXBRDJ9FDD7zQKzJ6r9aTyDW', 1);
 
 -- Dumping structure for table efilibrarydb.book
 DROP TABLE IF EXISTS `book`;

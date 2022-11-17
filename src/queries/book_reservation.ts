@@ -6,7 +6,7 @@ export const querySelectReservations = async (): Promise<
     Book_reservation[]
 > => {
     const promisePool = pool.promise();
-    const [rows] = await promisePool.query("SELECT * FROM book_reservations");
+    const [rows] = await promisePool.query("SELECT * FROM book_reservation");
     return rows as Book_reservation[];
 };
 
@@ -27,7 +27,7 @@ export const queryInsertReservation = async (
 ): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "INSERT INTO book_reservation (userId, bookId) VALUES (?, NOW())",
+        "INSERT INTO book_reservation VALUES (NULL, ?, NOW(), false, false)",
         [[userId, bookId]]
     );
     return rows.affectedRows != 0;
@@ -37,12 +37,32 @@ export const queryUpdateReservation = async (
     id: number,
     userId: number,
     bookId: number,
-    reservationDatetime: Date
+    reservationDatetime: Date,
+    loaned: boolean,
+    canceled: boolean
 ): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "UPDATE book_reservation SET userId = ?, bookId = ?, reservationDatetime = ? WHERE id = ?",
-        [userId, bookId, reservationDatetime, id]
+        "UPDATE book_reservation SET userId = ?, bookId = ?, reservationDatetime = ?, loaned = ?, canceled = ? WHERE id = ?",
+        [userId, bookId, reservationDatetime, loaned, canceled, id]
+    );
+    return rows.affectedRows != 0;
+};
+
+export const queryCancelReservation = async (id: number): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE book_reservation SET canceled=true WHERE id = ?",
+        [id]
+    );
+    return rows.affectedRows != 0;
+};
+
+export const queryLoanReservation = async (id: number): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "UPDATE book_reservation SET loaned=true WHERE id = ?",
+        [id]
     );
     return rows.affectedRows != 0;
 };

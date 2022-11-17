@@ -73,12 +73,11 @@ router.post("/login", async (req: Request, res: Response) => {
             message: "No account by that username",
         });
 
-    if (!await bcrypt.compare(password, user.passw))
+    if (!(await bcrypt.compare(password, user.passw)))
         return res.status(403).json({
             ok: false,
             message: "Invalid password",
         });
-
     let session = await createSession(user.id);
     if (session == null) return res.status(500).json({ ok: false });
 

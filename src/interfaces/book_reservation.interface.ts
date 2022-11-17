@@ -3,6 +3,8 @@ interface Book_reservation {
     bookId: number;
     userId: number;
     reservationDatetime: Date;
+    loaned: boolean;
+    canceled: boolean;
 }
 
 export default Book_reservation;

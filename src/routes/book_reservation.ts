@@ -4,6 +4,8 @@ import {
     querySelectReservation,
     queryInsertReservation,
     queryUpdateReservation,
+    queryCancelReservation,
+    queryLoanReservation,
 } from "../queries/book_reservation";
 
 const router = Router();
@@ -28,5 +30,31 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 });
+
+router.post(
+    "/cancel",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json({
+                ok: await queryCancelReservation(req.body.bookId),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.post(
+    "/loan",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json({
+                ok: await queryLoanReservation(req.body.bookId),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 export default router;

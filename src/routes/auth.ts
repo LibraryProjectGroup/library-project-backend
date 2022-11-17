@@ -129,7 +129,6 @@ router.post("/login", async (req: Request, res: Response) => {
             ok: false,
             message: "Invalid Email or Password",
         });
-
     let session = await createSession(user.id);
     if (session == null) return res.status(500).json({ ok: false });
 

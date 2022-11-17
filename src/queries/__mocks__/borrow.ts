@@ -9,13 +9,15 @@ import {
 } from "../../queries/user";
 
 // note: this mock is very basic and its purpose is for jest to run through routes
+let tenDaysAhead = new Date();
+tenDaysAhead.setDate(tenDaysAhead.getDate() + 10);
 
 const borrow1: Borrow = {
     id: 1,
     library_user: 1,
     book: 1,
     borrowDate: new Date(),
-    dueDate: new Date(),
+    dueDate: new Date(tenDaysAhead),
     returned: false,
 };
 
@@ -24,7 +26,7 @@ const borrow2: Borrow = {
     library_user: 1,
     book: 3,
     borrowDate: new Date(),
-    dueDate: new Date(),
+    dueDate: new Date(tenDaysAhead),
     returned: false,
 };
 const borrow3: Borrow = {
@@ -62,7 +64,17 @@ export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
     return array as Array<Borrow>;
 };
 
-//export const querySelectAllCurrentBorrows2 = async (): Promise<Borrow[]> => {};
+/*
+export const querySelectAllCurrentBorrows2 = async (): Promise<Borrow[]> => {
+    let array: Array<Borrow> = [];
+    mockBorrowData.forEach((element) => {
+        if (!element.returned && new Date() > element.dueDate) {
+            array.push(element);
+        }
+    });
+    return array as Array<Borrow>;
+};
+*/
 
 export const querySelectBorrow = async (
     borrowingId: number

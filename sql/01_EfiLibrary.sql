@@ -41,7 +41,7 @@ INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`)
 	(3, 'mikkoR', 'mikkoR@place.holder', '4egdv3a453', 0),
 	(4, 'Erika', 'Erika@place.holder', 'h4whs54htrh', 1),
   (5, 'admin', 'admin@place.holder', 'admin', 1),
-  (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0);
+  (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0),
   (7, 'testityyppi', 'testityyppi@testi.tyyppi', 'robotTests123#', 1);
 
 -- Dumping structure for table efilibrarydb.book

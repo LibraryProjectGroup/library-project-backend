@@ -1,5 +1,9 @@
 import { Request, Response, Router } from "express";
-import { queryInsertUser, querySelectUserByUsername } from "../queries/user";
+import {
+    queryInsertUser,
+    querySelectUserByEmail,
+    querySelectUserByUsername,
+} from "../queries/user";
 import { queryInsertSession, queryInvalidateSession } from "../queries/session";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
@@ -18,9 +22,50 @@ async function createSession(userId: number) {
     return await queryInsertSession(userId, secret, timeout);
 }
 
+const isAlphaNumeric = (charCode: number) => {
+    if (
+        (charCode > 47 && charCode < 58) || // (0-9)
+        (charCode > 64 && charCode < 91) || // (A-Z)
+        (charCode > 96 && charCode < 123) // (a-z)
+    )
+        return true;
+    else return false;
+};
+
+const isValidEmail = (email: string) => {
+    // "Email has to be in the form of [ prefix@domain ]"
+    // note: add check to only allow .-_ inside prefix symbols when followed by alphanumeric(s);
+    //      don't allow any other symbol (unless we care about +)
+    if (email.includes("@")) {
+        let parts = email.split("@");
+        let prefix = parts[0];
+        let domain = parts[1];
+        if (prefix.length > 0) {
+            let first = prefix.slice(0, 1).charCodeAt(0);
+            let last = prefix.slice(-1).charCodeAt(0);
+            if (isAlphaNumeric(first) && isAlphaNumeric(last)) {
+                if (domain.includes(".")) {
+                    let domainparts = domain.split(".");
+                    return domainparts[domainparts.length - 1].length >= 2;
+                } else {
+                    return domain.length >= 2;
+                }
+            }
+        }
+    }
+    return false;
+};
+
 router.post("/register", async (req: Request, res: Response) => {
     const username = req.body.username as string;
     const password = req.body.password as string;
+    const email = req.body.email as string;
+
+    if (!isValidEmail(email))
+        return res.status(400).json({
+            ok: false,
+            message: "Email has to be in the form of [ prefix@domain ]",
+        });
 
     if (
         username == undefined ||
@@ -51,7 +96,13 @@ router.post("/register", async (req: Request, res: Response) => {
 
     let hashedPassword = await bcrypt.hash(password, 8);
 
-    let newUser = await queryInsertUser(username, hashedPassword, false, false);
+    let newUser = await queryInsertUser(
+        username,
+        email,
+        hashedPassword,
+        false,
+        false
+    );
     if (newUser == null) return res.status(500).json({ ok: false });
 
     let session = await createSession(newUser.id);
@@ -64,19 +115,19 @@ router.post("/register", async (req: Request, res: Response) => {
 });
 
 router.post("/login", async (req: Request, res: Response) => {
-    const username = req.body.username as string;
     const password = req.body.password as string;
-    let user = await querySelectUserByUsername(username);
+    const email = req.body.email as string;
+    let user = await querySelectUserByEmail(email);
     if (user == null)
         return res.status(404).json({
             ok: false,
-            message: "No account by that username",
+            message: "Invalid Email or Password",
         });
 
     if (!(await bcrypt.compare(password, user.passw)))
         return res.status(403).json({
             ok: false,
-            message: "Invalid password",
+            message: "Invalid Email or Password",
         });
     let session = await createSession(user.id);
     if (session == null) return res.status(500).json({ ok: false });

@@ -19,6 +19,7 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
             formattedUsers.push({
                 id: user.id,
                 username: user.username,
+                email: user.email,
                 administrator: user.administrator,
             });
         }
@@ -35,6 +36,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
             res.json({
                 id: user.id,
                 username: user.username,
+                email: user.email,
                 administrator: user.administrator,
             });
         } else {
@@ -51,6 +53,7 @@ router.get(
         res.json({
             id: req.sessionUser.id,
             username: req.sessionUser.username,
+            email: req.sessionUser.email,
             administrator: req.sessionUser.administrator,
             deleted: req.sessionUser.deleted,
         });
@@ -73,12 +76,14 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         if (req.sessionUser.administrator) {
             const username = req.query.username as string;
+            const email = req.query.email as string;
             const password = req.query.password as string;
             const administrator = Boolean(Number(req.query.administrator));
             const deleted = false;
             res.json({
                 ok: await queryInsertUser(
                     username,
+                    email,
                     password,
                     administrator,
                     deleted
@@ -98,6 +103,7 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
             const user: User = {
                 id: Number(req.query.id),
                 username: req.query.username as string,
+                email: req.query.email as string,
                 passw: req.query.password as string,
                 administrator:
                     req.query.administrator === "true" ? true : false,
@@ -121,6 +127,7 @@ router.put(
                 const user: User = {
                     id: Number(req.query.id),
                     username: req.query.username as string,
+                    email: req.query.email as string,
                     passw: "null",
                     administrator:
                         req.query.administrator === "true" ? true : false,

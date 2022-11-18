@@ -5,6 +5,7 @@ import User from "../../interfaces/user.interface";
 const user1: User = {
     id: 1,
     username: "t1",
+    email: "t1@t.est",
     passw: "p1",
     administrator: false,
     deleted: false,
@@ -12,6 +13,7 @@ const user1: User = {
 const user2: User = {
     id: 2,
     username: "t2",
+    email: "t2@t.est",
     passw: "p2",
     administrator: true,
     deleted: false,
@@ -19,6 +21,7 @@ const user2: User = {
 const user3: User = {
     id: 3,
     username: "t3",
+    email: "t3@t.est",
     passw: "p3",
     administrator: false,
     deleted: true,
@@ -71,6 +74,7 @@ export const querySoftDeleteUser = async (userId: string) => {
 
 export const queryInsertUser = async (
     username: string,
+    email: string,
     password: string,
     isAdmin: boolean | number
 ) => {
@@ -78,6 +82,7 @@ export const queryInsertUser = async (
         ? ({
               id: 3,
               username,
+              email,
               passw: password,
               administrator: isAdmin,
           } as User)

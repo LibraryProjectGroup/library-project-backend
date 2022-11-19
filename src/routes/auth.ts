@@ -139,7 +139,7 @@ router.post("/login", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/logout", async (req: Request, res: Response) => {
+router.post("/logout", async (req: Request, res: Response) => {
     if (!req.token)
         return res.status(400).json({ ok: false, message: "No session" });
 

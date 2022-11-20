@@ -14,7 +14,7 @@ const router = Router();
 
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectCurrentReservations());
+        res.json(await querySelectReservations());
     } catch (err) {
         next(err);
     }
@@ -24,7 +24,7 @@ router.get(
     "/all/current",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.json(await querySelectReservations());
+            res.json(await querySelectCurrentReservations());
         } catch (err) {
             next(err);
         }

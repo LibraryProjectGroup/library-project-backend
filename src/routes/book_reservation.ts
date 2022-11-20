@@ -8,6 +8,7 @@ import {
     queryLoanReservation,
     querySelectCurrentReservations,
     querySelectJoinedReservations,
+    queryUserCurrentJoinedReservations,
 } from "../queries/book_reservation";
 
 const router = Router();
@@ -86,7 +87,7 @@ router.post(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json({
-                ok: await queryCurrentUserReservations(req.body.userId),
+                ok: await queryUserCurrentJoinedReservations(req.body.userId),
             });
         } catch (err) {
             next(err);

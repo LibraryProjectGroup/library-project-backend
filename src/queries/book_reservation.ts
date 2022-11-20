@@ -10,6 +10,26 @@ export const querySelectReservations = async (): Promise<
     return rows as Book_reservation[];
 };
 
+export const querySelectJoinedReservations = async (): Promise<
+    Book_reservation[]
+> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId ORDER BY reservation.reservationDatetime DESC"
+    );
+    return rows as Book_reservation[];
+};
+
+export const querySelectCurrentReservations = async (): Promise<
+    Book_reservation[]
+> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT * FROM book_reservation WHERE book_reservation.canceled != 1 AND book_reservation.loaned != 1"
+    );
+    return rows as Book_reservation[];
+};
+
 export const querySelectReservation = async (
     id: number
 ): Promise<Book_reservation | null> => {

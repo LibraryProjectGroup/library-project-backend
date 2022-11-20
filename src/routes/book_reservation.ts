@@ -81,4 +81,16 @@ router.post(
     }
 );
 
+router.post(
+    "/user/current",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json({
+                ok: await queryCurrentUserReservations(req.body.userId),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 export default router;

@@ -86,3 +86,14 @@ export const queryLoanReservation = async (id: number): Promise<boolean> => {
     );
     return rows.affectedRows != 0;
 };
+
+export const queryCurrentUserJoinedReservations = async (
+    userId: number
+): Promise<JoinedReservation[] | null> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId WHERE reservation.userId = ? AND loaned = 0 AND canceled = 0",
+        [userId]
+    );
+    return rows.length > 0 ? (rows as JoinedReservation[]) : null;
+};

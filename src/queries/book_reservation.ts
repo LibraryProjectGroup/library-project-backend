@@ -1,6 +1,7 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Book_reservation from "../interfaces/book_reservation.interface";
+import JoinedReservation from "../interfaces/joinedReservation.interface";
 
 export const querySelectReservations = async (): Promise<
     Book_reservation[]

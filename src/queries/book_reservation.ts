@@ -87,7 +87,7 @@ export const queryLoanReservation = async (id: number): Promise<boolean> => {
     return rows.affectedRows != 0;
 };
 
-export const queryCurrentUserJoinedReservations = async (
+export const queryUserCurrentJoinedReservations = async (
     userId: number
 ): Promise<JoinedReservation[] | null> => {
     const promisePool = pool.promise();

@@ -4,6 +4,7 @@ import { app, pool } from "../../src";
 
 jest.mock("../../src/queries/session");
 jest.mock("../../src/queries/borrow");
+jest.mock("../../src/queries/book");
 
 describe("basic endpoint testing for /borrow", () => {
     test("get /borrow/all", async () => {
@@ -22,20 +23,23 @@ describe("basic endpoint testing for /borrow", () => {
             .expect("Content-Type", /json/);
     });
 
-    // WRONG WRONG WRONG WRONG WRONG
     test("delete /borrow", async () => {
         return request(app)
-            .delete("/borrow?id=2")
+            .delete("/borrow")
+            .send({
+                borrowId: 2,
+            })
             .set("Authorization", `Bearer 123`)
             .expect(200)
-            .expect("Content-Type", /json/);
+            .expect({ ok: true });
     });
 
-    //High chance of being wrong
     test("post /borrow", async () => {
         return request(app)
             .post("/borrow")
-            .send()
+            .send({
+                bookId: 3,
+            })
             .set("Authorization", `Bearer 123`)
             .expect(200)
             .expect({ ok: true });
@@ -46,7 +50,6 @@ describe("basic endpoint testing for /borrow", () => {
             .put("/borrow")
             .send({
                 id: 1,
-                libary_user: 1,
                 book: 1,
                 borrowDate: new Date(),
                 dueDate: new Date(),
@@ -65,7 +68,6 @@ describe("basic endpoint testing for /borrow", () => {
             .expect("Content-Type", /json/);
     });
 
-    // mock querie queryDetailedExpiredBorrows() not done yet
     test("get /borrow/expired/admin", async () => {
         return request(app)
             .get("/borrow/expired/admin")
@@ -74,7 +76,6 @@ describe("basic endpoint testing for /borrow", () => {
             .expect("Content-Type", /json/);
     });
 
-    // mock querie querySelectAllCurrentBorrows2() not done yet
     test("get /borrow/current/admin", async () => {
         return request(app)
             .get("/borrow/current/admin")
@@ -99,17 +100,11 @@ describe("basic endpoint testing for /borrow", () => {
             .expect("Content-Type", /json/);
     });
 
-    // WRONG WRONG WRONG WRONG WRONG
     test("put /borrow/return", async () => {
         return request(app)
             .put("/borrow/return")
             .send({
-                id: 1,
-                libary_user: 1,
-                book: 1,
-                borrowDate: new Date(),
-                dueDate: new Date(),
-                returned: false,
+                borrowId: 1,
             })
             .set("Authorization", `Bearer 123`)
             .expect(200)

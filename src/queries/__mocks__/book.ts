@@ -35,7 +35,18 @@ let book3: Book = {
     deleted: false,
 };
 
-let mockBookData = [book1, book2, book3];
+let book4: Book = {
+    id: 4,
+    library_user: 2,
+    title: "bt4",
+    author: "ba4",
+    isbn: "456-t567",
+    topic: "SQL",
+    location: "Helsinki",
+    deleted: false,
+};
+
+let mockBookData = [book1, book2, book3, book4];
 let idCounter = 4;
 
 const getBook = (id: number) => {

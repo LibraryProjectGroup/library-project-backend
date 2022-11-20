@@ -1,16 +1,11 @@
 import Borrow from "../../interfaces/borrow.interface";
-import {
-    querySelectAllUsers,
-    querySelectUser,
-    querySoftDeleteUser,
-    queryInsertUser,
-    queryUpdateUser,
-    queryAdminUpdateUser,
-} from "../../queries/user";
+import DetailedExpiredBorrow from "../../interfaces/detailedExpiredBorrows.interface";
 
 // note: this mock is very basic and its purpose is for jest to run through routes
-let tenDaysAhead = new Date();
-tenDaysAhead.setDate(tenDaysAhead.getDate() + 10);
+
+let date = new Date();
+const tenDaysAhead = date.setDate(date.getDate() + 10);
+const dayBehind = date.setDate(date.getDate() - 1);
 
 const borrow1: Borrow = {
     id: 1,
@@ -29,6 +24,7 @@ const borrow2: Borrow = {
     dueDate: new Date(tenDaysAhead),
     returned: false,
 };
+
 const borrow3: Borrow = {
     id: 3,
     library_user: 2,
@@ -38,7 +34,26 @@ const borrow3: Borrow = {
     returned: true,
 };
 
-let mockBorrowData = [borrow1, borrow2, borrow3];
+const borrow4: Borrow = {
+    id: 4,
+    library_user: 2,
+    book: 4,
+    borrowDate: new Date(),
+    dueDate: new Date(dayBehind),
+    returned: false,
+};
+
+const detailedExpiredBorrow1: DetailedExpiredBorrow = {
+    borrowId: 4,
+    title: "bt4",
+    dueDate: borrow4.dueDate,
+    bookId: 4,
+    library_user: "t2",
+    userId: borrow4.library_user,
+};
+
+let mockBorrowData = [borrow1, borrow2, borrow3, borrow4];
+let mockDetailedExpiredBorrowData = [detailedExpiredBorrow1];
 let idCounter = 4;
 
 const getBorrow = (id: number) => {
@@ -64,17 +79,27 @@ export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
     return array as Array<Borrow>;
 };
 
-/*
-export const querySelectAllCurrentBorrows2 = async (): Promise<Borrow[]> => {
-    let array: Array<Borrow> = [];
+export const querySelectAllCurrentBorrows2 = async () => {
+    let array: {
+        username: string;
+        title: string;
+        borrowDate: Date;
+        dueDate: Date;
+        id: number;
+    }[] = [];
     mockBorrowData.forEach((element) => {
-        if (!element.returned && new Date() > element.dueDate) {
-            array.push(element);
+        if (!element.returned) {
+            array.push({
+                username: "asd",
+                title: "asd",
+                borrowDate: element.borrowDate,
+                dueDate: element.dueDate,
+                id: element.book,
+            });
         }
     });
-    return array as Array<Borrow>;
+    return array;
 };
-*/
 
 export const querySelectBorrow = async (
     borrowingId: number
@@ -113,7 +138,6 @@ export const queryInsertBorrow = async (
 export const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
     const editedBorrow = getBorrow(borrow.id);
     if (editedBorrow) {
-        editedBorrow.library_user = borrow.library_user;
         editedBorrow.book = borrow.book;
         editedBorrow.borrowDate = borrow.borrowDate;
         editedBorrow.dueDate = borrow.dueDate;
@@ -160,4 +184,8 @@ export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
     return array as Array<Borrow>;
 };
 
-// export const queryDetailedExpiredBorrows = async (): Promise<DetailedExpiredBorrow[]> => {}
+export const queryDetailedExpiredBorrows = async (): Promise<
+    DetailedExpiredBorrow[]
+> => {
+    return mockDetailedExpiredBorrowData as Array<DetailedExpiredBorrow>;
+};

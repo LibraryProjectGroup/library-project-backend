@@ -6,17 +6,41 @@ import {
     queryUpdateReservation,
     queryCancelReservation,
     queryLoanReservation,
+    querySelectCurrentReservations,
+    querySelectJoinedReservations,
 } from "../queries/book_reservation";
 
 const router = Router();
 
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectReservations());
+        res.json(await querySelectCurrentReservations());
     } catch (err) {
         next(err);
     }
 });
+
+router.get(
+    "/all/current",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectReservations());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get(
+    "/all/joined",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectJoinedReservations());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {

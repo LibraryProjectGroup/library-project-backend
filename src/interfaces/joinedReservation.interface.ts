@@ -7,3 +7,5 @@ interface JoinedReservation {
     loaned: boolean;
     canceled: boolean;
 }
+
+export default JoinedReservation;

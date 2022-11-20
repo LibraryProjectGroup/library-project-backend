@@ -86,9 +86,7 @@ router.post(
     "/user/current",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.json({
-                ok: await queryUserCurrentJoinedReservations(req.body.userId),
-            });
+            res.json(await queryUserCurrentJoinedReservations(req.body.userId));
         } catch (err) {
             next(err);
         }

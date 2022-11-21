@@ -41,7 +41,7 @@ INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`)
 	(2, 'joonajoo', 'joonajoo@place.holder', 'soin5oeran', 1),
 	(3, 'mikkoR', 'mikkoR@place.holder', '4egdv3a453', 0),
 	(4, 'Erika', 'Erika@place.holder', 'h4whs54htrh', 1),
-  (5, 'admin', 'admin@place.holder', 'admin', 1),
+  (5, 'admin', 'admin@eficode.com', '$2b$08$InfyNU.vUe8qc9BXLFmtzOfTcaxUz9POMIEw62UyNHWWDAv4S/NJm', 1),
   (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0),
   (7, 'testityyppi', 'testityyppi', '$2b$08$81Cv2lgk43p6EDHQ/qa3buFVcCMDtebDju4iAsoGOuRzAyqFnwHS6', 1),
   (8, 'asd', 'asd@asd', '$2b$08$2okL0BPRzVnLKQujmmRK7u4NU/FyeAXBRDJ9FDD7zQKzJ6r9aTyDW', 1);

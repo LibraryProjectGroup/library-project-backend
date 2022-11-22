@@ -31,15 +31,18 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-router.post(
+router.put(
     "/updatestatus",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            if (req.sessionUser.administrator)
+            if (req.sessionUser.administrator) {
+
+                res.json({
+                    ok: await queryUpdateRequest(req.body.id, req.body.status),
+                });
+            } else {
                 return res.status(403).json({ ok: false });
-            res.json({
-                ok: await queryUpdateRequest(req.body.id, req.body.status),
-            });
+            }
         } catch (err) {
             next(err);
         }

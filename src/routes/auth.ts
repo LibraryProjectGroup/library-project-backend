@@ -36,7 +36,7 @@ const isValidEmail = (email: string) => {
     // "Email has to be in the form of [ prefix@domain ]"
     // note: add check to only allow .-_ inside prefix symbols when followed by alphanumeric(s);
     //      don't allow any other symbol (unless we care about +)
-    if (email.includes("@")) {
+    if (email && email.includes("@")) {
         let parts = email.split("@");
         let prefix = parts[0];
         let domain = parts[1];
@@ -124,7 +124,7 @@ router.post("/login", async (req: Request, res: Response) => {
             message: "Invalid Email or Password",
         });
 
-    if (!(await bcrypt.compare(password, user.passw)))
+    if (password == null || !(await bcrypt.compare(password, user.passw)))
         return res.status(403).json({
             ok: false,
             message: "Invalid Email or Password",

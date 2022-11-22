@@ -13,9 +13,9 @@ services:
       - ..:/workspace
 
     stdin_open: true
-
+    env_file: 
+      - docker.env
     environment:
-
       DATABASE_SERVER: mysql
       DATABASE_NAME: efilibrarydb
       DATABASE_USER: app

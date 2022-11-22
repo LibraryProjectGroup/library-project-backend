@@ -36,5 +36,5 @@ jobs:
             - run: npm run build --if-present
             - run: |
                   npm start & 
-                  npx wait-on http://localhost:3000 &&
+                  npx wait-on tcp:3000 &&
                   robot --variable BACKENDTESTEMAIL:$BACKENDTESTEMAIL --variable BACKENDTESTPASSWORD:$BACKENDTESTPASSWORD --removekeywords  NAME:*login* --outputdir robot/results robot/tests

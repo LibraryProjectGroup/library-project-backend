@@ -4,31 +4,37 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "main", "development" ]
-  pull_request:
-    branches: [ "main", "development" ]
+    push:
+        branches: ["main", "development"]
+    pull_request:
+        branches: ["main", "development"]
+
+env:
+    BACKENDTESTEMAIL: ${{ secrets.REACT_APP_TEST_EMAIL }}
+    BACKENDTESTPASSWORD: ${{ secrets.REACT_APP_TEST_PASSWORD }}
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
 
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        strategy:
+            matrix:
+                node-version: [14.x, 16.x, 18.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: python -m pip install --upgrade pip
-    - run: python -m pip install -r robot-dependencies.txt
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "npm"
+            - run: python -m pip install --upgrade pip
+            - run: python -m pip install -r robot-dependencies.txt
+            - run: npm ci
+            - run: npm run build --if-present
+            - run: |
+                  npm start & 
+                  npx wait-on tcp:3000 &&
+                  robot --variable BACKENDTESTEMAIL:$BACKENDTESTEMAIL --variable BACKENDTESTPASSWORD:$BACKENDTESTPASSWORD --removekeywords  NAME:*login* --outputdir robot/results robot/tests

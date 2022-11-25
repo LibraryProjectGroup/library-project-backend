@@ -40,7 +40,7 @@ INSERT INTO `library_user` (`id`, `username`, `passw`, `administrator`) VALUES
 	(3, 'mikkoR', '4egdv3a453', 0),
 	(4, 'Erika', 'h4whs54htrh', 1),
   (5, 'admin', 'admin', 1),
-  (6, 'rascal', 'heckthelibrarians', 0);
+  (6, 'rascal', 'heckthelibrarians', 0),
   (7, 'testityyppi', 'robotTests123#', 1);
 
 -- Dumping structure for table efilibrarydb.book

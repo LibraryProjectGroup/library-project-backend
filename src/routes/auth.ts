@@ -62,18 +62,27 @@ router.post("/register", async (req: Request, res: Response) => {
 router.post("/login", async (req: Request, res: Response) => {
     const username = req.body.username as string;
     const password = req.body.password as string;
+    if (!username || !password)
+        return res.status(400).json({
+            ok: false,
+            message: "Username and password required",
+        });
+
     let user = await querySelectUserByUsername(username);
+
     if (user == null)
         return res.status(404).json({
             ok: false,
             message: "No account by that username",
         });
+    
 
     if (user.passw != password)
         return res.status(403).json({
             ok: false,
             message: "Invalid password",
         });
+        
 
     let session = await createSession(user.id);
     if (session == null) return res.status(500).json({ ok: false });

@@ -30,7 +30,6 @@ jobs:
             - run: python -m pip install -r robot-dependencies.txt
             - run: docker-compose up -d
             - run: npm install -g wait-on
-            - run: wait-on http://localhost:3000
-            - run: wait-on tcp:3306
+            - run: wait-on http://localhost:3000/health
             - run: npm test
             - run: docker-compose down

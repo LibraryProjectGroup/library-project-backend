@@ -42,10 +42,25 @@ export const querySelectReservation = async (
     return rows.length > 0 ? (rows[0] as Book_reservation) : null;
 };
 
+export const querySelectCurrentReservationForBook = async (
+    bookId: number
+): Promise<Book_reservation | null> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM book_reservation WHERE bookId = ? AND book_reservation.canceled != 1 AND book_reservation.loaned != 1",
+        [bookId]
+    );
+    return rows.length > 0 ? (rows[0] as Book_reservation) : null;
+};
+
 export const queryInsertReservation = async (
     userId: number,
     bookId: number
 ): Promise<boolean> => {
+    // check that reservation does not already exist
+    if (await querySelectCurrentReservationForBook(bookId)) {
+        return false;
+    }
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "INSERT INTO book_reservation VALUES (NULL, ?, NOW(), false, false)",

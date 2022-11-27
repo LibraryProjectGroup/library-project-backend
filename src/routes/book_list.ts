@@ -1,4 +1,4 @@
-import { Response, Request, Router } from 'express';
+import { Response, Request, Router, NextFunction } from "express";
 import {
     queryDeleteList,
     queryInsertNewList,
@@ -6,14 +6,16 @@ import {
     querySelectListByUser,
     querySelectList,
     queryUpdateList,
-} from '../queries/book_list';
-import Book_list from '../interfaces/book_list.interface';
+    queryBooksByList,
+    querySelectListInfo,
+} from "../queries/book_list";
+import Book_list from "../interfaces/book_list.interface";
 
 const router = Router();
 
 // note(markus): tested these in postman
 
-router.get('/all', async (req: Request, res: Response) => {
+router.get("/all", async (req: Request, res: Response) => {
     try {
         res.json(await querySelectAllLists());
     } catch (error) {
@@ -22,7 +24,7 @@ router.get('/all', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/user', async (req: Request, res: Response) => {
+router.get("/user", async (req: Request, res: Response) => {
     try {
         const booklists = await querySelectListByUser(req.sessionUser.id);
         res.json(booklists);
@@ -32,17 +34,36 @@ router.get('/user', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/', async (req: Request, res: Response) => {
-    const listId = req.body.id ;
+router.get(
+    "/books",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryBooksByList(Number(req.query.id)));
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+router.get("/info", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectList(listId));
+        res.json(await querySelectListInfo(Number(req.query.id)));
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get("/", async (req: Request, res: Response) => {
+    const listId = req.query.id;
+    try {
+        res.json(await querySelectList(Number(listId)));
     } catch (error) {
         console.error(error);
         res.json({ ok: false, status: 500 });
     }
 });
 
-router.put('/', async (req: Request, res: Response) => {
+router.put("/", async (req: Request, res: Response) => {
     const list: Book_list = req.body;
     try {
         res.json({ ok: await queryUpdateList(list) });
@@ -52,17 +73,19 @@ router.put('/', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
     const list: Book_list = { ...req.body };
     try {
-        res.json({ ok: await queryInsertNewList(req.sessionUser.id, req.body.name), });
+        res.json({
+            ok: await queryInsertNewList(req.sessionUser.id, req.body.name),
+        });
     } catch (error) {
         console.error(error);
         res.json({ ok: false, status: 500 });
     }
 });
 
-router.delete('/', async (req: Request, res: Response) => {
+router.delete("/", async (req: Request, res: Response) => {
     const listId = req.body.id;
     try {
         res.json({ ok: await queryDeleteList(listId) });

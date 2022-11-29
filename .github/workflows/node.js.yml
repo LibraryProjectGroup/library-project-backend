@@ -5,6 +5,7 @@ name: Node.js CI
 
 on:
     push:
+
         branches: ["main", "development", "back-end-robot-test"]
     pull_request:
         branches: ["main", "development"]
@@ -17,6 +18,7 @@ jobs:
         strategy:
             matrix:
                 node-version: [18.x]
+
                 # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
         steps:
@@ -33,3 +35,4 @@ jobs:
             - run: wait-on http://localhost:3000/health
             - run: npm test
             - run: docker-compose down
+

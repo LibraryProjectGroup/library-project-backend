@@ -12,6 +12,9 @@ import book_listRouter from "./routes/book_list";
 import book_list_entryRouter from "./routes/book_list_entry";
 import book_requestRouter from "./routes/book_request";
 import Session from "./interfaces/session.interface";
+import passwordreset, {
+    publicRouter as publicPasswordReset,
+} from "./routes/password_reset";
 import { querySelectSessionBySecret } from "./queries/session";
 import User from "./interfaces/user.interface";
 import { querySelectUserBySessionId } from "./queries/user";
@@ -43,6 +46,7 @@ app.use(expressBearerToken());
 app.use("/health", healthRouter);
 
 app.use("/auth", authRouter);
+app.use("/passwordreset", publicPasswordReset);
 app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (!req.token) return res.sendStatus(401);
     try {
@@ -66,6 +70,7 @@ app.use("/borrow", borrowRouter);
 app.use("/booklist", book_listRouter);
 app.use("/booklistentry", book_list_entryRouter);
 app.use("/bookrequest", book_requestRouter);
+app.use("/passwordreset", passwordreset);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err);

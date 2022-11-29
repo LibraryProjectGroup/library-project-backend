@@ -1,2 +1,2 @@
-robotframework==3
+robotframework
 robotframework-requests==0.9

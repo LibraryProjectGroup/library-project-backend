@@ -43,3 +43,15 @@ export const queryRemoveFromList = async (entryId: number) => {
     );
     return rows.affectedRows != 0;
 };
+
+export const queryDeleteListBook = async (
+    listId: number,
+    bookId: number
+): Promise<boolean> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<ResultSetHeader>(
+        "DELETE FROM book_list_entry WHERE book = ? AND list = ?",
+        [bookId, listId]
+    );
+    return rows.affectedRows != 0;
+};

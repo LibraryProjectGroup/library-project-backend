@@ -4,6 +4,12 @@ Library    RequestsLibrary
 Library    String
 
 
+*** Variables ***
+
+${URL}         http://localhost:3000
+
+
+
 *** test cases ***
 
 Verify that all books can be found

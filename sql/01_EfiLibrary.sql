@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `library_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table efilibrarydb.library_user: ~4 rows (approximately)
+
 INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`) VALUES
 	(1, 'hemuli', 'hemuli@place.holder', 'qweqweqwe', 0),
 	(2, 'joonajoo', 'joonajoo@place.holder', 'soin5oeran', 1),

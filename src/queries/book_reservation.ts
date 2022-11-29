@@ -2,6 +2,9 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Book_reservation from "../interfaces/book_reservation.interface";
 import JoinedReservation from "../interfaces/joinedReservation.interface";
+import Borrow from "../interfaces/borrow.interface";
+import { querySelectCurrentBorrowByBook } from "./borrow";
+import { assert } from "console";
 
 export const querySelectReservations = async (): Promise<
     Book_reservation[]
@@ -61,10 +64,11 @@ export const queryInsertReservation = async (
     if (await querySelectCurrentReservationForBook(bookId)) {
         return false;
     }
+    const borrow = await querySelectCurrentBorrowByBook(bookId);
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "INSERT INTO book_reservation VALUES (NULL, ?, NOW(), false, false)",
-        [[userId, bookId]]
+        [[userId, bookId, borrow?.id]]
     );
     return rows.affectedRows != 0;
 };

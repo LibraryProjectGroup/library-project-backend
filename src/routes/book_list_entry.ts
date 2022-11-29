@@ -1,5 +1,6 @@
-import { Response, Request, Router } from "express";
+import { Response, Request, Router, NextFunction } from "express";
 import {
+    queryDeleteListBook,
     queryInsertEntry,
     queryRemoveFromList,
     querySelectAllEntries,
@@ -7,6 +8,7 @@ import {
     querySelectEntry,
 } from "../queries/book_list_entry";
 import Book_list_entry from "../interfaces/book_list_entry.interface";
+import { querySelectList } from "../queries/book_list";
 
 const router = Router();
 
@@ -56,5 +58,27 @@ router.delete("/", async (req: Request, res: Response) => {
         res.json({ ok: false, status: 500 });
     }
 });
+
+router.delete(
+    "/book",
+    async (req: Request, res: Response, next: NextFunction) => {
+        const listId = req.body.listId;
+        const bookId = req.body.bookId;
+        try {
+            const list = await querySelectList(listId);
+            if (
+                !list ||
+                (req.sessionUser.id != list.user &&
+                    !req.sessionUser.administrator)
+            ) {
+                res.status(403).json({ ok: false });
+            } else {
+                res.json({ ok: await queryDeleteListBook(listId, bookId) });
+            }
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 export default router;

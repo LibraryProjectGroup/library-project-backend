@@ -1,11 +1,13 @@
 *** Settings ***
-
+Resource    ../common.resource
 Library    RequestsLibrary
 Library    String
 
+
 *** Variables ***
 
-${URL}         https://libraryproject.ddns.net/
+${URL}         http://localhost:3000
+
 
 
 *** test cases ***

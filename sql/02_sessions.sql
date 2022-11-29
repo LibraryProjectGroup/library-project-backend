@@ -1,3 +1,5 @@
+USE `efilibrarydb`;
+
 CREATE TABLE IF NOT EXISTS `sessions` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `userId` int(11) NOT NULL,

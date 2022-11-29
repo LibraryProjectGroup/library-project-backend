@@ -1,22 +1,16 @@
-# see https://code.visualstudio.com/remote/advancedcontainers/connect-multiple-containers
-# see https://github.com/0916dhkim/vscode-devcontainer-tutorial/blob/master/.devcontainer/docker-compose.yml
-
 version: '3.3'
 
 services:
-  development:
+  efilibrary-backend:
     build:
       context: .
       dockerfile: Dockerfile
 
-    volumes:
-      - ..:/workspace
+#    stdin_open: true
 
-    stdin_open: true
-    env_file: 
-      - docker.env
     environment:
-      DATABASE_SERVER: mysql
+
+      DATABASE_SERVER: efilibrary-mysql
       DATABASE_NAME: efilibrarydb
       DATABASE_USER: app
       DATABASE_PASSWORD: 'not_secure'
@@ -25,12 +19,12 @@ services:
     ports:
       - 3000:3000
 
-  mysql:
+  efilibrary-mysql:
     image: mysql
 
     volumes:
-      - ../sql:/docker-entrypoint-initdb.d
-      - my-db:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+      #- efilibrary-db:/var/lib/mysql
 
     environment:
       MYSQL_DATABASE: efilibrarydb
@@ -44,5 +38,5 @@ services:
     expose:
       - 3306
 
-volumes:
-  my-db:
+#volumes:
+#  efilibrary-db:

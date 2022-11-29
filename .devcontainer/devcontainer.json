@@ -14,7 +14,8 @@
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"dbaeumer.vscode-eslint",
-				"robocorp.robotframework-lsp"
+				"robocorp.robotframework-lsp",
+				"ritwickdey.liveserver"
 			]
 		}
 	},

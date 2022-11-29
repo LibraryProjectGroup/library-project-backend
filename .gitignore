@@ -3,3 +3,4 @@ build/
 .env
 robot/results
 vscode/
+**/docker.env

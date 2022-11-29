@@ -3,6 +3,7 @@ import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import mysql from "mysql2";
 import expressBearerToken from "express-bearer-token";
+import healthRouter from "./routes/health";
 import authRouter from "./routes/auth";
 import bookRouter from "./routes/book";
 import userRouter from "./routes/user";
@@ -41,6 +42,8 @@ const app: Express = express();
 app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));
 app.use(expressBearerToken());
+
+app.use("/health", healthRouter);
 
 app.use("/auth", authRouter);
 app.use("/passwordreset", publicPasswordReset);

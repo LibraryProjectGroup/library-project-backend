@@ -117,6 +117,13 @@ router.post("/register", async (req: Request, res: Response) => {
 router.post("/login", async (req: Request, res: Response) => {
     const password = req.body.password as string;
     const email = req.body.email as string;
+
+    if (email == null)
+        return res.status(404).json({
+            ok: false,
+            message: "Email and password required",
+        });
+
     let user = await querySelectUserByEmail(email);
     if (user == null)
         return res.status(404).json({
@@ -129,6 +136,7 @@ router.post("/login", async (req: Request, res: Response) => {
             ok: false,
             message: "Invalid Email or Password",
         });
+
     let session = await createSession(user.id);
     if (session == null) return res.status(500).json({ ok: false });
 

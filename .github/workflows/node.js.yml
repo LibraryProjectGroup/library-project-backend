@@ -10,6 +10,10 @@ on:
     pull_request:
         branches: ["main", "development"]
 
+env:
+    BACKENDTESTEMAIL: ${{ secrets.REACT_APP_TEST_EMAIL }}
+    BACKENDTESTPASSWORD: ${{ secrets.REACT_APP_TEST_PASSWORD }}
+
 jobs:
     build:
         runs-on: ubuntu-latest

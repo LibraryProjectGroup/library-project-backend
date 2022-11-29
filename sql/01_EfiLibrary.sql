@@ -45,7 +45,8 @@ INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`)
   (5, 'admin', 'admin@eficode.com', '$2b$08$InfyNU.vUe8qc9BXLFmtzOfTcaxUz9POMIEw62UyNHWWDAv4S/NJm', 1),
   (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0),
   (7, 'testityyppi', 'testityyppi', '$2b$08$81Cv2lgk43p6EDHQ/qa3buFVcCMDtebDju4iAsoGOuRzAyqFnwHS6', 1),
-  (8, 'asd', 'asd@asd', '$2b$08$2okL0BPRzVnLKQujmmRK7u4NU/FyeAXBRDJ9FDD7zQKzJ6r9aTyDW', 1);
+  (8, 'asd', 'asd@asd', '$2b$08$2okL0BPRzVnLKQujmmRK7u4NU/FyeAXBRDJ9FDD7zQKzJ6r9aTyDW', 1),
+  (9, 'testattavatyyppi', 'etu.suku@doesnt.exist', '$2b$08$4LdND6u7LymHX5DCBtmyweaYCOxKvUY6Rd9Z4N4cWQalAVtBSBOvi', 0);
 
 -- Dumping structure for table efilibrarydb.book
 DROP TABLE IF EXISTS `book`;

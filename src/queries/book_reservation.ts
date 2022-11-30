@@ -42,7 +42,6 @@ export const querySelectReservation = async (
     return rows.length > 0 ? (rows[0] as Book_reservation) : null;
 };
 
-
 export const querySelectCurrentReservationForBook = async (
     bookId: number
 ): Promise<Book_reservation | null> => {
@@ -54,7 +53,6 @@ export const querySelectCurrentReservationForBook = async (
     return rows.length > 0 ? (rows[0] as Book_reservation) : null;
 };
 
-
 export const queryInsertReservation = async (
     userId: number,
     bookId: number
@@ -64,7 +62,7 @@ export const queryInsertReservation = async (
     if (await querySelectCurrentReservationForBook(bookId)) {
         return false;
     }
-
+    
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "INSERT INTO book_reservation VALUES (NULL, ?, NOW(), false, false)",
@@ -117,3 +115,4 @@ export const queryUserCurrentJoinedReservations = async (
     );
     return rows.length > 0 ? (rows as JoinedReservation[]) : null;
 };
+

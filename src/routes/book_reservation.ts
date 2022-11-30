@@ -9,6 +9,7 @@ import {
     querySelectCurrentReservations,
     querySelectJoinedReservations,
     queryUserCurrentJoinedReservations,
+    querySelectCurrentReservationForBook,
 } from "../queries/book_reservation";
 
 const router = Router();
@@ -42,6 +43,14 @@ router.get(
         }
     }
 );
+
+router.get("/book", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.json(await querySelectCurrentReservationForBook(req.body.bookId));
+    } catch (err) {
+        next(err);
+    }
+});
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {

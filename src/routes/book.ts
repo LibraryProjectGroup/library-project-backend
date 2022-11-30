@@ -5,6 +5,7 @@ import {
     querySoftDeleteBook,
     queryInsertBook,
     queryUpdateBook,
+    querySelectAllReservedBooks,
 } from "../queries/book";
 import Book from "../interfaces/book.interface";
 
@@ -78,5 +79,16 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 });
+
+router.get(
+    "/all/reserved",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectAllReservedBooks());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 export default router;

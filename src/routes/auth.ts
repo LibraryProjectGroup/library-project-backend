@@ -117,27 +117,25 @@ router.post("/register", async (req: Request, res: Response) => {
 router.post("/login", async (req: Request, res: Response) => {
     const password = req.body.password as string;
     const email = req.body.email as string;
-    
+
     if (email == null)
         return res.status(404).json({
             ok: false,
             message: "Email and password required",
         });
-    
+
     let user = await querySelectUserByEmail(email);
     if (user == null)
         return res.status(404).json({
             ok: false,
             message: "Invalid Email or Password",
         });
-    
 
     if (password == null || !(await bcrypt.compare(password, user.passw)))
         return res.status(403).json({
             ok: false,
             message: "Invalid Email or Password",
         });
-        
 
     let session = await createSession(user.id);
     if (session == null) return res.status(500).json({ ok: false });
@@ -149,7 +147,7 @@ router.post("/login", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/logout", async (req: Request, res: Response) => {
+router.post("/logout", async (req: Request, res: Response) => {
     if (!req.token)
         return res.status(400).json({ ok: false, message: "No session" });
 

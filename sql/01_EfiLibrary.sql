@@ -119,6 +119,21 @@ INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, 
     CONSTRAINT `FK_book_list_entry_book` FOREIGN KEY (`book`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
+  DROP TABLE IF EXISTS `book_reservation`;
+  CREATE TABLE IF NOT EXISTS `book_reservation` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `userId` int(11) NOT NULL,
+    `bookId` int(11) NOT NULL,
+    `reservationDatetime` datetime NOT NULL,
+    `loaned` tinyint(1) NOT NULL,
+    `canceled` tinyint(1) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `userId` (`userId`),    
+    KEY `bookId` (`bookId`),
+    CONSTRAINT FOREIGN KEY `FK_book_reservation_user_id` (`userId`) REFERENCES `library_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY `FK_book_reservation_book_id` (`bookId`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  );
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

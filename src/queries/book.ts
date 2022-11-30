@@ -19,6 +19,20 @@ export const querySelectAllBooks = async (): Promise<Book[]> => {
     return rows as Book[];
 };
 
+export const querySelectAllBooksPaged = async (
+    page: number,
+    pageSize: number | null
+): Promise<Book[]> => {
+    let size = pageSize ? pageSize : 20;
+    let start = (page - 1) * size;
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query(
+        "SELECT * FROM book WHERE deleted != 1 limit ? offset ?",
+        [size, start]
+    );
+    return rows as Book[];
+};
+
 export const querySelectAllExistingBooks = async (): Promise<Book[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query("SELECT * FROM book");

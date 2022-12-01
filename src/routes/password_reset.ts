@@ -4,6 +4,9 @@ import crypto from "crypto";
 import bcrypt from "bcrypt";
 
 const RESET_TIMEOUT = 1000 * 60 * 60 * 24;
+const minPasswordLength = 3;
+const maxPasswordLength = 150;
+
 const router = Router();
 const publicRouter = Router();
 
@@ -52,6 +55,15 @@ publicRouter.post(
                 res.status(404).json({ ok: false });
                 return;
             }
+            if (
+                req.body.password == undefined ||
+                req.body.password.length < minPasswordLength ||
+                req.body.password.length > maxPasswordLength
+            )
+                return res.status(400).json({
+                    ok: false,
+                    message: "Password has to be between 3 and 50 characters",
+                });
             if (req.body.password) {
                 const userId = activeResets[secret].userId;
                 let user = await querySelectUser(userId);

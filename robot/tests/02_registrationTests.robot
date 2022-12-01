@@ -1,7 +1,11 @@
 *** Settings ***
-Resource    ../common.resource
-Library     RequestsLibrary
-Library     String
+
+Library    RequestsLibrary
+Library    String
+
+*** Variables ***
+
+${URL}         http://localhost:3000
 
 
 *** Test Cases ***

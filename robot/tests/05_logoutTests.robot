@@ -5,8 +5,8 @@ Library     String
 
 
 *** Variables ***
+${URL}      http://localhost:3000
 
-${URL}         http://localhost:3000
 
 *** Test Cases ***
 Verify user can logout

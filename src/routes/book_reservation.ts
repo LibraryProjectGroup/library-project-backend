@@ -1,14 +1,14 @@
 import { Response, Request, Router, NextFunction } from "express";
 import {
-    querySelectReservations,
+    querySelectAllReservations,
     querySelectReservation,
     queryInsertReservation,
     queryUpdateReservation,
     queryCancelReservation,
     queryLoanReservation,
     querySelectCurrentReservations,
-    querySelectJoinedReservations,
-    queryUserCurrentJoinedReservations,
+    querySelectAllExtendedReservations,
+    querySelectUserCurrentExtendedReservations,
     querySelectCurrentReservationForBook,
 } from "../queries/book_reservation";
 
@@ -16,12 +16,13 @@ const router = Router();
 
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.json(await querySelectReservations());
+        res.json(await querySelectAllReservations());
     } catch (err) {
         next(err);
     }
 });
 
+// Filtered
 router.get(
     "/all/current",
     async (req: Request, res: Response, next: NextFunction) => {
@@ -33,17 +34,19 @@ router.get(
     }
 );
 
+// Filtered
 router.get(
-    "/all/joined",
+    "/all/extended",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.json(await querySelectJoinedReservations());
+            res.json(await querySelectAllExtendedReservations());
         } catch (err) {
             next(err);
         }
     }
 );
 
+// Filtered
 router.get("/book", async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.json(await querySelectCurrentReservationForBook(req.body.bookId));
@@ -91,11 +94,16 @@ router.post(
     }
 );
 
+// Filtered
 router.post(
     "/user/current",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            res.json(await queryUserCurrentJoinedReservations(req.body.userId));
+            res.json(
+                await querySelectUserCurrentExtendedReservations(
+                    req.body.userId
+                )
+            );
         } catch (err) {
             next(err);
         }

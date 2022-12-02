@@ -5,14 +5,13 @@ name: Node.js CI
 
 on:
     push:
-
         branches: ["main", "development", "back-end-robot-test"]
     pull_request:
         branches: ["main", "development"]
 
 env:
-    BACKENDTESTEMAIL: ${{ secrets.REACT_APP_TEST_EMAIL }}
-    BACKENDTESTPASSWORD: ${{ secrets.REACT_APP_TEST_PASSWORD }}
+    TESTUSERNAME: ${{ secrets.REACT_APP_TEST_EMAIL }}
+    TESTPASSWORD: ${{ secrets.REACT_APP_TEST_PASSWORD }}
 
 jobs:
     build:
@@ -39,4 +38,3 @@ jobs:
             - run: wait-on http://localhost:3000/health
             - run: npm test
             - run: docker-compose down
-

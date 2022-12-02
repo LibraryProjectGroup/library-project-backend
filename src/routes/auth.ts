@@ -119,14 +119,14 @@ router.post("/login", async (req: Request, res: Response) => {
     const email = req.body.email as string;
 
     if (email == null)
-        return res.status(404).json({
+        return res.status(400).json({
             ok: false,
             message: "Email and password required",
         });
 
     let user = await querySelectUserByEmail(email);
     if (user == null)
-        return res.status(404).json({
+        return res.status(400).json({
             ok: false,
             message: "Invalid Email or Password",
         });

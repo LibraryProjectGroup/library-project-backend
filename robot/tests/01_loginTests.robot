@@ -8,15 +8,20 @@ Library     String
 Verify server requires authentication
     ${response}=    GET    ${URL}    expected_status=401
 
-Verify user can't login with nonexistent email
-    &{data}=    Create dictionary    email=nonexistent    password=randompassword
-    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=404
+Verify user can't login with nonexistent user
+    &{data}=    Create dictionary    email=this.user@notexist.aol    password=randompassword
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=400
     Should Be Equal    Invalid Email or Password    ${response.json()['message']}
 
 Verify user can't login without password
     ${data}=    Create dictionary    email=${BACKENDTESTEMAIL}
     ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=403
     Should Be Equal    Invalid Email or Password    ${response.json()['message']}
+
+Verify user can't login without email
+    ${data}=    Create dictionary    password=${BACKENDTESTPASSWORD}
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=400
+    Should Be Equal    Email and password required    ${response.json()['message']}
 
 Verify user can't login with wrong password
     ${data}=    Create dictionary    email=${BACKENDTESTEMAIL}    password=wrongpassword

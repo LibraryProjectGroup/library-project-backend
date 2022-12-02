@@ -1,12 +1,7 @@
 *** Settings ***
-
+Resource    ../common.resource
 Library     RequestsLibrary
 Library     String
-
-
-*** Variables ***
-${URL}      http://localhost:3000
-
 
 
 *** Test Cases ***
@@ -15,7 +10,6 @@ Create random username
     Set Global Variable    ${randomUsername}    ${RDMid}
 
 Verify user can be created
-
     &{data}=    Create dictionary
     ...    email=${randomUsername}@example.com
     ...    username=${randomUsername}
@@ -25,7 +19,6 @@ Verify user can be created
     Should Be True    ${response.json()['ok']}
 
 Verify user cannot be duplicated
-
     &{data}=    Create dictionary
     ...    email=${randomUsername}@example.com
     ...    username=${randomUsername}
@@ -43,7 +36,6 @@ Verify that user can check user by id
     ${response}=    GET    url=${URL}/user/?id=1&${bearerToken}    expected_status=200
     Should Be Equal    ${response.json()['id']}    ${1}
 
-
 Verify non existing user can't be deleted
     &{data}=    Create dictionary    id=-24
     ${response}=    DELETE    url=${URL}/user/?${bearerToken}    json=${data}    expected_status=200
@@ -57,4 +49,3 @@ Verify user can be deleted
     &{data}=    Create dictionary    id=9
     ${response}=    DELETE    url=${URL}/user/?${bearerToken}    json=${data}    expected_status=200
     Should Be True    ${response.json()['ok']}
-

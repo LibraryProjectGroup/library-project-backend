@@ -4,10 +4,6 @@ Library     RequestsLibrary
 Library     String
 
 
-*** Variables ***
-${URL}      http://localhost:3000
-
-
 *** Test Cases ***
 Verify that all books can be found
     ${response}=    GET    url=${URL}/book/all?${bearerToken}    expected_status=200

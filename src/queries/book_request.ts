@@ -40,7 +40,7 @@ const queryUpdateRequest = async (
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
         "UPDATE book_requests SET status = ? WHERE id = ?",
-        [id, status]
+        [status, id]
     );
     return rows.affectedRows != 0;
 };

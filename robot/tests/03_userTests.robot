@@ -44,8 +44,3 @@ Verify non existing user can't be deleted
 Verify that user cannot get a nonexisting user
     ${response}=    GET    url=${URL}/user/?id=-1&${bearerToken}    expected_status=404
     Should Not Be True    ${response.json()['ok']}
-
-Verify user can be deleted
-    &{data}=    Create dictionary    id=9
-    ${response}=    DELETE    url=${URL}/user/?${bearerToken}    json=${data}    expected_status=200
-    Should Be True    ${response.json()['ok']}

@@ -5,7 +5,7 @@ interface Borrow {
     borrowDate: Date;
     dueDate: Date;
     returned: boolean;
-    returnDate: Date;
+    returnDate: Date | null;
 }
 
 export default Borrow;

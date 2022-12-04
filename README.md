@@ -1022,80 +1022,107 @@ On Fail Response schema:
 }
 ```
 
+## Health
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### User
-
-#### /user?id={id} (GET)
-
-Response schema:
-
+### /health (GET)
+On Success Response schema:
 ```JSON
 {
-    "title": "User",
-    "description": "User",
-    "type": "object",
-    "properties":{
-      "books":{"type":"array"},
-      "userId":{"type":"string"},
-      "userName":{"type":"string"},
+  "ok": true
 }
 ```
 
-#### /user/all (GET)
-
-Response schema:
-
+On Fail Response schema:
 ```JSON
 {
-  "type":"array",
-  "items": {
-    "title": "User",
-    "description": "User",
-    "type": "object",
-    "properties":{
-      "books":{"type":"array"},
-      "userId":{"type":"string"},
-      "userName":{"type":"string"},
-    }
+  "ok": false,
+  "error:": string
 }
 ```
+
+## Password Reset
+
+### /passwordreset/secret?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "ok": true,
+  "secret": string
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false
+}
+```
+
+### /passwordreset (POST)
+Body:
+```JSON
+{
+  "secret": string,
+  "password": string
+}
+```
+
+On Success Response schema:
+```JSON
+{
+  "ok": true
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "message": string
+}
+```
+
+## User
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Docker Help
 Building the docker image: `docker image build .`  
 Running the docker image: `docker run -p 3000:3000 <docker image>`

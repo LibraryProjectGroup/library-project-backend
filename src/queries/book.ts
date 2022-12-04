@@ -33,6 +33,14 @@ export const querySelectAllBooksPaged = async (
     return rows as Book[];
 };
 
+export const queryCountAllBooks = async (): Promise<Number | null> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT COUNT(*) as bookCount FROM book WHERE deleted != 1"
+    );
+    return rows.length > 0 ? (rows[0].bookCount as Number) : null;
+};
+
 export const querySelectAllExistingBooks = async (): Promise<Book[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query("SELECT * FROM book");

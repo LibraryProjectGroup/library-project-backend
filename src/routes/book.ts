@@ -7,6 +7,7 @@ import {
     queryUpdateBook,
     querySelectAllReservedBooks,
     querySelectAllBooksPaged,
+    queryCountAllBooks,
 } from "../queries/book";
 import Book from "../interfaces/book.interface";
 
@@ -32,6 +33,17 @@ router.get("/page", async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 });
+
+router.get(
+    "/count",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryCountAllBooks());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {

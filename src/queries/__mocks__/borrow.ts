@@ -13,6 +13,7 @@ const borrow1: Borrow = {
     book: 1,
     borrowDate: new Date(),
     dueDate: new Date(tenDaysAhead),
+    returnDate: null,
     returned: false,
 };
 
@@ -22,6 +23,7 @@ const borrow2: Borrow = {
     book: 3,
     borrowDate: new Date(),
     dueDate: new Date(tenDaysAhead),
+    returnDate: null,
     returned: false,
 };
 
@@ -31,6 +33,7 @@ const borrow3: Borrow = {
     book: 2,
     borrowDate: new Date("2020-01-01"),
     dueDate: new Date("2020-01-11"),
+    returnDate: null,
     returned: true,
 };
 
@@ -40,6 +43,7 @@ const borrow4: Borrow = {
     book: 4,
     borrowDate: new Date(),
     dueDate: new Date(dayBehind),
+    returnDate: null,
     returned: false,
 };
 
@@ -131,6 +135,7 @@ export const queryInsertBorrow = async (
         borrowDate,
         dueDate,
         returned: false,
+        returnDate: null,
     });
     return true;
 };

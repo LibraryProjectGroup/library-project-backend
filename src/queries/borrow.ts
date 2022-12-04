@@ -37,6 +37,17 @@ export const querySelectBorrow = async (
     return rows.length > 0 ? (rows[0] as Borrow) : null;
 };
 
+export const querySelectCurrentBorrowByBook = async (
+    bookId: number
+): Promise<Borrow | null> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM borrowing WHERE book = ? AND returned = 0",
+        [bookId]
+    );
+    return rows.length > 0 ? (rows[0] as Borrow) : null;
+};
+
 export const queryDeleteBorrow = async (
     borrowingId: number
 ): Promise<boolean> => {
@@ -56,7 +67,7 @@ export const queryInsertBorrow = async (
 ): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "INSERT INTO borrowing (library_user, book, borrowDate, dueDate, returned) VALUES (?) ",
+        "INSERT INTO borrowing (library_user, book, borrowDate, dueDate, returned) VALUES (?)",
         [[userId, bookId, dueDate, borrowDate, false]]
     );
     return rows.affectedRows != 0;
@@ -65,13 +76,14 @@ export const queryInsertBorrow = async (
 export const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?) WHERE id=(?)",
+        "UPDATE borrowing SET library_user=(?), book=(?), borrowDate=(?), dueDate=(?), returned=(?), returnDate=(?) WHERE id=(?)",
         [
             borrow.library_user,
             borrow.book,
             borrow.borrowDate,
             borrow.dueDate,
             borrow.returned,
+            borrow.returnDate,
             borrow.id,
         ]
     );

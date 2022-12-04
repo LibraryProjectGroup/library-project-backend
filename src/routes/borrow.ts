@@ -159,6 +159,7 @@ router.put(
                     req.sessionUser.administrator)
             ) {
                 borrow.returned = true;
+                borrow.returnDate = new Date();
                 res.json({ ok: await queryUpdateBorrow(borrow) });
             } else {
                 res.status(403).json({ ok: false });

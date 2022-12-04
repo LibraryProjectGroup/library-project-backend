@@ -6,6 +6,7 @@ import {
     queryUpdateReservation,
     queryCancelReservation,
     queryLoanReservation,
+    querySelectBooksWithActiveAndLoanableReservations,
     querySelectCurrentReservations,
     querySelectAllExtendedReservations,
     querySelectUserCurrentExtendedReservations,
@@ -28,6 +29,18 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json(await querySelectCurrentReservations());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// Filtered
+router.get(
+    "/active/loanable",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await querySelectBooksWithActiveAndLoanableReservations());
         } catch (err) {
             next(err);
         }
@@ -86,7 +99,7 @@ router.post(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json({
-                ok: await queryLoanReservation(req.body.bookId),
+                ok: await queryLoanReservation(req.body.id),
             });
         } catch (err) {
             next(err);

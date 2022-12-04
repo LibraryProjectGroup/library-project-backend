@@ -6,7 +6,7 @@ import { querySelectCurrentBorrowByBook } from "./borrow";
 import { RESERVATION_DAYS, MS_IN_DAY } from "../constants";
 
 // Used between query and response to filter out reservations that are based on borrows that have been returned RESERVATION_DAYS before.
-const filterValidReservations = (reservations: any) => {
+export const filterActiveReservations = (reservations: any) => {
     return JSON.parse(JSON.stringify(reservations)).filter(
         (reservation: ExtendedReservation) =>
             reservation.returnDate === null ||
@@ -32,7 +32,7 @@ export const querySelectCurrentReservations = async (): Promise<
     const [rows] = await promisePool.query(
         "SELECT reservation.id, reservation.userId, reservation.bookId, reservation.borrowId, reservation.reservationDatetime, reservation.loaned, reservation.canceled, borrowing.returnDate FROM book_reservation AS reservation JOIN borrowing ON borrowing.id = reservation.borrowId WHERE reservation.canceled != 1 AND reservation.loaned != 1"
     );
-    return filterValidReservations(rows) as ExtendedReservation[];
+    return filterActiveReservations(rows) as ExtendedReservation[];
 };
 
 export const querySelectReservation = async (
@@ -54,7 +54,7 @@ export const querySelectCurrentReservationForBook = async (
         "SELECT reservation.id, reservation.userId, reservation.bookId, reservation.borrowId, reservation.reservationDateTime, reservation.loaned, reservation.canceled, borrowing.returnDate FROM book_reservation AS reservation JOIN borrowing ON reservation.borrowId = borrowing.id WHERE bookId = ? AND reservation.canceled != 1 AND reservation.loaned != 1",
         [bookId]
     );
-    const validReservations = filterValidReservations(rows);
+    const validReservations = filterActiveReservations(rows);
     return validReservations.length > 0
         ? (validReservations[0] as ExtendedReservation)
         : null;
@@ -118,9 +118,9 @@ export const querySelectAllExtendedReservations = async (): Promise<
 > => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query(
-        "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled, borrowing.returnDate FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId JOIN borrowing ON borrowing.id = reservation.borrowId ORDER BY reservation.reservationDatetime DESC"
+        "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled, borrowing.returnDate, borrowing.dueDate FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId JOIN borrowing ON borrowing.id = reservation.borrowId ORDER BY reservation.reservationDatetime DESC"
     );
-    return filterValidReservations(rows) as ExtendedReservation[];
+    return filterActiveReservations(rows) as ExtendedReservation[];
 };
 
 export const querySelectUserCurrentExtendedReservations = async (
@@ -131,8 +131,18 @@ export const querySelectUserCurrentExtendedReservations = async (
         "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled, borrowing.returnDate FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId JOIN borrowing ON borrowing.id = reservation.borrowId WHERE reservation.userId = ? AND loaned = 0 AND canceled = 0",
         [userId]
     );
-    const validReservations = filterValidReservations(rows);
+    const validReservations = filterActiveReservations(rows);
     return validReservations.length > 0
         ? (validReservations as ExtendedReservation[])
         : null;
 };
+
+export const querySelectBooksWithActiveAndLoanableReservations =
+    async (): Promise<number[]> => {
+        const promisePool = pool.promise();
+        const [rows] = await promisePool.query(
+            "SELECT reservation.id, reservation.bookId, reservation.canceled, reservation.reservationDatetime, reservation.loaned, borrowing.returnDate FROM borrowing JOIN book_reservation reservation ON reservation.borrowId = borrowing.id WHERE borrowing.returnDate IS NOT NULL AND reservation.canceled != 1 AND reservation.loaned != 1;"
+        );
+        const activeReservations = filterActiveReservations(rows);
+        return filterActiveReservations(rows) as number[];
+    };

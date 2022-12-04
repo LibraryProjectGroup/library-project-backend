@@ -1,6 +1,8 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Book from "../interfaces/book.interface";
+import { filterActiveReservations } from "./book_reservation";
+import { MS_IN_DAY, RESERVATION_DAYS } from "../constants";
 
 export const querySelectBook = async (bookId: number): Promise<Book | null> => {
     const promisePool = pool.promise();
@@ -71,7 +73,7 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
 export const querySelectAllReservedBooks = async (): Promise<Book[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query(
-        "select book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location, book.deleted from book JOIN book_reservation AS reservation ON reservation.bookId = book.id WHERE reservation.canceled = 0 AND reservation.loaned = 0 AND book.deleted != 1;"
+        "select book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location, book.deleted, from book JOIN book_reservation AS reservation ON reservation.bookId = book.id WHERE reservation.canceled = 0 AND reservation.loaned = 0 AND book.deleted != 1;"
     );
     return rows as Book[];
 };

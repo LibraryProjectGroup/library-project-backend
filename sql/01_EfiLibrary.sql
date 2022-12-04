@@ -90,12 +90,12 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='data entry that shows which book was borrowed and when and by which library user';
 
 -- Dumping data for table efilibrarydb.borrowing: ~3 rows (approximately)
-INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, `returned`) VALUES
-	(1, 1, 2, '2022-08-20', '2022-08-13', 0),
-	(2, 3, 3, '2022-08-18', '2022-08-11', 0),
-	(3, 2, 1, '2022-09-29', '2022-09-22', 1),
-  (4, 6, 4, '2020-01-08', '2020-01-01', 0),
-  (5, 6, 5, '2008-09-09', '2008-09-02', 0);
+INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, `returned`, `returnDate`) VALUES
+	(1, 1, 2, '2022-08-20', '2022-08-13', 0, null),
+	(2, 3, 3, '2022-08-18', '2022-08-11', 0, null),
+	(3, 2, 1, '2022-09-29', '2022-09-22', 1, `2022-09-27`),
+  (4, 6, 4, '2020-01-08', '2020-01-01', 0, null),
+  (5, 6, 5, '2008-09-09', '2008-09-02', 0, null);
 
   DROP TABLE IF EXISTS `book_list`;
   CREATE TABLE IF NOT EXISTS `book_list` (

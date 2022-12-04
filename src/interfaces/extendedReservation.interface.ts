@@ -8,6 +8,7 @@ interface ExtendedReservation {
     loaned: boolean;
     canceled: boolean;
     returnDate: Date | null;
+    dueDate: Date;
 }
 
 export default ExtendedReservation;

@@ -954,6 +954,78 @@ On Fail Response schema:
 }
 ```
 
+### /borrow/expired (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "book": number,
+    "dueDate": Date,
+    "borrowDate": Date,
+    "returned": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false
+}
+```
+
+### /borrow/session (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "book": number,
+    "dueDate": Date,
+    "borrowDate": Date,
+    "returned": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false
+}
+```
+
+### /borrow/return (PUT)
+Body:
+```JSON
+{
+  "borrowId": number
+}
+```
+
+On Success Response schema:
+```JSON
+{
+  "ok": true
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false
+}
+```
+
+
+
+
+
 
 
 

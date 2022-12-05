@@ -39,7 +39,8 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 
 # Endpoints
 ### Note #4:
-Endpoints that use body will be in JSON format.
+Endpoints that use body will be in JSON format. Endpoint requires either query or body, if query is present, the body section will not be shown and vice versa.
+<br>
 If not separately mentioned, On Success Response schema is:
 ```JSON
 {

@@ -99,7 +99,7 @@ router.post(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             res.json({
-                ok: await queryLoanReservation(req.body.id),
+                ok: await queryLoanReservation(req.body.reservationId),
             });
         } catch (err) {
             next(err);

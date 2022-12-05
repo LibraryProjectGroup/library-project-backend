@@ -128,7 +128,7 @@ export const querySelectUserCurrentExtendedReservations = async (
 ): Promise<ExtendedReservation[] | null> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<RowDataPacket[]>(
-        "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled, borrowing.returnDate FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId JOIN borrowing ON borrowing.id = reservation.borrowId WHERE reservation.userId = ? AND loaned = 0 AND canceled = 0",
+        "SELECT reservation.id, user.username, book.title, book.id AS bookId, reservation.reservationDatetime, reservation.loaned, reservation.canceled, borrowing.returnDate, borrowing.dueDate FROM book_reservation AS reservation JOIN library_user AS user ON reservation.userId = user.id JOIN book ON book.id = reservation.bookId JOIN borrowing ON borrowing.id = reservation.borrowId WHERE reservation.userId = ? AND loaned = 0 AND canceled = 0",
         [userId]
     );
     const validReservations = filterActiveReservations(rows);

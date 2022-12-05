@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node ./src/server.ts",
-    "test": "robot --variable BACKENDTESTEMAIL:${BACKENDTESTEMAIL} --variable BACKENDTESTPASSWORD:${BACKENDTESTPASSWORD} --outputdir robot/results robot/tests",
+    "test": "robot --variable BACKENDTESTEMAIL:${TESTUSERNAME} --variable BACKENDTESTPASSWORD:${TESTPASSWORD} --outputdir robot/results robot/tests",
     "build": "tsc"
   },
   "author": "",

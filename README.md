@@ -37,172 +37,874 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 
 <br>
 
-## Endpoints
-
-### Auth
-
-#### /auth/login?username={username}&password={password}
-
-Response schema:
-
+# Endpoints
+### Note #4:
+Endpoints that use body will be in JSON format. Endpoint requires either query or body, if query is present, the body section will not be shown and vice versa.
+<br>
+If not separately mentioned, On Success Response schema is:
 ```JSON
 {
-  "ok": boolean,
-  "secret": ok ? string : undefined,
-  "message": string | undefined
+  "ok": true
+}
+```
+If not separately mentioned, On Fail Response schema is:
+```JSON
+{
+  "ok": fail
 }
 ```
 
-#### /auth/register?username={username}&password={password}
+## Auth
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
-Response schema:
-
+### /auth/register (POST)
+Body
 ```JSON
 {
-  "ok": boolean,
-  "secret": ok ? string,
-  "message": !ok ? string
+  "username": string,
+  "email": string,
+  "password": string
 }
 ```
 
-#### /auth/logout
-
-Response schema:
-
+On Success Response schema:
 ```JSON
 {
-  "ok": boolean,
-  "message": string | undefined
+  "ok": true,
+  "secret": string
 }
 ```
 
-### Book
-
-#### /book?id={id} (GET)
-
-Response schema:
-
+On Fail Response schema:
 ```JSON
 {
-    "title": "Book",
-    "description": "Book",
-    "type": "object",
-    "properties":{
-      "id":{"type":"string"},
-      "libraryUser":{"type":"User"},
-      "topic":{"type":"Topic"},
-      "title":{"type":"string"},
-      "author":{"type":"string"},
-      "isbn":{"type":"string"},
-      "location":{"type":"string"}
-    }
+  "ok": false,
+  "message": string
 }
 ```
 
-#### /book (POST)
-
-Response schema:
-
+### /auth/login (POST)
+Body
 ```JSON
 {
-    "title": "Ok",
-    "description": "Ok",
-    "type": "object",
-    "properties":{
-      "ok":{"type":"boolean"}
-    }
+  "email": string,
+  "password": string
 }
 ```
 
-#### /book (PUT)
-
-Response schema:
-
+On Success Response schema:
 ```JSON
 {
-    "title": "Ok",
-    "description": "Ok",
-    "type": "object",
-    "properties":{
-      "ok":{"type":"boolean"}
-    }
+  "ok": true,
+  "userId": number,
+  "secret": string
 }
 ```
 
-#### /book?id={id} (DELETE)
-
-Response schema:
-
+On Fail Response schema:
 ```JSON
 {
-    "title": "Ok",
-    "description": "Ok",
-    "type": "object",
-    "properties":{
-      "ok":{"type":"boolean"}
-    }
+  "ok": false,
+  "message": string
 }
 ```
 
-#### /book/all (GET)
-
-Response schema:
-
+### /auth/logout (POST)
+On Fail Response schema:
 ```JSON
 {
-  "type":"array",
-  "items": {
-    "title": "Book",
-    "description": "Book",
-    "type": "object",
-    "properties":{
-      "libraryUser":{"type":"User"},
-      "topic":{"type":"Topic"},
-      "title":{"type":"string"},
-      "author":{"type":"string"},
-      "isbn":{"type":"string"},
-      "location":{"type":"string"}
-    }
+  "ok": false,
+  "message": string
+}
+```
+</Details>
+
+## Book List Entry
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+    
+### /booklistentry/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "list": number,
+    "book": number
+  }
+]
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
 }
 ```
 
-### User
+### /booklistentry/list?id={id} (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "list": number,
+    "book": number
+  }
+]
+```
 
-#### /user?id={id} (GET)
-
-Response schema:
-
+On Fail Response schema:
 ```JSON
 {
-    "title": "User",
-    "description": "User",
-    "type": "object",
-    "properties":{
-      "books":{"type":"array"},
-      "userId":{"type":"string"},
-      "userName":{"type":"string"},
+  "ok": false,
+  "status": 500
 }
 ```
 
-#### /user/all (GET)
-
-Response schema:
-
+### /booklistentry?id={id} (GET)
+On Success Response schema:
 ```JSON
 {
-  "type":"array",
-  "items": {
-    "title": "User",
-    "description": "User",
-    "type": "object",
-    "properties":{
-      "books":{"type":"array"},
-      "userId":{"type":"string"},
-      "userName":{"type":"string"},
-    }
+  "id": number,
+  "list": number,
+  "book": number
 }
 ```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry (POST)
+Body:
+```JSON
+{
+  "list": number,
+  "book": number
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry (DELETE)
+Body:
+```JSON
+{
+  "id": number
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry/book (DELETE)
+Body:
+```JSON
+{
+  "listId": number,
+  "bookId": number
+}
+```
+</Details>
+
+## Book List
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+    
+### /booklist/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "name": string
+  }
+]
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklist/user (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "name": string
+  }
+]
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklist/books?id={id} (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "author": string,
+    "isbn": string,
+    "topic": string,
+    "location": string,
+    "deleted": boolean
+  }
+]
+```
+
+### /booklist/info?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "userId": number,
+  "username": string,
+  "name": string
+}
+```
+
+### /booklist?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "library_user": number,
+  "name": string
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklist (PUT)
+Body:
+```JSON
+{
+  "id": number,
+  "name": string
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklist (POST)
+Body:
+```JSON
+{
+  "name": string
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklist (DELETE)
+Body:
+```JSON
+{
+  "id": number
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+</Details>
+
+## Book Request
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /bookrequest/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "userId": number,
+    "isbn": string,
+    "title": string,
+    "reason": string,
+    "status": Book_request_status
+  }
+]
+```
+
+### /bookrequest (POST)
+Body:
+```JSON
+{
+  "isbn": string,
+  "title": string,
+  "reason": string
+}
+```
+
+### /bookrequest/updatestatus (PUT)
+Body:
+```JSON
+{
+  "id": number,
+  "status": Book_request_status
+}
+```
+</Details>
+
+## Book Reservation
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /bookreservation/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "userId": number,
+    "bookId": number,
+    "borrowId": number,
+    "reservationDatetime": Date,
+    "loaned": boolean,
+    "canceled": boolean
+  }
+]
+```
+
+### /bookreservation/all/current (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "userId": number,
+    "bookId": number,
+    "borrowId": number,
+    "reservationDatetime": Date,
+    "loaned": boolean,
+    "canceled": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+### /bookreservation/all/extended (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "username": string,
+    "title": string,
+    "bookId": number,
+    "reservationDatetime": Date,
+    "loaned": boolean,
+    "canceled": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+### /bookreservation/book (GET)
+Body:
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "userId": number,
+    "bookId": number,
+    "borrowId": number,
+    "reservationDatetime": Date,
+    "loaned": boolean,
+    "canceled": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+### /bookreservation (POST)
+Body:
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /bookreservation/cancel (POST)
+Body:
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /bookreservation/loan (POST)
+Body:
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /bookreservation/user/current (POST)
+Body:
+```JSON
+{
+  "userId": number
+}
+```
+</Details>
+
+## Book
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /book/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "author": string,
+    "isbn": string,
+    "topic": string,
+    "location": string,
+    "deleted": boolean
+  }
+]
+```
+
+### /book/page?page={page}&pageSize={pageSize} (GET)
+pageSize is optional
+
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "author": string,
+    "isbn": string,
+    "topic": string,
+    "location": string,
+    "deleted": boolean
+  }
+]
+```
+
+### /book/count (GET)
+On Success Response schema:
+```JSON
+number
+```
+
+### /book?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "library_user": number,
+  "title": string,
+  "author": string,
+  "isbn": string,
+  "topic": string,
+  "location": string,
+  "deleted": boolean
+}
+```
+
+### /book?id={id} (DELETE)
+
+### /book (POST)
+Body:
+```JSON
+{
+  "title": string,
+  "author": string,
+  "isbn": string,
+  "topic": string,
+  "location": string
+}
+```
+
+### /book (PUT)
+Body:
+```JSON
+{
+  "id": number,
+  "title": string,
+  "author": string,
+  "isbn": string,
+  "topic": string,
+  "location": string
+}
+```
+
+### /book/all/reserved (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "author": string,
+    "isbn": string,
+    "topic": string,
+    "location": string,
+    "deleted": boolean
+  }
+]
+```
+</Details>
+
+## Borrow
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /borrow/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "book": number,
+    "dueDate": Date,
+    "borrowDate": Date,
+    "returned": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+### /borrow?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "library_user": number,
+  "book": number,
+  "dueDate": Date,
+  "borrowDate": Date,
+  "returned": boolean,
+  "returnDate": Date | null
+}
+```
+
+### /borrow (DELETE)
+Body:
+```JSON
+{
+    "bookId": number
+}
+```
+
+### /borrow (POST)
+Body:
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "message": string
+}
+```
+
+### /borrow (PUT)
+Body:
+```JSON
+{
+  "id": number,
+  "book": number,
+  "dueDate": Date,
+  "borrowDate": Date,
+  "returned": boolean,
+  "returnDate": Date | null
+}
+```
+
+### /borrow/current (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "book": number,
+    "dueDate": Date,
+    "borrowDate": Date,
+    "returned": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+### /borrow/expired/admin (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "borrowId": number,
+    "dueDate": Date,
+    "title": string,
+    "bookId": number,
+    "username": string,
+    "userId": number
+  }
+]
+```
+
+### /borrow/current/admin (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "username": string,
+    "title": string,
+    "borrowDate": Date,
+    "dueDate": Date,
+    "id": number
+  }
+]
+```
+
+### /borrow/expired (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "book": number,
+    "dueDate": Date,
+    "borrowDate": Date,
+    "returned": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+### /borrow/session (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "library_user": number,
+    "book": number,
+    "dueDate": Date,
+    "borrowDate": Date,
+    "returned": boolean,
+    "returnDate": Date | null
+  }
+]
+```
+
+### /borrow/return (PUT)
+Body:
+```JSON
+{
+  "borrowId": number
+}
+```
+</Details>
+
+## Health
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /health (GET)
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "error:": string
+}
+```
+</Details>
+
+## Password Reset
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /passwordreset/secret?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "ok": true,
+  "secret": string
+}
+```
+
+### /passwordreset (POST)
+Body:
+```JSON
+{
+  "secret": string,
+  "password": string
+}
+```
+
+On Fail Response schema:
+```JSON
+{
+  "ok": false,
+  "message": string
+}
+```
+</Details>
+
+## User
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /user/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "username": string,
+    "email": string,
+    "administrator": boolean
+  }
+]
+```
+
+### /user?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "username": string,
+  "email": string,
+  "administrator": boolean
+}
+```
+
+### /user/session (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "username": string,
+  "email": string,
+  "administrator": boolean,
+  "deleted": boolean
+}
+```
+
+### /user (DELETE)
+Body:
+```JSON
+{
+  "id": number
+}
+```
+
+### /user (POST)
+Body:
+```JSON
+{
+  "username": string,
+  "email": string,
+  "password": string,
+  "administrator": boolean
+}
+```
+
+### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
+
+### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
+</Details>
+
 # Docker Help
 Building the docker image: `docker image build .`  
 Running the docker image: `docker run -p 3000:3000 <docker image>`
-

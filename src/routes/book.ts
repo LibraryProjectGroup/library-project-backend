@@ -6,6 +6,8 @@ import {
     queryInsertBook,
     queryUpdateBook,
     querySelectAllReservedBooks,
+    querySelectAllBooksPaged,
+    queryCountAllBooks,
 } from "../queries/book";
 import Book from "../interfaces/book.interface";
 
@@ -18,6 +20,30 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
         next(err);
     }
 });
+
+router.get("/page", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.json(
+            await querySelectAllBooksPaged(
+                Number(req.query.page),
+                Number(req.query.pageSize)
+            )
+        );
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get(
+    "/count",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.json(await queryCountAllBooks());
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {

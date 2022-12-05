@@ -55,15 +55,6 @@ publicRouter.post(
                 res.status(404).json({ ok: false });
                 return;
             }
-            if (
-                req.body.password == undefined ||
-                req.body.password.length < minPasswordLength ||
-                req.body.password.length > maxPasswordLength
-            )
-                return res.status(400).json({
-                    ok: false,
-                    message: "Password has to be between 3 and 50 characters",
-                });
             if (req.body.password) {
                 const userId = activeResets[secret].userId;
                 let user = await querySelectUser(userId);
@@ -71,6 +62,15 @@ publicRouter.post(
                     res.status(404).json({ ok: false });
                     return;
                 }
+                if (
+                    req.body.password.length < minPasswordLength ||
+                    req.body.password.length > maxPasswordLength
+                )
+                    return res.status(400).json({
+                        ok: false,
+                        message:
+                            "Password has to be between 3 and 50 characters",
+                    });
                 let hashedPassword = await bcrypt.hash(req.body.password, 8);
                 user.passw = hashedPassword;
                 delete activeResets[secret];

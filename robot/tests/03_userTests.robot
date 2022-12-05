@@ -18,9 +18,19 @@ Verify user can be created
     ${response}=    POST    ${URL}/auth/register    json=${data}    expected_status=200
     Should Be True    ${response.json()['ok']}
 
-Verify user cannot be duplicated
+Verify email cannot be duplicated
     &{data}=    Create dictionary
     ...    email=${randomUsername}@example.com
+    ...    username=unpocoloco
+    ...    password=password
+    ${response}=    POST    ${URL}/auth/register    json=${data}    expected_status=400
+    Log    ${response}
+    Should Not Be True    ${response.json()['ok']}
+    Should Be Equal As Strings    Email is already taken    ${response.json()['message']}
+
+Verify user cannot be duplicated
+    &{data}=    Create dictionary
+    ...    email=unpocoloco@example.com
     ...    username=${randomUsername}
     ...    password=password
     ${response}=    POST    ${URL}/auth/register    json=${data}    expected_status=400

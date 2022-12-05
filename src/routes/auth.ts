@@ -87,6 +87,13 @@ router.post("/register", async (req: Request, res: Response) => {
             message: "Password has to be between 3 and 50 characters",
         });
 
+    let userByEmail = await querySelectUserByEmail(email);
+    if (userByEmail != null)
+        return res.status(400).json({
+            ok: false,
+            message: "Email is already taken",
+        });
+
     let user = await querySelectUserByUsername(username);
     if (user != null)
         return res.status(400).json({

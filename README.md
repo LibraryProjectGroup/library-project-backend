@@ -55,6 +55,10 @@ If not separately mentioned, On Fail Response schema is:
 ```
 
 ## Auth
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /auth/register (POST)
 Body
@@ -116,9 +120,14 @@ On Fail Response schema:
   "message": string
 }
 ```
+</Details>
 
 ## Book List Entry
-
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+    
 ### /booklistentry/all (GET)
 On Success Response schema:
 ```JSON
@@ -218,9 +227,14 @@ Body:
   "bookId": number
 }
 ```
+</Details>
 
 ## Book List
-
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+    
 ### /booklist/all (GET)
 On Success Response schema:
 ```JSON
@@ -354,8 +368,13 @@ On Fail Response schema:
   "status": 500
 }
 ```
+</Details>
 
 ## Book Request
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /bookrequest/all (GET)
 On Success Response schema:
@@ -390,8 +409,13 @@ Body:
   "status": Book_request_status
 }
 ```
+</Details>
 
 ## Book Reservation
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /bookreservation/all (GET)
 On Success Response schema:
@@ -497,8 +521,13 @@ Body:
   "userId": number
 }
 ```
+</Details>
 
 ## Book
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /book/all (GET)
 On Success Response schema:
@@ -600,8 +629,13 @@ On Success Response schema:
   }
 ]
 ```
+</Details>
 
 ## Borrow
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /borrow/all (GET)
 On Success Response schema:
@@ -754,8 +788,13 @@ Body:
   "borrowId": number
 }
 ```
+</Details>
 
 ## Health
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /health (GET)
 On Fail Response schema:
@@ -765,8 +804,13 @@ On Fail Response schema:
   "error:": string
 }
 ```
+</Details>
 
 ## Password Reset
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /passwordreset/secret?id={id} (GET)
 On Success Response schema:
@@ -793,8 +837,13 @@ On Fail Response schema:
   "message": string
 }
 ```
+</Details>
 
 ## User
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
 
 ### /user/all (GET)
 On Success Response schema:
@@ -854,6 +903,7 @@ Body:
 ### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
 
 ### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
+</Details>
 
 # Docker Help
 Building the docker image: `docker image build .`  

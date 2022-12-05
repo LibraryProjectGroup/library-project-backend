@@ -40,11 +40,22 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 # Endpoints
 ### Note #4:
 Endpoints that use body will be in JSON format.
+If not separately mentioned, On Success Response schema is:
+```JSON
+{
+  "ok": true
+}
+```
+If not separately mentioned, On Fail Response schema is:
+```JSON
+{
+  "ok": fail
+}
+```
 
 ## Auth
 
 ### /auth/register (POST)
-
 Body
 ```JSON
 {
@@ -71,7 +82,6 @@ On Fail Response schema:
 ```
 
 ### /auth/login (POST)
-
 Body
 ```JSON
 {
@@ -98,14 +108,6 @@ On Fail Response schema:
 ```
 
 ### /auth/logout (POST)
-
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
 On Fail Response schema:
 ```JSON
 {
@@ -183,13 +185,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
 On Fail Response schema:
 ```JSON
 {
@@ -203,13 +198,6 @@ Body:
 ```JSON
 {
   "id": number
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true
 }
 ```
 
@@ -230,19 +218,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
 ## Book List
 
 ### /booklist/all (GET)
@@ -268,11 +243,13 @@ On Fail Response schema:
 ### /booklist/user (GET)
 On Success Response schema:
 ```JSON
-{
-  "id": number,
-  "library_user": number,
-  "name": string
-}
+[
+  {
+    "id": number,
+    "library_user": number,
+    "name": string
+  }
+]
 ```
 
 On Fail Response schema:
@@ -337,13 +314,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
 On Fail Response schema:
 ```JSON
 {
@@ -360,13 +330,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
 On Fail Response schema:
 ```JSON
 {
@@ -380,13 +343,6 @@ Body:
 ```JSON
 {
   "id": number
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true
 }
 ```
 
@@ -425,13 +381,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
 ### /bookrequest/updatestatus (PUT)
 Body:
 ```JSON
@@ -441,19 +390,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
 ## Book Reservation
 
 ### /bookreservation/all (GET)
@@ -537,25 +473,11 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true,
-}
-```
-
 ### /bookreservation/cancel (POST)
 Body:
 ```JSON
 {
   "bookId": number
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true,
 }
 ```
 
@@ -567,25 +489,11 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true,
-}
-```
-
 ### /bookreservation/user/current (POST)
 Body:
 ```JSON
 {
   "userId": number
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true,
 }
 ```
 
@@ -608,13 +516,6 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /book/page?page={page}&pageSize={pageSize} (GET)
 pageSize is optional
 
@@ -634,24 +535,10 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /book/count (GET)
 On Success Response schema:
 ```JSON
 number
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
 ```
 
 ### /book?id={id} (GET)
@@ -669,27 +556,7 @@ On Success Response schema:
 }
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /book?id={id} (DELETE)
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
 
 ### /book (POST)
 Body:
@@ -703,22 +570,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-[
-{
-  "ok": true,
-}
-
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /book (PUT)
 Body:
 ```JSON
@@ -729,20 +580,6 @@ Body:
   "isbn": string,
   "topic": string,
   "location": string
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true,
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
 }
 ```
 
@@ -763,13 +600,6 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ## Borrow
 
 ### /borrow/all (GET)
@@ -788,13 +618,6 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow?id={id} (GET)
 On Success Response schema:
 ```JSON
@@ -809,13 +632,6 @@ On Success Response schema:
 }
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow (DELETE)
 Body:
 ```JSON
@@ -824,32 +640,11 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow (POST)
 Body:
 ```JSON
 {
   "bookId": number
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true,
 }
 ```
 
@@ -874,20 +669,6 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow/current (GET)
 On Success Response schema:
 ```JSON
@@ -902,13 +683,6 @@ On Success Response schema:
     "returnDate": Date | null
   }
 ]
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
 ```
 
 ### /borrow/expired/admin (GET)
@@ -926,13 +700,6 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow/current/admin (GET)
 On Success Response schema:
 ```JSON
@@ -945,13 +712,6 @@ On Success Response schema:
     "id": number
   }
 ]
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
 ```
 
 ### /borrow/expired (GET)
@@ -970,13 +730,6 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow/session (GET)
 On Success Response schema:
 ```JSON
@@ -993,13 +746,6 @@ On Success Response schema:
 ]
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /borrow/return (PUT)
 Body:
 ```JSON
@@ -1008,30 +754,9 @@ Body:
 }
 ```
 
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ## Health
 
 ### /health (GET)
-On Success Response schema:
-```JSON
-{
-  "ok": true
-}
-```
-
 On Fail Response schema:
 ```JSON
 {
@@ -1051,26 +776,12 @@ On Success Response schema:
 }
 ```
 
-On Fail Response schema:
-```JSON
-{
-  "ok": false
-}
-```
-
 ### /passwordreset (POST)
 Body:
 ```JSON
 {
   "secret": string,
   "password": string
-}
-```
-
-On Success Response schema:
-```JSON
-{
-  "ok": true
 }
 ```
 
@@ -1084,46 +795,65 @@ On Fail Response schema:
 
 ## User
 
+### /user/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "username": string,
+    "email": string,
+    "administrator": boolean
+  }
+]
+```
 
+### /user?id={id} (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "username": string,
+  "email": string,
+  "administrator": boolean
+}
+```
 
+### /user/session (GET)
+On Success Response schema:
+```JSON
+{
+  "id": number,
+  "username": string,
+  "email": string,
+  "administrator": boolean,
+  "deleted": boolean
+}
+```
 
+### /user (DELETE)
+Body:
+```JSON
+{
+  "id": number
+}
+```
 
+### /user (POST)
+Body:
+```JSON
+{
+  "username": string,
+  "email": string,
+  "password": string,
+  "administrator": boolean
+}
+```
 
+### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
 
 # Docker Help
 Building the docker image: `docker image build .`  
 Running the docker image: `docker run -p 3000:3000 <docker image>`
-

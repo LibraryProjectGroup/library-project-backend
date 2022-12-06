@@ -15,22 +15,20 @@ const router = Router();
 
 // note(markus): tested these in postman
 
-router.get("/all", async (req: Request, res: Response) => {
+router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.json(await querySelectAllLists());
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.get("/user", async (req: Request, res: Response) => {
+router.get("/user", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booklists = await querySelectListByUser(req.sessionUser.id);
         res.json(booklists);
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
@@ -53,45 +51,41 @@ router.get("/info", async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     const listId = req.query.id;
     try {
         res.json(await querySelectList(Number(listId)));
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.put("/", async (req: Request, res: Response) => {
+router.put("/", async (req: Request, res: Response, next: NextFunction) => {
     const list: Book_list = req.body;
     try {
         res.json({ ok: await queryUpdateList(list) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     const list: Book_list = { ...req.body };
     try {
         res.json({
             ok: await queryInsertNewList(req.sessionUser.id, req.body.name),
         });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 
-router.delete("/", async (req: Request, res: Response) => {
+router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
     const listId = req.body.id;
     try {
         res.json({ ok: await queryDeleteList(listId) });
-    } catch (error) {
-        console.error(error);
-        res.json({ ok: false, status: 500 });
+    } catch (err) {
+        next(err);
     }
 });
 

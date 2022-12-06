@@ -449,6 +449,19 @@ On Success Response schema:
   }
 ]
 ```
+### /bookreservation/active/loanable
+```JSON
+[
+  {
+    "id": number,
+    "bookId": number,
+    "reservationDatetime": Date,
+    "loaned": boolean,
+    "canceled": boolean,
+    "returnDate": Date
+  }
+]
+```
 
 ### /bookreservation/all/extended (GET)
 On Success Response schema:
@@ -510,7 +523,7 @@ Body:
 Body:
 ```JSON
 {
-  "bookId": number
+  "reservationId": number
 }
 ```
 

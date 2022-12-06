@@ -417,6 +417,9 @@ Body:
         Show Endpoints
     </Summary>
 
+\
+Book_reservations are considered active, if they are not canceled, loaned, and the connected Borrow hasn't been returned more than RESERVATION_DAYS prior to now. Book_reservations are considered loanable, if they are active and the connecting Borrow has been returned. Book_reservation status isn't automatically updated in the backend, but is instead filtered through SQL queries and *filterActiveReservations* function in **queries/book_reservation**.
+
 ### /bookreservation/all (GET)
 On Success Response schema:
 ```JSON

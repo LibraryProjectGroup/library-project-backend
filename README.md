@@ -921,6 +921,14 @@ Body:
 ### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
 </Details>
 
+# Database Diagram
+<Details>
+    <Summary>
+        Show Diagram
+    </Summary>
+    <img src="dbdiagram.png"></img>
+</Details>
+
 # Docker Help
 Building the docker image: `docker image build .`  
 Running the docker image: `docker run -p 3000:3000 <docker image>`

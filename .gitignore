@@ -4,3 +4,4 @@ build/
 robot/results
 vscode/
 **/docker.env
+/*.iml

@@ -37,13 +37,9 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const borrow = await querySelectBorrow(req.body.borrowId);
-        if (
-            borrow &&
-            (borrow.library_user == req.sessionUser.id ||
-                req.sessionUser.administrator)
-        ) {
+        if (borrow && req.sessionUser.administrator) {
             res.json({
-                ok: await queryDeleteBorrow(Number(req.query.borrowId)),
+                ok: await queryDeleteBorrow(req.body.borrowId),
             });
         } else {
             res.status(403).json({ ok: false });
@@ -163,6 +159,7 @@ router.put(
                     req.sessionUser.administrator)
             ) {
                 borrow.returned = true;
+                borrow.returnDate = new Date();
                 res.json({ ok: await queryUpdateBorrow(borrow) });
             } else {
                 res.status(403).json({ ok: false });

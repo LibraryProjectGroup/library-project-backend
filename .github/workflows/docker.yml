@@ -1,13 +1,14 @@
 name: Docker CI
 
 on:
-  push:
-    branches: ["main", "development", "docker"]
   pull_request:
     branches: [ "main", "development", "docker"]
+    types:
+      - closed
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:

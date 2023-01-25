@@ -2,3 +2,5 @@ node_modules/
 build/
 .env
 robot/results
+vscode/
+**/docker.env

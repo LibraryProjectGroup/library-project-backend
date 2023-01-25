@@ -1,36 +1,36 @@
 *** Settings ***
-
-Library    RequestsLibrary
-Library    String
-
-*** Variables ***
-
-${URL}         https://libraryproject.ddns.net/
+Resource    ../common.resource
+Library     RequestsLibrary
+Library     String
 
 
-*** test cases ***
-
+*** Test Cases ***
 Verify server requires authentication
-    ${response}=    GET  ${URL}    expected_status=401
+    ${response}=    GET    ${URL}    expected_status=401
 
-Verify user can't login with nonexistent username
-    &{data}=    Create dictionary    username=nonexistent    password=randompassword
-    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=404
-    Should Be Equal    No account by that username    ${response.json()['message']}
+Verify user can't login with nonexistent user
+    &{data}=    Create dictionary    email=this.user@notexist.aol    password=randompassword
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=400
+    Should Be Equal    Invalid Email or Password    ${response.json()['message']}
 
 Verify user can't login without password
-    ${data}=    Create dictionary    username=joonajoo
-    ${response}=    POST  ${URL}/auth/login   json=${data}    expected_status=403 
-    Should Be Equal    Invalid password    ${response.json()['message']}
+    ${data}=    Create dictionary    email=${BACKENDTESTEMAIL}
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=403
+    Should Be Equal    Invalid Email or Password    ${response.json()['message']}
+
+Verify user can't login without email
+    ${data}=    Create dictionary    password=${BACKENDTESTPASSWORD}
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=400
+    Should Be Equal    Email and password required    ${response.json()['message']}
 
 Verify user can't login with wrong password
-    ${data}=    Create dictionary    username=joonajoo    password=wrongpassword
-    ${response}=    POST  ${URL}/auth/login   json=${data}    expected_status=403 
-    Should Be Equal    Invalid password    ${response.json()['message']}
+    ${data}=    Create dictionary    email=${BACKENDTESTEMAIL}    password=wrongpassword
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=403
+    Should Be Equal    Invalid Email or Password    ${response.json()['message']}
 
 Verify user can login
-    &{data}=    Create dictionary    username=joonajoo    password=soin5oeran
-    ${response}=    POST  ${URL}/auth/login   json=${data}    expected_status=200
+    ${data}=    Create dictionary    email=${BACKENDTESTEMAIL}    password=${BACKENDTESTPASSWORD}
+    ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=200
     Should Be True    ${response.json()['ok']}
     Set Global Variable    ${bearerToken}    access_token=${response.json()['secret']}
     Log To Console    ${bearerToken}

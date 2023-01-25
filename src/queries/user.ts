@@ -47,6 +47,17 @@ export const querySelectUserByUsername = async (
     return rows.length > 0 ? (rows[0] as User) : null;
 };
 
+export const querySelectUserByEmail = async (
+    email: string
+): Promise<User | null> => {
+    const promisePool = pool.promise();
+    const [rows] = await promisePool.query<RowDataPacket[]>(
+        "SELECT * FROM library_user WHERE email = ?",
+        [email]
+    );
+    return rows.length > 0 ? (rows[0] as User) : null;
+};
+
 export const queryHardDeleteUser = async (userId: number): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
@@ -67,19 +78,21 @@ export const querySoftDeleteUser = async (userId: number): Promise<boolean> => {
 
 export const queryInsertUser = async (
     username: string,
+    email: string,
     password: string,
     isAdmin: boolean,
     deleted: boolean
 ): Promise<User | null> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "INSERT INTO library_user (username, passw, administrator, deleted) VALUES (?)",
-        [[username, password, isAdmin, deleted]]
+        "INSERT INTO library_user (username, email, passw, administrator, deleted) VALUES (?)",
+        [[username, email, password, isAdmin, deleted]]
     );
     if (rows.affectedRows == 0) return null;
     return {
         id: rows.insertId,
         username,
+        email,
         passw: password,
         administrator: isAdmin,
         deleted: false,
@@ -89,8 +102,8 @@ export const queryInsertUser = async (
 export const queryUpdateUser = async (user: User): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "UPDATE library_user SET username=(?), passw=(?), administrator=(?) WHERE id=(?)",
-        [user.username, user.passw, user.administrator, user.id]
+        "UPDATE library_user SET username=(?), email=(?), passw=(?), administrator=(?) WHERE id=(?)",
+        [user.username, user.email, user.passw, user.administrator, user.id]
     );
     return rows.affectedRows != 0;
 };
@@ -98,8 +111,8 @@ export const queryUpdateUser = async (user: User): Promise<boolean> => {
 export const queryAdminUpdateUser = async (user: User): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "UPDATE library_user SET username=(?), administrator=(?) WHERE id=(?)",
-        [user.username, user.administrator, user.id]
+        "UPDATE library_user SET username=(?), email=(?), administrator=(?) WHERE id=(?)",
+        [user.username, user.email, user.administrator, user.id]
     );
     return rows.affectedRows != 0;
 };

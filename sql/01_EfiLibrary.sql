@@ -25,23 +25,28 @@ DROP TABLE IF EXISTS `library_user`;
 CREATE TABLE IF NOT EXISTS `library_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
+  `email` varchar(80) NOT NULL,
   `passw` varchar(150) NOT NULL,
   `administrator` tinyint(1) DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQ_libary_user_username` (`username`),
+  UNIQUE KEY `UQ_libary_user_email` (`email`),
   CONSTRAINT `CHK_libary_user_username_not_empty` CHECK (char_length(`username`) > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table efilibrarydb.library_user: ~4 rows (approximately)
-INSERT INTO `library_user` (`id`, `username`, `passw`, `administrator`) VALUES
-	(1, 'hemuli', 'qweqweqwe', 0),
-	(2, 'joonajoo', 'soin5oeran', 1),
-	(3, 'mikkoR', '4egdv3a453', 0),
-	(4, 'Erika', 'h4whs54htrh', 1),
-  (5, 'admin', 'admin', 1),
-  (6, 'rascal', 'heckthelibrarians', 0);
-  (7, 'testityyppi', 'robotTests123#', 1);
+
+INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`) VALUES
+	(1, 'hemuli', 'hemuli@place.holder', 'qweqweqwe', 0),
+	(2, 'joonajoo', 'joonajoo@place.holder', 'soin5oeran', 1),
+	(3, 'mikkoR', 'mikkoR@place.holder', '4egdv3a453', 0),
+	(4, 'Erika', 'Erika@place.holder', 'h4whs54htrh', 1),
+  (5, 'admin', 'admin@eficode.com', '$2b$08$InfyNU.vUe8qc9BXLFmtzOfTcaxUz9POMIEw62UyNHWWDAv4S/NJm', 1),
+  (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0),
+  (7, 'testityyppi', 'testityyppi', '$2b$08$81Cv2lgk43p6EDHQ/qa3buFVcCMDtebDju4iAsoGOuRzAyqFnwHS6', 1),
+  (8, 'asd', 'asd@asd', '$2b$08$2okL0BPRzVnLKQujmmRK7u4NU/FyeAXBRDJ9FDD7zQKzJ6r9aTyDW', 1),
+  (9, 'testattavatyyppi', 'etu.suku@doesnt.exist', '$2b$08$4LdND6u7LymHX5DCBtmyweaYCOxKvUY6Rd9Z4N4cWQalAVtBSBOvi', 0);
 
 -- Dumping structure for table efilibrarydb.book
 DROP TABLE IF EXISTS `book`;
@@ -76,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `borrowing` (
   `dueDate` date NOT NULL,
   `borrowDate` date NOT NULL,
   `returned` tinyint(1) NOT NULL,
+  `returnDate` date,
   PRIMARY KEY (`id`),
   KEY `library_user` (`library_user`),
   KEY `book` (`book`),
@@ -112,6 +118,23 @@ INSERT INTO `borrowing` (`id`, `library_user`, `book`, `dueDate`, `borrowDate`, 
     KEY `book` (`book`),
     CONSTRAINT `FK_book_list_entry_list` FOREIGN KEY (`list`) REFERENCES `book_list` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `FK_book_list_entry_book` FOREIGN KEY (`book`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  );
+
+  DROP TABLE IF EXISTS `book_reservation`;
+  CREATE TABLE IF NOT EXISTS `book_reservation` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `userId` int(11) NOT NULL,
+    `bookId` int(11) NOT NULL,
+    `borrowId` int(11) NOT NULL,
+    `reservationDatetime` datetime NOT NULL,
+    `loaned` tinyint(1) NOT NULL,
+    `canceled` tinyint(1) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `userId` (`userId`),    
+    KEY `bookId` (`bookId`),
+    CONSTRAINT FOREIGN KEY `FK_book_reservation_user_id` (`userId`) REFERENCES `library_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY `FK_book_reservation_book_id` (`bookId`) REFERENCES `book` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FOREIGN KEY `FK_book_reservation_borrow_id` (`borrowId`) REFERENCES `borrowing` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;

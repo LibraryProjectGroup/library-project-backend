@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node ./src/server.ts",
     "test": "robot --variable BACKENDTESTEMAIL:${TESTUSERNAME} --variable BACKENDTESTPASSWORD:${TESTPASSWORD} --outputdir robot/results robot/tests",
-    "build": "tsc"
+    "build": "tsc",
+    "fmt": "prettier --write ."
   },
   "license": "ISC",
   "dependencies": {

@@ -1,7 +1,14 @@
-/node_modules/
-build/
-.env
-robot/results
-vscode/
-**/docker.env
+# JetBrains
 /*.iml
+
+# Environment variables
+.env
+
+# Node.js
+/node_modules/
+
+# When running "npm run build"
+/build/
+
+# Python "robot" tests
+/robot/results/

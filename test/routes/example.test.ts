@@ -6,12 +6,12 @@ jest.mock("../../src/queries/session");
 jest.mock("../../src/queries/user");
 
 describe("example test to make sure jest works", () => {
-    test("get unauthorized from /", async () => {
-        return request(app).get("/").expect(401);
-    });
+  test("get unauthorized from /", async () => {
+    return request(app).get("/").expect(401);
+  });
 });
 
 afterAll((done) => {
-    pool.end();
-    done();
+  pool.end();
+  done();
 });

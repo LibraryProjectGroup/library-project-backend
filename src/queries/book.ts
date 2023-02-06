@@ -69,14 +69,15 @@ export const queryInsertBook = async (
     userId: number,
     title: string,
     author: string,
+    year: number,
     isbn: string,
     topic: string,
     location: string
 ): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "INSERT INTO book (library_user, title, author, topic, isbn, location) VALUES (?)",
-        [[userId, title, author, topic, isbn, location]]
+        "INSERT INTO book (library_user, title, author, year, topic, isbn, location) VALUES (?)",
+        [[userId, title, author, year, topic, isbn, location]]
     );
     return rows.affectedRows != 0;
 };
@@ -84,7 +85,7 @@ export const queryInsertBook = async (
 export const queryUpdateBook = async (book: Book): Promise<boolean> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query<ResultSetHeader>(
-        "UPDATE book SET title=(?), author=(?), topic=(?), isbn=(?), location=(?) WHERE id=(?)",
+        "UPDATE book SET title=(?), author=(?), year=(?), topic=(?), isbn=(?), location=(?) WHERE id=(?)",
         [book.title, book.author, book.topic, book.isbn, book.location, book.id]
     );
     return rows.changedRows != 0;
@@ -93,7 +94,7 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
 export const querySelectAllReservedBooks = async (): Promise<Book[]> => {
     const promisePool = pool.promise();
     const [rows] = await promisePool.query(
-        "select book.id, book.library_user, book.title, book.author, book.isbn, book.topic, book.location, book.deleted from book JOIN book_reservation AS reservation ON reservation.bookId = book.id WHERE reservation.canceled = 0 AND reservation.loaned = 0 AND book.deleted != 1;"
+        "select book.id, book.library_user, book.title, book.author, book.year, book.isbn, book.topic, book.location, book.deleted from book JOIN book_reservation AS reservation ON reservation.bookId = book.id WHERE reservation.canceled = 0 AND reservation.loaned = 0 AND book.deleted != 1;"
     );
     return rows as Book[];
 };

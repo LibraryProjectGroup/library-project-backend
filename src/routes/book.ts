@@ -77,6 +77,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
                 req.sessionUser.id,
                 req.body.title,
                 req.body.author,
+                req.body.year,
                 req.body.isbn,
                 req.body.topic,
                 req.body.location

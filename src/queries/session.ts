@@ -43,3 +43,44 @@ export async function queryInvalidateSession(secret: string): Promise<boolean> {
   );
   return res.affectedRows != 0;
 }
+
+export async function storeChallenge(code: string, challenge: string) {
+  const [res] = await pool
+    .promise()
+    .execute<ResultSetHeader>(
+      "INSERT INTO oauth_challenge_storage (code_parameter, code_verifier, created_at) VALUES (?, ?, FROM_UNIXTIME(UNIX_TIMESTAMP()));",
+      [code, challenge]
+    );
+  if (res.affectedRows == 0) {
+    return null;
+  }
+  return {
+    id: res.insertId,
+  };
+}
+
+type ChallengePacket = {
+  storageId: number;
+  verificationCode: string;
+  createdAtUtc: string;
+};
+
+export async function getChallengeVerificationCodeByCodeParameter(
+  code: string
+): Promise<ChallengePacket | null> {
+  const [res] = await pool
+    .promise()
+    .query<RowDataPacket[]>(
+      "SELECT oauth_challenge_storage_id, code_verifier, created_at FROM oauth_challenge_storage WHERE code_parameter = ? LIMIT 1;",
+      [code]
+    );
+  if (res.length < 1) {
+    return null;
+  }
+  const data = res[0];
+  return {
+    storageId: data.oauth_challenge_storage_id,
+    verificationCode: data.code_verifier,
+    createdAtUtc: data.created_at,
+  };
+}

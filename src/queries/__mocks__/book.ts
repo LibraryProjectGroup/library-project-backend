@@ -7,6 +7,7 @@ let book1: Book = {
   library_user: 1,
   title: "bt1",
   author: "ba1",
+  year: 2011,
   isbn: "123-t456",
   topic: "Java",
   location: "Helsinki",
@@ -18,6 +19,7 @@ let book2: Book = {
   library_user: 1,
   title: "bt2",
   author: "ba2",
+  year: 2012,
   isbn: "234-t567",
   topic: "JavaScript",
   location: "Helsinki",
@@ -29,6 +31,7 @@ let book3: Book = {
   library_user: 2,
   title: "bt3",
   author: "ba3",
+  year: 2013,
   isbn: "345-t678",
   topic: "TypeScript",
   location: "Helsinki",
@@ -40,6 +43,7 @@ let book4: Book = {
   library_user: 2,
   title: "bt4",
   author: "ba4",
+  year: 2014,
   isbn: "456-t567",
   topic: "SQL",
   location: "Helsinki",
@@ -97,6 +101,7 @@ export const queryInsertBook = async (
   userId: number,
   title: string,
   author: string,
+  year: number,
   isbn: string,
   topic: string,
   location: string
@@ -106,6 +111,7 @@ export const queryInsertBook = async (
     library_user: userId,
     title,
     author,
+    year,
     isbn,
     topic,
     location,
@@ -119,6 +125,7 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
   if (editedBook) {
     editedBook.title = book.title;
     editedBook.author = book.author;
+    editedBook.year = book.year;
     editedBook.isbn = book.isbn;
     editedBook.topic = book.topic;
     editedBook.location = book.location;

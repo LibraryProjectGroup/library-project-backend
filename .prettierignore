@@ -1,6 +1,8 @@
-# Add files to exclude from formatting here
-build
-coverage
-.package-lock.json
-*.min.*
-.devcontainer
+/node_modules/
+/package-lock.json
+/.devcontainer/
+
+
+/test/report.html
+/test/log.html
+/build/

@@ -6,9 +6,9 @@ const router = Router();
 router.get("", async (req: Request, res: Response, next: NextFunction) => {
     try {
         await querySelectAllBooks();
-        res.json({ok: true});
+        res.json({ ok: true });
     } catch (err: any) {
-        res.status(500).json({ok: false, error: err.toString()});
+        res.status(500).json({ ok: false, error: err.toString() });
     }
 });
 

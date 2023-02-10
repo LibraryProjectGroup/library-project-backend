@@ -38,16 +38,21 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 <br>
 
 # Endpoints
+
 ### Note #4:
+
 Endpoints that use body will be in JSON format. Endpoint requires either query or body, if query is present, the body section will not be shown and vice versa.
 <br>
 If not separately mentioned, On Success Response schema is:
+
 ```JSON
 {
   "ok": true
 }
 ```
+
 If not separately mentioned, On Fail Response schema is:
+
 ```JSON
 {
   "ok": fail
@@ -55,13 +60,16 @@ If not separately mentioned, On Fail Response schema is:
 ```
 
 ## Auth
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /auth/register (POST)
+
 Body
+
 ```JSON
 {
   "username": string,
@@ -71,6 +79,7 @@ Body
 ```
 
 On Success Response schema:
+
 ```JSON
 {
   "ok": true,
@@ -79,6 +88,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -87,7 +97,9 @@ On Fail Response schema:
 ```
 
 ### /auth/login (POST)
+
 Body
+
 ```JSON
 {
   "email": string,
@@ -96,6 +108,7 @@ Body
 ```
 
 On Success Response schema:
+
 ```JSON
 {
   "ok": true,
@@ -105,6 +118,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -113,16 +127,20 @@ On Fail Response schema:
 ```
 
 ### /auth/logout (POST)
+
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
   "message": string
 }
 ```
+
 </Details>
 
 ## Book List Entry
+
 <Details>
     <Summary>
         Show Endpoints
@@ -141,6 +159,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -149,7 +168,9 @@ On Fail Response schema:
 ```
 
 ### /booklistentry/list?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -161,6 +182,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -169,7 +191,9 @@ On Fail Response schema:
 ```
 
 ### /booklistentry?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "id": number,
@@ -179,6 +203,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -187,7 +212,9 @@ On Fail Response schema:
 ```
 
 ### /booklistentry (POST)
+
 Body:
+
 ```JSON
 {
   "list": number,
@@ -196,6 +223,7 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -204,7 +232,9 @@ On Fail Response schema:
 ```
 
 ### /booklistentry (DELETE)
+
 Body:
+
 ```JSON
 {
   "id": number
@@ -212,6 +242,7 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -220,16 +251,20 @@ On Fail Response schema:
 ```
 
 ### /booklistentry/book (DELETE)
+
 Body:
+
 ```JSON
 {
   "listId": number,
   "bookId": number
 }
 ```
+
 </Details>
 
 ## Book List
+
 <Details>
     <Summary>
         Show Endpoints
@@ -248,6 +283,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -256,7 +292,9 @@ On Fail Response schema:
 ```
 
 ### /booklist/user (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -268,6 +306,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -276,7 +315,9 @@ On Fail Response schema:
 ```
 
 ### /booklist/books?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -293,7 +334,9 @@ On Success Response schema:
 ```
 
 ### /booklist/info?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "userId": number,
@@ -303,7 +346,9 @@ On Success Response schema:
 ```
 
 ### /booklist?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "id": number,
@@ -313,6 +358,7 @@ On Success Response schema:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -321,7 +367,9 @@ On Fail Response schema:
 ```
 
 ### /booklist (PUT)
+
 Body:
+
 ```JSON
 {
   "id": number,
@@ -330,6 +378,7 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -338,7 +387,9 @@ On Fail Response schema:
 ```
 
 ### /booklist (POST)
+
 Body:
+
 ```JSON
 {
   "name": string
@@ -346,6 +397,7 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -354,7 +406,9 @@ On Fail Response schema:
 ```
 
 ### /booklist (DELETE)
+
 Body:
+
 ```JSON
 {
   "id": number
@@ -362,22 +416,27 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
   "status": 500
 }
 ```
+
 </Details>
 
 ## Book Request
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /bookrequest/all (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -392,7 +451,9 @@ On Success Response schema:
 ```
 
 ### /bookrequest (POST)
+
 Body:
+
 ```JSON
 {
   "isbn": string,
@@ -402,26 +463,32 @@ Body:
 ```
 
 ### /bookrequest/updatestatus (PUT)
+
 Body:
+
 ```JSON
 {
   "id": number,
   "status": Book_request_status
 }
 ```
+
 </Details>
 
 ## Book Reservation
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 \
-Book_reservations are considered active, if they are not canceled, loaned, and the connected Borrow hasn't been returned more than RESERVATION_DAYS prior to now. Book_reservations are considered loanable, if they are active and the connecting Borrow has been returned. Book_reservation status isn't automatically updated in the backend, but is instead filtered through SQL queries and *filterActiveReservations* function in **queries/book_reservation**.
+Book_reservations are considered active, if they are not canceled, loaned, and the connected Borrow hasn't been returned more than RESERVATION_DAYS prior to now. Book_reservations are considered loanable, if they are active and the connecting Borrow has been returned. Book_reservation status isn't automatically updated in the backend, but is instead filtered through SQL queries and _filterActiveReservations_ function in **queries/book_reservation**.
 
 ### /bookreservation/all (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -437,7 +504,9 @@ On Success Response schema:
 ```
 
 ### /bookreservation/all/current (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -452,7 +521,9 @@ On Success Response schema:
   }
 ]
 ```
+
 ### /bookreservation/active/loanable
+
 ```JSON
 [
   {
@@ -467,7 +538,9 @@ On Success Response schema:
 ```
 
 ### /bookreservation/all/extended (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -482,8 +555,11 @@ On Success Response schema:
   }
 ]
 ```
+
 ### /bookreservation/book (GET)
+
 Body:
+
 ```JSON
 {
   "bookId": number
@@ -491,6 +567,7 @@ Body:
 ```
 
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -507,7 +584,9 @@ On Success Response schema:
 ```
 
 ### /bookreservation (POST)
+
 Body:
+
 ```JSON
 {
   "bookId": number
@@ -515,7 +594,9 @@ Body:
 ```
 
 ### /bookreservation/cancel (POST)
+
 Body:
+
 ```JSON
 {
   "bookId": number
@@ -523,7 +604,9 @@ Body:
 ```
 
 ### /bookreservation/loan (POST)
+
 Body:
+
 ```JSON
 {
   "reservationId": number
@@ -531,22 +614,28 @@ Body:
 ```
 
 ### /bookreservation/user/current (POST)
+
 Body:
+
 ```JSON
 {
   "userId": number
 }
 ```
+
 </Details>
 
 ## Book
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /book/all (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -563,9 +652,11 @@ On Success Response schema:
 ```
 
 ### /book/page?page={page}&pageSize={pageSize} (GET)
+
 pageSize is optional
 
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -582,13 +673,17 @@ On Success Response schema:
 ```
 
 ### /book/count (GET)
+
 On Success Response schema:
+
 ```JSON
 number
 ```
 
 ### /book?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "id": number,
@@ -605,7 +700,9 @@ On Success Response schema:
 ### /book?id={id} (DELETE)
 
 ### /book (POST)
+
 Body:
+
 ```JSON
 {
   "title": string,
@@ -617,7 +714,9 @@ Body:
 ```
 
 ### /book (PUT)
+
 Body:
+
 ```JSON
 {
   "id": number,
@@ -630,7 +729,9 @@ Body:
 ```
 
 ### /book/all/reserved (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -645,16 +746,20 @@ On Success Response schema:
   }
 ]
 ```
+
 </Details>
 
 ## Borrow
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /borrow/all (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -670,7 +775,9 @@ On Success Response schema:
 ```
 
 ### /borrow?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "id": number,
@@ -684,7 +791,9 @@ On Success Response schema:
 ```
 
 ### /borrow (DELETE)
+
 Body:
+
 ```JSON
 {
     "bookId": number
@@ -692,7 +801,9 @@ Body:
 ```
 
 ### /borrow (POST)
+
 Body:
+
 ```JSON
 {
   "bookId": number
@@ -700,6 +811,7 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
@@ -708,7 +820,9 @@ On Fail Response schema:
 ```
 
 ### /borrow (PUT)
+
 Body:
+
 ```JSON
 {
   "id": number,
@@ -721,7 +835,9 @@ Body:
 ```
 
 ### /borrow/current (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -737,7 +853,9 @@ On Success Response schema:
 ```
 
 ### /borrow/expired/admin (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -752,7 +870,9 @@ On Success Response schema:
 ```
 
 ### /borrow/current/admin (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -766,7 +886,9 @@ On Success Response schema:
 ```
 
 ### /borrow/expired (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -782,7 +904,9 @@ On Success Response schema:
 ```
 
 ### /borrow/session (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -798,38 +922,48 @@ On Success Response schema:
 ```
 
 ### /borrow/return (PUT)
+
 Body:
+
 ```JSON
 {
   "borrowId": number
 }
 ```
+
 </Details>
 
 ## Health
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /health (GET)
+
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
   "error:": string
 }
 ```
+
 </Details>
 
 ## Password Reset
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /passwordreset/secret?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "ok": true,
@@ -838,7 +972,9 @@ On Success Response schema:
 ```
 
 ### /passwordreset (POST)
+
 Body:
+
 ```JSON
 {
   "secret": string,
@@ -847,22 +983,27 @@ Body:
 ```
 
 On Fail Response schema:
+
 ```JSON
 {
   "ok": false,
   "message": string
 }
 ```
+
 </Details>
 
 ## User
+
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
 ### /user/all (GET)
+
 On Success Response schema:
+
 ```JSON
 [
   {
@@ -875,7 +1016,9 @@ On Success Response schema:
 ```
 
 ### /user?id={id} (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "id": number,
@@ -886,7 +1029,9 @@ On Success Response schema:
 ```
 
 ### /user/session (GET)
+
 On Success Response schema:
+
 ```JSON
 {
   "id": number,
@@ -898,7 +1043,9 @@ On Success Response schema:
 ```
 
 ### /user (DELETE)
+
 Body:
+
 ```JSON
 {
   "id": number
@@ -906,7 +1053,9 @@ Body:
 ```
 
 ### /user (POST)
+
 Body:
+
 ```JSON
 {
   "username": string,
@@ -919,9 +1068,11 @@ Body:
 ### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
 
 ### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
+
 </Details>
 
 # Database Diagram
+
 <Details>
     <Summary>
         Show Diagram
@@ -930,5 +1081,6 @@ Body:
 </Details>
 
 # Docker Help
+
 Building the docker image: `docker image build .`  
 Running the docker image: `docker run -p 3000:3000 <docker image>`

@@ -1,4 +1,4 @@
-import Session from '../../interfaces/session.interface';
+import Session from "../../interfaces/session.interface";
 
 async function querySelectSessionBySecret(
     secret: string
@@ -7,7 +7,7 @@ async function querySelectSessionBySecret(
     const session: Session = {
         id: 1,
         userId: 1,
-        secret: '123',
+        secret: "123",
         expires: currentTime + 1234,
         invalidated: false,
     };

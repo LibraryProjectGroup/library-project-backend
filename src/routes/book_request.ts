@@ -36,7 +36,6 @@ router.put(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (req.sessionUser.administrator) {
-
                 res.json({
                     ok: await queryUpdateRequest(req.body.id, req.body.status),
                 });

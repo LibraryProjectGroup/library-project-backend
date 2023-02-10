@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `library_user` int(11) NOT NULL,
   `title` varchar(250) NOT NULL,
   `author` varchar(250) NOT NULL,
-  `year` int(5) NOT NULL,
+  `year` YEAR NOT NULL,
   `isbn` varchar(20) NOT NULL,
   `topic` varchar(50) NOT NULL,
   `location` varchar(20) NOT NULL,

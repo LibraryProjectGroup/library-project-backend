@@ -17,6 +17,7 @@ Verify that new book can be created
     ...    { library_user=2
     ...    title=Fake
     ...    author=Test Author
+    ...    year=2023
     ...    isbn=123-242-421
     ...    topic=js
     ...    location=Fake location
@@ -44,7 +45,7 @@ Verify that user can check borrowed book by id
     Should Be Equal    ${response.json()['id']}    ${1}
 
 # Verify that book can be updated
-#    &{data}=    Create dictionary    { library_user=2    title=Fake asdf    author=Test Author    isbn=123-242-421    topic=js    location=Fake location    deleted=0}
+#    &{data}=    Create dictionary    { library_user=2    title=Fake asdf    author=Test Author     year=2022    isbn=123-242-421    topic=js    location=Fake location    deleted=0}
 #    ${response}=    PUT    url=${URL}/book/?id=12&${bearerToken}    json=${data}    expected_status=200
 #    Should Be True    ${response.json()['ok']}
 

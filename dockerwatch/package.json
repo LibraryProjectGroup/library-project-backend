@@ -1,13 +1,13 @@
 {
-    "name": "dockerwatch",
-    "version": "1.0.0",
-    "description": "A node application to update a docker container with the latest image from a repository",
-    "main": "index.js",
-    "type": "module",
-    "author": "ImWuX",
-    "license": "ISC",
-    "dependencies": {
-        "dockerode": "^3.3.4",
-        "node-fetch": "^3.3.0"
-    }
+  "name": "dockerwatch",
+  "version": "1.0.0",
+  "description": "A node application to update a docker container with the latest image from a repository",
+  "main": "index.js",
+  "type": "module",
+  "author": "ImWuX",
+  "license": "ISC",
+  "dependencies": {
+    "dockerode": "^3.3.4",
+    "node-fetch": "^3.3.0"
+  }
 }

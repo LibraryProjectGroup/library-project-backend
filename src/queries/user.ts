@@ -2,6 +2,7 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import User from "../interfaces/user.interface";
 import user from "../routes/user";
+import { OidcIssuerId } from "../interfaces/OidcIssuer";
 
 export const querySelectAllExistingUsers = async (): Promise<User[]> => {
   const promisePool = pool.promise();
@@ -119,7 +120,7 @@ export const queryAdminUpdateUser = async (user: User): Promise<boolean> => {
 };
 
 export const queryOrRegisterOidcUser = async (
-  issuer: "google",
+  issuerId: OidcIssuerId,
   subject: string,
   name: string,
   email: string
@@ -128,8 +129,8 @@ export const queryOrRegisterOidcUser = async (
   try {
     await conn.beginTransaction();
     const [linkedConnectionRows] = await conn.query<RowDataPacket[]>(
-      "SELECT library_user_id FROM oidc_connection WHERE oidc_issuer = ? AND oidc_subject = ?;",
-      [issuer, subject]
+      "SELECT library_user_id FROM oidc_connection WHERE oidc_issuer_id = ? AND oidc_subject = ?;",
+      [issuerId, subject]
     );
 
     let userId;
@@ -150,8 +151,8 @@ export const queryOrRegisterOidcUser = async (
       const insertedId = data.insertId;
       // Create OIDC user
       const [oidcUserData] = await conn.query<RowDataPacket[]>(
-        "INSERT INTO oidc_connection (oidc_issuer, oidc_subject, library_user_id) VALUES (?, ?, ?);",
-        [issuer, subject, insertedId]
+        "INSERT INTO oidc_connection (oidc_issuer_id, oidc_subject, library_user_id) VALUES (?, ?, ?);",
+        [issuerId, subject, insertedId]
       );
       userId = insertedId;
     }

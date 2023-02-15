@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: "16"
           cache: "npm"
+      - run: npm install
       - name: Check formatting
         run: npm run fmt:check
       - run: python -m pip install --upgrade pip

@@ -45,7 +45,7 @@ export async function queryInvalidateSession(secret: string): Promise<boolean> {
   return res.affectedRows != 0;
 }
 
-export async function storeChallenge(
+export async function storeOidcChallenge(
   code: string,
   challenge: string,
   issuerId: OidcIssuerId
@@ -64,7 +64,7 @@ export async function storeChallenge(
   };
 }
 
-type ChallengePacket = {
+type OidcChallengePacket = {
   storageId: number;
   verificationCode: string;
   createdAtUtc: string;
@@ -73,7 +73,7 @@ type ChallengePacket = {
 
 export async function getChallengeVerificationCodeByCodeParameter(
   code: string
-): Promise<ChallengePacket | null> {
+): Promise<OidcChallengePacket | null> {
   const [res] = await pool
     .promise()
     .query<RowDataPacket[]>(
@@ -89,29 +89,6 @@ export async function getChallengeVerificationCodeByCodeParameter(
     verificationCode: data.code_verifier,
     createdAtUtc: data.created_at,
     oidcIssuerId: data.oidc_issuer_id,
-  };
-}
-
-export async function getOidcIssuerDataByName(
-  issuerName: string
-): Promise<OidcIssuer | null> {
-  const [res] = await pool
-    .promise()
-    .query<RowDataPacket[]>(
-      "SELECT oidc_issuer_id, issuer_name, oidc_well_known_url, oauth_client_id, oauth_client_secret, metadata FROM oidc_issuer WHERE issuer_name = ? LIMIT 1;",
-      [issuerName]
-    );
-  if (res.length < 1) {
-    return null;
-  }
-  const data = res[0];
-  return {
-    databaseId: data.oidc_issuer_id,
-    name: data.issuer_name,
-    wellKnownDomain: data.oidc_well_known_url,
-    clientId: data.oauth_client_id,
-    clientSecret: data.oauth_client_secret,
-    metadata: JSON.parse(data.metadata) ?? {}, // Empty object in case of `NULL`
   };
 }
 

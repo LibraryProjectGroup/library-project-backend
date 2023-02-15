@@ -3,8 +3,7 @@ import { Client, generators, Issuer } from "openid-client";
 import {
   getChallengeVerificationCodeByCodeParameter,
   getOidcIssuerDataById,
-  getOidcIssuerDataByName,
-  storeChallenge,
+  storeOidcChallenge,
 } from "../../../queries/session";
 import { StatusCodes } from "http-status-codes";
 import { randomBytes } from "crypto";
@@ -17,7 +16,7 @@ const router = Router();
 const TEMP_COOKIE_NAME = "Efi-OIDC-Session";
 // e.g. `http://localhost:3000`, this becomes `http://localhost:3000/login`.
 const OIDC_AUTH_BACKLINK_URL = process.env.OIDC_AUTH_BACKLINK_URL;
-// e.g. `http://localhost:3002/auth/oidc/callback`
+// e.g. `http://localhost:3002`
 const OIDC_AUTH_REDIRECT_URL = process.env.OIDC_AUTH_REDIRECT_URL;
 
 (function () {
@@ -30,19 +29,6 @@ const OIDC_AUTH_REDIRECT_URL = process.env.OIDC_AUTH_REDIRECT_URL;
   }
 })();
 
-async function resolveAndDiscoverIssuerByName(
-  issuerName: string
-): Promise<{ issuerData: OidcIssuer; issuer: Issuer }> {
-  const issuerData = await getOidcIssuerDataByName(issuerName);
-  if (!issuerData) {
-    throw new Error(`No issuer named '${issuerName}' found`);
-  }
-  return {
-    issuerData: issuerData,
-    issuer: await Issuer.discover(issuerData.wellKnownDomain),
-  };
-}
-
 async function resolveAndDiscoverIssuerById(
   issuerId: OidcIssuerId
 ): Promise<{ issuerData: OidcIssuer; issuer: Issuer }> {
@@ -52,25 +38,8 @@ async function resolveAndDiscoverIssuerById(
   }
   return {
     issuerData: issuerData,
+    // This line makes a network request to the .well-known OIDC information endpoint
     issuer: await Issuer.discover(issuerData.wellKnownDomain),
-  };
-}
-
-async function createAuthClientByName(
-  issuerName: string
-): Promise<{ client: Client; issuerData: OidcIssuer }> {
-  const { issuer: clientIssuer, issuerData } =
-    await resolveAndDiscoverIssuerByName(issuerName);
-  return {
-    issuerData: issuerData,
-    client: new clientIssuer.Client({
-      client_id: issuerData.clientId,
-      client_secret: issuerData.clientSecret,
-      redirect_uris: [OIDC_AUTH_REDIRECT_URL!!],
-      response_types: ["code"],
-      id_token_signed_response_alg: "RS256",
-      token_endpoint_auth_method: "client_secret_basic",
-    }),
   };
 }
 
@@ -84,7 +53,7 @@ async function createAuthClientById(
     client: new clientIssuer.Client({
       client_id: issuerData.clientId,
       client_secret: issuerData.clientSecret,
-      redirect_uris: [OIDC_AUTH_REDIRECT_URL!!],
+      redirect_uris: [`${OIDC_AUTH_REDIRECT_URL!!}/auth/oidc/callback`],
       response_types: ["code"],
       id_token_signed_response_alg: "RS256",
       token_endpoint_auth_method: "client_secret_basic",
@@ -109,19 +78,17 @@ router.get(
 
     if (!challengeData) {
       // Verification code was not put in to the database on /login or was already removed
-      res.sendStatus(StatusCodes.PRECONDITION_FAILED);
+      res.sendStatus(StatusCodes.UNAUTHORIZED);
       return;
     }
 
     const { client } = await createAuthClientById(challengeData.oidcIssuerId);
     const tokenSet = await client.callback(
-      "http://localhost:3002",
+      OIDC_AUTH_REDIRECT_URL,
       { code: code },
       { code_verifier: challengeData.verificationCode }
     );
-    console.log("received and validated tokens %j", tokenSet);
     const tokenClaims = tokenSet.claims();
-    console.log("validated ID Token claims %j", tokenClaims);
 
     const { iss, email, name, sub } = tokenClaims;
 
@@ -144,15 +111,17 @@ router.get(
     );
 
     if (!user) {
-      // TODO Better error message
-      throw new Error("Something went wrong during authentication");
+      throw new Error(
+        `Something went wrong during authentication, no registered library user for OIDC user profile ${challengeData.oidcIssuerId}`
+      );
     }
 
     const session = await createSession(user.id);
 
     if (!session) {
-      // TODO Better error message
-      throw new Error("Something went wrong during authentication");
+      throw new Error(
+        `Something went wrong during authentication, no session was created for user ${user.id}`
+      );
     }
 
     // Only clear it at the end, when someone navigates to /login it gets overwritten anyway.
@@ -170,12 +139,12 @@ router.get(
 router.get(
   "/login",
   async (req: Request<{}, {}, {}, { issuer: string }>, res: Response) => {
-    const { issuer: issuerName } = req.query;
-    if (!issuerName) {
+    const { issuer: issuerId } = req.query;
+    if (!issuerId) {
       throw new Error("No OIDC issuer specified in request");
     }
 
-    const { client, issuerData } = await createAuthClientByName(issuerName);
+    const { client, issuerData } = await createAuthClientById(issuerId);
 
     // Secret code stored in backend (used later to verify public code)
     const codeVerifier = generators.codeVerifier();
@@ -184,7 +153,7 @@ router.get(
     // Stored in a cookie to couple the (secret) verification code in the database
     const authId = randomBytes(20).toString("hex");
 
-    await storeChallenge(authId, codeVerifier, issuerData.databaseId);
+    await storeOidcChallenge(authId, codeVerifier, issuerData.databaseId);
 
     const url = client.authorizationUrl({
       scope: "openid email profile",

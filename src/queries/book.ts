@@ -86,7 +86,15 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<ResultSetHeader>(
     "UPDATE book SET title=(?), author=(?), year=(?), topic=(?), isbn=(?), location=(?) WHERE id=(?)",
-    [book.title, book.author, book.year, book.topic, book.isbn, book.location, book.id]
+    [
+      book.title,
+      book.author,
+      book.year,
+      book.topic,
+      book.isbn,
+      book.location,
+      book.id,
+    ]
   );
   return rows.changedRows != 0;
 };

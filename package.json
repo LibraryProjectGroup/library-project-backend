@@ -7,7 +7,8 @@
     "start": "ts-node ./src/server.ts",
     "test": "robot --variable BACKENDTESTEMAIL:${TESTUSERNAME} --variable BACKENDTESTPASSWORD:${TESTPASSWORD} --outputdir robot/results robot/tests",
     "build": "tsc",
-    "fmt": "prettier --write ."
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check ."
   },
   "license": "ISC",
   "dependencies": {

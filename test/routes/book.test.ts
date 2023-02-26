@@ -1,5 +1,4 @@
 import { test, describe, jest, afterAll } from "@jest/globals";
-import supertest from "supertest";
 import request from "supertest";
 import { app, pool } from "../../src";
 

@@ -107,6 +107,7 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
         passw: req.query.password as string,
         administrator: req.query.administrator === "true" ? true : false,
         deleted: false,
+        homeOfficeId: parseInt(req.query.homeOfficeId as string),
       };
       res.json({ ok: await queryUpdateUser(user) });
     } else {
@@ -130,6 +131,7 @@ router.put(
           passw: "null",
           administrator: req.query.administrator === "true" ? true : false,
           deleted: false,
+          homeOfficeId: parseInt(req.query.homeOfficeId as string),
         };
         res.json({ ok: await queryAdminUpdateUser(user) });
       } else {

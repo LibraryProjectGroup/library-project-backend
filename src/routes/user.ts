@@ -21,6 +21,7 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
         username: user.username,
         email: user.email,
         administrator: user.administrator,
+        homeOfficeId: user.homeOfficeId,
       });
     }
     res.json(formattedUsers);

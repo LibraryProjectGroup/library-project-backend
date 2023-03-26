@@ -1,14 +1,3 @@
-CREATE TABLE oauth_challenge_storage
-(
-    oauth_challenge_storage_id BIGINT       NOT NULL AUTO_INCREMENT,
-    code_parameter             VARCHAR(255) NOT NULL,
-    code_verifier              VARCHAR(255) NOT NULL,
-    created_at                 TIMESTAMP    NOT NULL,
-    oidc_issuer_id             BIGINT       NOT NULL,
-    PRIMARY KEY (oauth_challenge_storage_id),
-    FOREIGN KEY (oidc_issuer_id) REFERENCES oidc_issuer (oidc_issuer_id)
-);
-
 CREATE TABLE oidc_issuer
 (
     oidc_issuer_id      BIGINT       NOT NULL AUTO_INCREMENT,
@@ -19,6 +8,17 @@ CREATE TABLE oidc_issuer
     metadata            JSON         NULL,
     PRIMARY KEY (oidc_issuer_id),
     UNIQUE (issuer_name)
+);
+
+CREATE TABLE oauth_challenge_storage
+(
+    oauth_challenge_storage_id BIGINT       NOT NULL AUTO_INCREMENT,
+    code_parameter             VARCHAR(255) NOT NULL,
+    code_verifier              VARCHAR(255) NOT NULL,
+    created_at                 TIMESTAMP    NOT NULL,
+    oidc_issuer_id             BIGINT       NOT NULL,
+    PRIMARY KEY (oauth_challenge_storage_id),
+    FOREIGN KEY (oidc_issuer_id) REFERENCES oidc_issuer (oidc_issuer_id)
 );
 
 CREATE TABLE oidc_connection

@@ -6,6 +6,7 @@ let book1: Book = {
   id: 1,
   library_user: 1,
   title: "bt1",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba1",
   year: 2011,
   isbn: "123-t456",
@@ -18,6 +19,7 @@ let book2: Book = {
   id: 2,
   library_user: 1,
   title: "bt2",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba2",
   year: 2012,
   isbn: "234-t567",
@@ -30,6 +32,7 @@ let book3: Book = {
   id: 3,
   library_user: 2,
   title: "bt3",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba3",
   year: 2013,
   isbn: "345-t678",
@@ -42,6 +45,7 @@ let book4: Book = {
   id: 4,
   library_user: 2,
   title: "bt4",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba4",
   year: 2014,
   isbn: "456-t567",
@@ -100,6 +104,7 @@ export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
 export const queryInsertBook = async (
   userId: number,
   title: string,
+  image: string,
   author: string,
   year: number,
   isbn: string,
@@ -110,6 +115,7 @@ export const queryInsertBook = async (
     id: idCounter++,
     library_user: userId,
     title,
+    image,
     author,
     year,
     isbn,
@@ -124,6 +130,7 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
   const editedBook = getBook(book.id);
   if (editedBook) {
     editedBook.title = book.title;
+    editedBook.image = book.image;
     editedBook.author = book.author;
     editedBook.year = book.year;
     editedBook.isbn = book.isbn;

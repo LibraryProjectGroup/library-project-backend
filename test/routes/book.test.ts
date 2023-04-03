@@ -63,7 +63,8 @@ describe("basic endpoint testing for /book", () => {
         .send({
           id: 3,
           title: "editedtitle",
-          image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
+          image:
+            "http://books.google.com/books/content?id=ILqrxQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
           author: "editedauthor",
           year: 2000,
           isbn: "editedisbn",

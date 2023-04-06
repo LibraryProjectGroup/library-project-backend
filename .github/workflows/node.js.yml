@@ -28,6 +28,6 @@ jobs:
       - name: Run services with docker-compose
         run: docker-compose up -d
       - name: Spin up backend
-        run: npx wait-on --timeout 60000 http://localhost:3000/health || docker-compose logs --tail=10000
+        run: npx wait-on --timeout 60000 http://localhost:3000/health || docker-compose logs --tail=10000 && exit 2
       - run: npm test
       - run: docker-compose down

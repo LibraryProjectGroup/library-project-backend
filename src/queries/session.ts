@@ -1,7 +1,6 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Session from "../interfaces/session.interface";
-import { OidcIssuer, OidcIssuerId } from "../interfaces/OidcIssuer";
 
 export async function queryInsertSession(
   userId: number,
@@ -43,74 +42,4 @@ export async function queryInvalidateSession(secret: string): Promise<boolean> {
     [secret]
   );
   return res.affectedRows != 0;
-}
-
-export async function storeOidcChallenge(
-  code: string,
-  challenge: string,
-  issuerId: OidcIssuerId
-) {
-  const [res] = await pool
-    .promise()
-    .execute<ResultSetHeader>(
-      "INSERT INTO oauth_challenge_storage (code_parameter, code_verifier, created_at, oidc_issuer_id) VALUES (?, ?, FROM_UNIXTIME(UNIX_TIMESTAMP()), ?);",
-      [code, challenge, issuerId]
-    );
-  if (res.affectedRows == 0) {
-    return null;
-  }
-  return {
-    id: res.insertId,
-  };
-}
-
-type OidcChallengePacket = {
-  storageId: number;
-  verificationCode: string;
-  createdAtUtc: string;
-  oidcIssuerId: OidcIssuerId;
-};
-
-export async function getChallengeVerificationCodeByCodeParameter(
-  code: string
-): Promise<OidcChallengePacket | null> {
-  const [res] = await pool
-    .promise()
-    .query<RowDataPacket[]>(
-      "SELECT oauth_challenge_storage_id, code_verifier, created_at, oidc_issuer_id FROM oauth_challenge_storage WHERE code_parameter = ? LIMIT 1;",
-      [code]
-    );
-  if (res.length < 1) {
-    return null;
-  }
-  const data = res[0];
-  return {
-    storageId: data.oauth_challenge_storage_id,
-    verificationCode: data.code_verifier,
-    createdAtUtc: data.created_at,
-    oidcIssuerId: data.oidc_issuer_id,
-  };
-}
-
-export async function getOidcIssuerDataById(
-  issuerId: OidcIssuerId
-): Promise<OidcIssuer | null> {
-  const [res] = await pool
-    .promise()
-    .query<RowDataPacket[]>(
-      "SELECT oidc_issuer_id, issuer_name, oidc_well_known_url, oauth_client_id, oauth_client_secret, metadata FROM oidc_issuer WHERE oidc_issuer_id = ? LIMIT 1;",
-      [issuerId]
-    );
-  if (res.length < 1) {
-    return null;
-  }
-  const data = res[0];
-  return {
-    databaseId: data.oidc_issuer_id,
-    name: data.issuer_name,
-    wellKnownDomain: data.oidc_well_known_url,
-    clientId: data.oauth_client_id,
-    clientSecret: data.oauth_client_secret,
-    metadata: JSON.parse(data.metadata) ?? {}, // Empty object in case of `NULL`
-  };
 }

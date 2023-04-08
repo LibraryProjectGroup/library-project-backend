@@ -2,7 +2,7 @@ interface User {
   id: number;
   username: string;
   email: string;
-  passw: string | null;
+  passw: string;
   administrator: boolean;
   deleted: boolean;
 }

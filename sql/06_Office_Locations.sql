@@ -3,13 +3,12 @@ CREATE TABLE home_office
     home_office_id BIGINT       NOT NULL AUTO_INCREMENT,
     name           VARCHAR(255) NOT NULL,
     country_code   CHAR(3)      NOT NULL, /* ISO 3166-1 alpha-3 */
-    location       POINT        NOT NULL,
     PRIMARY KEY (home_office_id)
 );
 
 # Create home offices for existing book locations
-INSERT INTO home_office (name, country_code, location)
-SELECT location, 'XXX', Point(0, 0)
+INSERT INTO home_office (name, country_code)
+SELECT location, 'XXX'
 FROM book;
 
 # Properly update the locations of books

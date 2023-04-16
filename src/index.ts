@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { Express, Request, Response, NextFunction } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import mysql from "mysql2";
 import expressBearerToken from "express-bearer-token";
@@ -7,6 +7,7 @@ import healthRouter from "./routes/health";
 import authRouter from "./routes/auth";
 import bookRouter from "./routes/book";
 import userRouter from "./routes/user";
+import officeRouter from "./routes/office";
 import borrowRouter from "./routes/borrow";
 import book_listRouter from "./routes/book_list";
 import book_list_entryRouter from "./routes/book_list_entry";
@@ -66,6 +67,7 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
   res.sendStatus(500);
 });
 app.use("/book", bookRouter);
+app.use("/office", officeRouter);
 app.use("/user", userRouter);
 app.use("/borrow", borrowRouter);
 app.use("/booklist", book_listRouter);

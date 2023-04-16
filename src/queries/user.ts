@@ -4,14 +4,16 @@ import User from "../interfaces/user.interface";
 
 export const querySelectAllExistingUsers = async (): Promise<User[]> => {
   const promisePool = pool.promise();
-  const [rows] = await promisePool.query("SELECT * FROM library_user");
+  const [rows] = await promisePool.query(
+    "SELECT *, home_office_id AS homeOfficeId FROM library_user"
+  );
   return rows as User[];
 };
 
 export const querySelectAllUsers = async (): Promise<User[]> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query(
-    "SELECT * FROM library_user WHERE deleted != 1"
+    "SELECT *, home_office_id AS homeOfficeId FROM library_user WHERE deleted != 1"
   );
   return rows as User[];
 };
@@ -19,7 +21,7 @@ export const querySelectAllUsers = async (): Promise<User[]> => {
 export const querySelectUser = async (userId: number): Promise<User | null> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<RowDataPacket[]>(
-    "SELECT * FROM library_user WHERE id = ?",
+    "SELECT *, home_office_id AS homeOfficeId FROM library_user WHERE id = ?",
     [userId]
   );
   return rows.length > 0 ? (rows[0] as User) : null;
@@ -30,7 +32,7 @@ export const querySelectUserBySessionId = async (
 ): Promise<User | null> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<RowDataPacket[]>(
-    "SELECT * FROM library_user WHERE id = (SELECT userId FROM sessions WHERE id = ?)",
+    "SELECT *, home_office_id AS homeOfficeId FROM library_user WHERE id = (SELECT userId FROM sessions WHERE id = ?)",
     [sessionId]
   );
   return rows.length > 0 ? (rows[0] as User) : null;
@@ -41,7 +43,7 @@ export const querySelectUserByUsername = async (
 ): Promise<User | null> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<RowDataPacket[]>(
-    "SELECT * FROM library_user WHERE username = ?",
+    "SELECT *, home_office_id AS homeOfficeId FROM library_user WHERE username = ?",
     [username]
   );
   return rows.length > 0 ? (rows[0] as User) : null;
@@ -52,7 +54,7 @@ export const querySelectUserByEmail = async (
 ): Promise<User | null> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<RowDataPacket[]>(
-    "SELECT * FROM library_user WHERE email = ?",
+    "SELECT *, home_office_id AS homeOfficeId FROM library_user WHERE email = ?",
     [email]
   );
   return rows.length > 0 ? (rows[0] as User) : null;
@@ -81,12 +83,13 @@ export const queryInsertUser = async (
   email: string,
   password: string,
   isAdmin: boolean,
-  deleted: boolean
+  deleted: boolean,
+  homeOfficeId?: number
 ): Promise<User | null> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<ResultSetHeader>(
-    "INSERT INTO library_user (username, email, passw, administrator, deleted) VALUES (?)",
-    [[username, email, password, isAdmin, deleted]]
+    "INSERT INTO library_user (username, email, passw, administrator, deleted, home_office_id) VALUES (?)",
+    [[username, email, password, isAdmin, deleted, homeOfficeId]]
   );
   if (rows.affectedRows == 0) return null;
   return {
@@ -96,14 +99,22 @@ export const queryInsertUser = async (
     passw: password,
     administrator: isAdmin,
     deleted: false,
+    homeOfficeId,
   };
 };
 
 export const queryUpdateUser = async (user: User): Promise<boolean> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<ResultSetHeader>(
-    "UPDATE library_user SET username=(?), email=(?), passw=(?), administrator=(?) WHERE id=(?)",
-    [user.username, user.email, user.passw, user.administrator, user.id]
+    "UPDATE library_user SET username=(?), email=(?), passw=(?), administrator=(?), home_office_id=(?) WHERE id=(?)",
+    [
+      user.username,
+      user.email,
+      user.passw,
+      user.administrator,
+      user.homeOfficeId,
+      user.id,
+    ]
   );
   return rows.affectedRows != 0;
 };
@@ -111,8 +122,8 @@ export const queryUpdateUser = async (user: User): Promise<boolean> => {
 export const queryAdminUpdateUser = async (user: User): Promise<boolean> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<ResultSetHeader>(
-    "UPDATE library_user SET username=(?), email=(?), administrator=(?) WHERE id=(?)",
-    [user.username, user.email, user.administrator, user.id]
+    "UPDATE library_user SET username=(?), email=(?), administrator=(?), home_office_id=(?) WHERE id=(?)",
+    [user.username, user.email, user.administrator, user.homeOfficeId, user.id]
   );
   return rows.affectedRows != 0;
 };

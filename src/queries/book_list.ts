@@ -60,7 +60,7 @@ export const queryUpdateList = async (book_list: Book_list) => {
 export const queryBooksByList = async (bookListId: number): Promise<Book[]> => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<RowDataPacket[]>(
-    "SELECT book.* FROM book_list_entry INNER JOIN book ON book_list_entry.book = book.id WHERE book_list_entry.list = ?",
+    "SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book_list_entry INNER JOIN book ON book_list_entry.book = book.id JOIN home_office ho USING (home_office_id) WHERE book_list_entry.list = ?",
     [bookListId]
   );
   return rows as Book[];

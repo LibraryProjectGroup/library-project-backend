@@ -10,7 +10,9 @@ let book1: Book = {
   year: 2011,
   isbn: "123-t456",
   topic: "Java",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: false,
 };
 
@@ -22,7 +24,9 @@ let book2: Book = {
   year: 2012,
   isbn: "234-t567",
   topic: "JavaScript",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: true,
 };
 
@@ -34,7 +38,9 @@ let book3: Book = {
   year: 2013,
   isbn: "345-t678",
   topic: "TypeScript",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: false,
 };
 
@@ -46,7 +52,9 @@ let book4: Book = {
   year: 2014,
   isbn: "456-t567",
   topic: "SQL",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: false,
 };
 
@@ -104,7 +112,9 @@ export const queryInsertBook = async (
   year: number,
   isbn: string,
   topic: string,
-  location: string
+  homeOfficeCountry: string,
+  homeOfficeId: number,
+  homeOfficeName: string
 ): Promise<boolean> => {
   mockBookData.push({
     id: idCounter++,
@@ -114,7 +124,9 @@ export const queryInsertBook = async (
     year,
     isbn,
     topic,
-    location,
+    homeOfficeCountry,
+    homeOfficeId,
+    homeOfficeName,
     deleted: false,
   });
   return true;
@@ -128,7 +140,9 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
     editedBook.year = book.year;
     editedBook.isbn = book.isbn;
     editedBook.topic = book.topic;
-    editedBook.location = book.location;
+    editedBook.homeOfficeId = book.homeOfficeId;
+    editedBook.homeOfficeName = book.homeOfficeName;
+    editedBook.homeOfficeCountry = book.homeOfficeCountry;
     return true;
   }
   return false;

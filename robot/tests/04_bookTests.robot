@@ -20,7 +20,9 @@ Verify that new book can be created
     ...    year=2023
     ...    isbn=123-242-421
     ...    topic=js
-    ...    location=Fake location
+    ...    homeOfficeId=1
+    ...    homeOfficeName=Helsinki
+    ...    homeOfficeCountry=FIN
     ...    deleted=0}
     ${response}=    POST    url=${URL}/book?${bearerToken}    json=${data}    expected_status=200
     Should Be True    ${response.json()['ok']}

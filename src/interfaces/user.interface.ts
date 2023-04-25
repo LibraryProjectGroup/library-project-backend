@@ -5,6 +5,10 @@ interface User {
   passw: string;
   administrator: boolean;
   deleted: boolean;
+  /**
+   * An optional home office.
+   */
+  homeOfficeId?: number;
 }
 
 export default User;

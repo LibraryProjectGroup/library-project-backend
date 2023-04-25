@@ -20,6 +20,8 @@ import passwordreset, {
 import { querySelectSessionBySecret } from "./queries/session";
 import User from "./interfaces/user.interface";
 import { querySelectUserBySessionId } from "./queries/user";
+import { migrate } from "./sql_migrate";
+import { Sequelize } from "sequelize";
 
 declare global {
   namespace NodeJS {
@@ -89,5 +91,17 @@ const pool = mysql.createPool({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
 });
+
+(async () => {
+  const sequelize = new Sequelize({
+    dialect: "mysql",
+    host: process.env.DATABASE_SERVER,
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+  });
+
+  await migrate(sequelize);
+})();
 
 export { app, pool };

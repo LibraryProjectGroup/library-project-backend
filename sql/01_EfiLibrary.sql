@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `library_user` int(11) NOT NULL,
   `title` varchar(250) NOT NULL,
-  `image` varchar(500) NOT NULL,
+  `image` varchar(500),
   `author` varchar(250) NOT NULL,
   `year` YEAR NOT NULL,
   `isbn` varchar(20) NOT NULL,

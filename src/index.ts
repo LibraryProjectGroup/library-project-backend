@@ -40,6 +40,15 @@ declare global {
   }
 }
 
+process.on("uncaughtException", (err, origin) => {
+  console.log(
+    `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n`,
+    err,
+    "\nUncaught exception origin:\n",
+    origin
+  );
+});
+
 const app: Express = express();
 app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));

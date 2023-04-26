@@ -51,7 +51,7 @@ process.on("uncaughtException", (err, origin) => {
 
 const app: Express = express();
 app.use(express.json());
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: "*" }));
 app.use(expressBearerToken());
 
 app.use("/health", healthRouter);

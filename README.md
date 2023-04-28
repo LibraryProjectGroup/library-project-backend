@@ -1,28 +1,46 @@
 # library-project-backend
 
-### Note:
+## Installing the project
 
-The backend server is run during development with [ts-node](https://www.npmjs.com/package/ts-node). Ts-node is now included in development dependencies, and the server can be started with `npm start`. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
+You need to have npm installed to run this project, you can check if you have it installed by running `npm -v` in the command line.
 
-```sh
-$ npm install
-$ npm start
-# open http://localhost:3000
-```
+Clone the repository on your computer. Detailed instructions can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository?tool=webui).
 
-### Note #2:
+Use `npm ci` or `npm install` to install node modules.
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. <br> .env is in the form of: <br>
+## Environment variables
+
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. You will not need this if you're using docker-compose. <br> .env is in the form of: <br>
 
 ```
     DATABASE_SERVER = ???
     DATABASE_NAME = ???
     DATABASE_USER = ???
     DATABASE_PASSWORD = ???
+    PORT = ???
+```
+# How to run
+
+You will need to run the backend application and the database. You can have them separately, or you can use docker-compose.
+
+## Using docker-compose
+
+Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder. [docker-compose-test.yml](docker-compose-test.yml) also contains the database credentials for local development as environment variables. These must only be used for local development.
+
+If you have Windows, make you have Docker Desktop running before running the command.
 
 ```
+docker-compose -f docker-compose-test.yml up -d
+```
+The -f flag specifies the file since there are different ones. The -d flag (detach) runs the container in the background allowing you to close the terminal without killing the process.
 
-Database name, user, and password can be found on Discord at **#secrets**.
+## Running the program locally
+
+```sh
+$ npm install
+$ npm start
+```
+
 
 ### Note #3:
 
@@ -33,7 +51,7 @@ After connecting, input proper credentials from **#secrets**. The database is th
 
 The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
-[docker-compose.yml](.devcontainer/docker-compose.yml) file contains a container for both the Express application as well as the dabatase. Database initialization is handled automatically on creation using the _\*.sql_ files in [sql/](./sql/) folder. [docker-compose.yml](.devcontainer/docker-compose.yml) contains also the database credentials for local development as environment variables. These must only be used for local development.
+
 
 <br>
 
@@ -1071,7 +1089,7 @@ Body:
 
 </Details>
 
-# Database Diagram
+# Database Diagram (outdated)
 
 <Details>
     <Summary>
@@ -1079,8 +1097,3 @@ Body:
     </Summary>
     <img src="dbdiagram.png"></img>
 </Details>
-
-# Docker Help
-
-Building the docker image: `docker image build .`  
-Running the docker image: `docker run -p 3000:3000 <docker image>`

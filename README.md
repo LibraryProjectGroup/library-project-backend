@@ -6,8 +6,6 @@ You need to have npm installed to run this project, you can check if you have it
 
 Clone the repository on your computer. Detailed instructions can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository?tool=webui).
 
-Use `npm ci` or `npm install` to install node modules.
-
 ## Environment variables
 
 Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. You will not need this if you're using docker-compose. <br> .env is in the form of: <br>
@@ -34,20 +32,39 @@ docker-compose -f docker-compose-test.yml up -d
 ```
 The -f flag specifies the file since there are different ones. The -d flag (detach) runs the container in the background allowing you to close the terminal without killing the process.
 
-## Running the program locally
+## Creating the database separately
 
-```sh
-$ npm install
-$ npm start
+Having the database and the node project separately is more convenient if you want to make changes to the code.
+
+### Setting up the local database
+
+You can use Docker to create the MariaDB container:
+
+```cmd
+docker run -d --name efilibrary-mariadb -p "3306:3306" --env MARIADB_ROOT_PASSWORD=admin --volume efilbirary-mariadb-data:/var/lib/mysql mariadb:latest
 ```
 
+Each time you start up the project, you can just start the existing container, you don't have to create a new database every time.
 
-### Note #3:
+Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder (with MySQL Workbench or DataGrip or another database explorer).
+
+
+
+### Running the node project
+
+Use `npm ci` or `npm install` to install node modules.
+
+Start the backend by running `npm start`.
+
+
+### What the previous team used:
 
 To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
 After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.
 
-### Developing in a container
+### Using DevContainers
+
+> Note: These files have not been used or updated in a while so it's possible that this does not work.
 
 The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 

@@ -13,8 +13,8 @@ services:
       DATABASE_USER: root
       DATABASE_PASSWORD: "3c35281b8a5104e58c84"
       PORT: "3000"
-      OIDC_AUTH_BACKLINK_URL: "http://frontend-staging.efilibrary.efilibrary.jrdie.nl"
-      OIDC_AUTH_REDIRECT_URL: "http://backend-staging.efilibrary.efilibrary.jrdie.nl"
+      OIDC_AUTH_BACKLINK_URL: "http://frontend-staging-efilibrary.jrdie.nl"
+      OIDC_AUTH_REDIRECT_URL: "http://backend-staging-efilibrary.jrdie.nl"
     networks:
       - efilibrary
 

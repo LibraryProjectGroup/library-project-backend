@@ -12,7 +12,7 @@ Database connection doesn't work without **.env** in **root** folder. .env is se
 
 Here's an example of a .env file you can use:
 
-```
+```env
     DATABASE_SERVER=localhost
     DATABASE_NAME=efilibrarydb
     DATABASE_USER=root
@@ -58,7 +58,7 @@ Use `npm ci` or `npm install` to install node modules.
 
 Start the backend by running `npm start`.
 
-### What the previous team used:
+## What the previous team used:
 
 To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
 After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.

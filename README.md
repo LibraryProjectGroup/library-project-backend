@@ -8,14 +8,16 @@ Clone the repository on your computer. Detailed instructions can be found [here]
 
 ## Environment variables
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. You will not need this if you're using docker-compose. <br> .env is in the form of: <br>
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. You will not need this if you're using docker-compose.
+
+Here's an example of a .env file you can use:
 
 ```
-    DATABASE_SERVER = ???
-    DATABASE_NAME = ???
-    DATABASE_USER = ???
-    DATABASE_PASSWORD = ???
-    PORT = ???
+    DATABASE_SERVER=localhost
+    DATABASE_NAME=efilibrarydb
+    DATABASE_USER=root
+    DATABASE_PASSWORD=admin <<< This should be whatever your root password is
+    PORT=3002
 ```
 # How to run
 
@@ -46,7 +48,7 @@ docker run -d --name efilibrary-mariadb -p "3306:3306" --env MARIADB_ROOT_PASSWO
 
 Each time you start up the project, you can just start the existing container, you don't have to create a new database every time.
 
-Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder (with MySQL Workbench or DataGrip or another database explorer).
+Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder. [Here's a video](https://youtu.be/POcHaIwmAhw) on how to do it in MySQL Workbench, but you can also use DataGrip or another database explorer.
 
 
 
@@ -55,7 +57,6 @@ Once you have the database up and running, you need to execute the scripts in th
 Use `npm ci` or `npm install` to install node modules.
 
 Start the backend by running `npm start`.
-
 
 ### What the previous team used:
 

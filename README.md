@@ -8,7 +8,7 @@ Clone the repository on your computer. Detailed instructions can be found [here]
 
 ## Environment variables
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. You will not need this if you're using docker-compose.
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. You will not need this if you're using docker-compose. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
 
 Here's an example of a .env file you can use:
 
@@ -19,6 +19,7 @@ Here's an example of a .env file you can use:
     DATABASE_PASSWORD=admin <<< This should be whatever your root password is
     PORT=3002
 ```
+
 # How to run
 
 You will need to run the backend application and the database. You can have them separately, or you can use docker-compose.
@@ -32,6 +33,7 @@ If you have Windows, make you have Docker Desktop running before running the com
 ```
 docker-compose -f docker-compose-test.yml up -d
 ```
+
 The -f flag specifies the file since there are different ones. The -d flag (detach) runs the container in the background allowing you to close the terminal without killing the process.
 
 ## Creating the database separately
@@ -50,8 +52,6 @@ Each time you start up the project, you can just start the existing container, y
 
 Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder. [Here's a video](https://youtu.be/POcHaIwmAhw) on how to do it in MySQL Workbench, but you can also use DataGrip or another database explorer.
 
-
-
 ### Running the node project
 
 Use `npm ci` or `npm install` to install node modules.
@@ -69,9 +69,14 @@ After connecting, input proper credentials from **#secrets**. The database is th
 
 The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
-
-
 <br>
+
+# Workflows
+
+There are two workflows files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
+
+The Node.js CI workflow runs on every push and pull request to development or main so it will tell you if the new code can be merged.
+First thing it checks for is the formatting using Prettier, so remember to use `npm run fmt`. After that it will spin up the backend and use wait-on to check when the URL is available. If that times out, it's most likely a problem with building the container/app. Then it runs the robot tests. If those fail, update the code, or update the tests.
 
 # Endpoints
 

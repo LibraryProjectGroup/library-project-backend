@@ -757,7 +757,7 @@ Body:
   "year": number,
   "isbn": string,
   "topic": string,
-  "homeOfficeId": string,     
+  "homeOfficeId": string,
 }
 ```
 

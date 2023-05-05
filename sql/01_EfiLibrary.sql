@@ -46,7 +46,8 @@ INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`)
   (6, 'rascal', 'rascal@place.holder', 'heckthelibrarians', 0),
   (7, 'testityyppi', 'testityyppi', '$2b$08$81Cv2lgk43p6EDHQ/qa3buFVcCMDtebDju4iAsoGOuRzAyqFnwHS6', 1),
   (8, 'asd', 'asd@asd', '$2b$08$2okL0BPRzVnLKQujmmRK7u4NU/FyeAXBRDJ9FDD7zQKzJ6r9aTyDW', 1),
-  (9, 'testattavatyyppi', 'etu.suku@doesnt.exist', '$2b$08$4LdND6u7LymHX5DCBtmyweaYCOxKvUY6Rd9Z4N4cWQalAVtBSBOvi', 0);
+  (9, 'testattavatyyppi', 'etu.suku@doesnt.exist', '$2b$08$4LdND6u7LymHX5DCBtmyweaYCOxKvUY6Rd9Z4N4cWQalAVtBSBOvi', 0),
+  (10, 'testuser', 'test@user.com', 'T3st_Us3r', 0);
 
 -- Dumping structure for table efilibrarydb.book
 DROP TABLE IF EXISTS `book`;
@@ -54,7 +55,9 @@ CREATE TABLE IF NOT EXISTS `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `library_user` int(11) NOT NULL,
   `title` varchar(250) NOT NULL,
+  `image` varchar(500),
   `author` varchar(250) NOT NULL,
+  `year` YEAR NOT NULL,
   `isbn` varchar(20) NOT NULL,
   `topic` varchar(50) NOT NULL,
   `location` varchar(20) NOT NULL,
@@ -65,12 +68,12 @@ CREATE TABLE IF NOT EXISTS `book` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table efilibrarydb.book: ~3 rows (approximately)
-INSERT INTO `book` (`id`, `library_user`, `title`, `author`, `isbn`, `topic`, `location`) VALUES
-	(1, 1, 'JS for Dummies', 'Mikko Mallikas', '123-456-789', 'JS', 'Nevada'),
-	(2, 2, 'Java for Babies', 'John Doe', '123-5223-789', 'Java', 'Florida'),
-	(3, 3, 'Python for Pets', 'S. Bonsai', '123-456-5623', 'JS', 'Hong Kong'),
-  (4, 5, 'Assembly for Infants', 'A. Einstein', '999-999-999', 'Assembly', 'Switzerland'),
-  (5, 5, 'Animal Pictures for Programmers', 'Oreally', '987-654-321', 'Safari', 'Pacific Ocean');
+INSERT INTO `book` (`id`, `library_user`, `title`, `image`,`author`, `year`, `isbn`, `topic`, `location`) VALUES
+	(1, 1, 'JS for Dummies', "https://images.isbndb.com/covers/91/26/9789513119126.jpg", 'Mikko Mallikas', 2000, '123-456-789', 'JS', 'Nevada'),
+	(2, 2, 'Java for Babies', "https://images.isbndb.com/covers/91/26/9789513119126.jpg", 'John Doe', 2015, '123-5223-789', 'Java', 'Florida'),
+	(3, 3, 'Python for Pets', "https://images.isbndb.com/covers/91/26/9789513119126.jpg", 'S. Bonsai', 2020, '123-456-5623', 'JS', 'Hong Kong'),
+  (4, 5, 'Assembly for Infants', "https://images.isbndb.com/covers/91/26/9789513119126.jpg", 'A. Einstein', 2007, '999-999-999', 'Assembly', 'Switzerland'),
+  (5, 5, 'Animal Pictures for Programmers', "https://images.isbndb.com/covers/91/26/9789513119126.jpg", 'Oreally', 2010, '987-654-321', 'Safari', 'Pacific Ocean');
 
 -- Dumping structure for table efilibrarydb.borrowing
 DROP TABLE IF EXISTS `borrowing`;

@@ -75,10 +75,12 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       ok: await queryInsertBook(
         req.sessionUser.id,
         req.body.title,
+        req.body.image,
         req.body.author,
+        req.body.year,
         req.body.isbn,
         req.body.topic,
-        req.body.location
+        req.body.homeOfficeId
       ),
     });
   } catch (err) {

@@ -6,10 +6,14 @@ let book1: Book = {
   id: 1,
   library_user: 1,
   title: "bt1",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba1",
+  year: 2011,
   isbn: "123-t456",
   topic: "Java",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: false,
 };
 
@@ -17,10 +21,14 @@ let book2: Book = {
   id: 2,
   library_user: 1,
   title: "bt2",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba2",
+  year: 2012,
   isbn: "234-t567",
   topic: "JavaScript",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: true,
 };
 
@@ -28,10 +36,14 @@ let book3: Book = {
   id: 3,
   library_user: 2,
   title: "bt3",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba3",
+  year: 2013,
   isbn: "345-t678",
   topic: "TypeScript",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: false,
 };
 
@@ -39,10 +51,14 @@ let book4: Book = {
   id: 4,
   library_user: 2,
   title: "bt4",
+  image: "https://images.isbndb.com/covers/91/26/9789513119126.jpg",
   author: "ba4",
+  year: 2014,
   isbn: "456-t567",
   topic: "SQL",
-  location: "Helsinki",
+  homeOfficeId: 1,
+  homeOfficeName: "Helsinki",
+  homeOfficeCountry: "FIN",
   deleted: false,
 };
 
@@ -96,19 +112,27 @@ export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
 export const queryInsertBook = async (
   userId: number,
   title: string,
+  image: string,
   author: string,
+  year: number,
   isbn: string,
   topic: string,
-  location: string
+  homeOfficeCountry: string,
+  homeOfficeId: number,
+  homeOfficeName: string
 ): Promise<boolean> => {
   mockBookData.push({
     id: idCounter++,
     library_user: userId,
     title,
+    image,
     author,
+    year,
     isbn,
     topic,
-    location,
+    homeOfficeCountry,
+    homeOfficeId,
+    homeOfficeName,
     deleted: false,
   });
   return true;
@@ -118,10 +142,14 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
   const editedBook = getBook(book.id);
   if (editedBook) {
     editedBook.title = book.title;
+    editedBook.image = book.image;
     editedBook.author = book.author;
+    editedBook.year = book.year;
     editedBook.isbn = book.isbn;
     editedBook.topic = book.topic;
-    editedBook.location = book.location;
+    editedBook.homeOfficeId = book.homeOfficeId;
+    editedBook.homeOfficeName = book.homeOfficeName;
+    editedBook.homeOfficeCountry = book.homeOfficeCountry;
     return true;
   }
   return false;

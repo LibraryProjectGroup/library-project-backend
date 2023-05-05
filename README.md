@@ -324,11 +324,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -392,6 +396,7 @@ Body:
 
 ```JSON
 {
+  "id": number,
   "name": string
 }
 ```
@@ -456,6 +461,7 @@ Body:
 
 ```JSON
 {
+  "userId": number,
   "isbn": string,
   "title": string,
   "reason": string
@@ -546,6 +552,7 @@ On Success Response schema:
   {
     "id": number,
     "username": string,
+    "image": string,
     "title": string,
     "bookId": number,
     "reservationDatetime": Date,
@@ -589,6 +596,7 @@ Body:
 
 ```JSON
 {
+  "userId": number,
   "bookId": number
 }
 ```
@@ -619,7 +627,7 @@ Body:
 
 ```JSON
 {
-  "userId": number
+  "userId": number,
 }
 ```
 
@@ -642,11 +650,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -663,11 +675,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -689,15 +705,27 @@ On Success Response schema:
   "id": number,
   "library_user": number,
   "title": string,
+  "image": string,
   "author": string,
-  "isbn": string,
+  "year": number,
   "topic": string,
-  "location": string,
-  "deleted": boolean
+  "isbn": string,
+  "deleted": boolean,
+  "homeOfficeId": number,
+  "homeOfficeName": string,
+  "homeOfficeCountry": string
 }
 ```
 
 ### /book?id={id} (DELETE)
+
+On Success Response schema:
+
+```JSON
+{
+  "id": number,
+}
+```
 
 ### /book (POST)
 
@@ -705,11 +733,14 @@ Body:
 
 ```JSON
 {
+  "userId": number,
   "title": string,
+  "image": string,
   "author": string,
+  "year": number,
   "isbn": string,
   "topic": string,
-  "location": string
+  "homeOfficeId": string
 }
 ```
 
@@ -721,10 +752,12 @@ Body:
 {
   "id": number,
   "title": string,
+  "image": string,
   "author": string,
+  "year": number,
   "isbn": string,
   "topic": string,
-  "location": string
+  "homeOfficeId": string,     
 }
 ```
 
@@ -738,11 +771,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -796,7 +833,7 @@ Body:
 
 ```JSON
 {
-    "bookId": number
+    "id": number
 }
 ```
 
@@ -806,7 +843,11 @@ Body:
 
 ```JSON
 {
-  "bookId": number
+  "userId": number,
+  "bookId": number,
+  "dueDate": Date,
+  "borrowDate": Date,
+  "returned": boolean
 }
 ```
 
@@ -826,6 +867,7 @@ Body:
 ```JSON
 {
   "id": number,
+  "library_user": number,
   "book": number,
   "dueDate": Date,
   "borrowDate": Date,
@@ -927,7 +969,13 @@ Body:
 
 ```JSON
 {
-  "borrowId": number
+  "id": number,
+  "library_user": number,
+  "book": number,
+  "dueDate": Date,
+  "borrowDate": Date,
+  "returned": boolean,
+  "returnDate": Date | null
 }
 ```
 
@@ -948,6 +996,61 @@ On Fail Response schema:
 {
   "ok": false,
   "error:": string
+}
+```
+
+</Details>
+
+## Office
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /office/all (GET)
+
+Body:
+
+```JSON
+{
+  "id": number,
+  "name": string,
+  "countryCode": string
+}
+```
+
+### /office/homeOfficeId (GET)
+
+Body:
+
+```JSON
+{
+  "id": number,
+  "name": string,
+  "countryCode": string
+}
+```
+
+### /office/homeOfficeId (DELETE)
+
+Body:
+
+```JSON
+{
+  "id": number
+}
+```
+
+### /office/homeOfficeId (PUT)
+
+Body:
+
+```JSON
+{
+  "id": number,
+  "name": string,
+  "countryCode": string
 }
 ```
 
@@ -977,8 +1080,12 @@ Body:
 
 ```JSON
 {
-  "secret": string,
-  "password": string
+  "id": number,
+  "username": string,
+  "email": string,
+  "passw": string,
+  "administrator": boolean,
+  "homeOfficeId?": number
 }
 ```
 
@@ -1007,10 +1114,11 @@ On Success Response schema:
 ```JSON
 [
   {
-    "id": number,
-    "username": string,
-    "email": string,
-    "administrator": boolean
+  "id": number,
+  "username": string,
+  "email": string,
+  "administrator": boolean,
+  "homeOfficeId?": number
   }
 ]
 ```
@@ -1061,7 +1169,8 @@ Body:
   "username": string,
   "email": string,
   "password": string,
-  "administrator": boolean
+  "administrator": boolean,
+  "deleted": boolean
 }
 ```
 

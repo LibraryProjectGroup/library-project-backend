@@ -16,7 +16,6 @@ services:
       OIDC_AUTH_BACKLINK_URL: "http://notworking:80/backlink"
       OIDC_AUTH_REDIRECT_URL: "http://notworking:80/redirect"
       PORT: 3000
-
     ports:
       - 3000:3000
 

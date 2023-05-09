@@ -40,6 +40,8 @@ declare global {
   }
 }
 
+// This is not really considered good practice, but it is an easy fix
+// https://nodejs.org/api/process.html#process_warning_using_uncaughtexception_correctly
 process.on("uncaughtException", (err, origin) => {
   console.log(
     `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n`,

@@ -131,7 +131,16 @@ router.post("/login", async (req: Request, res: Response) => {
       message: "Email and password required",
     });
 
-  let user = await querySelectUserByEmail(email);
+  let user;
+  try {
+    user = await querySelectUserByEmail(email);
+  } catch (error) {
+    return res.status(503).json({
+      ok: false,
+      message: "Something went wrong at our end, try again later",
+    });
+  }
+
   if (user == null)
     return res.status(400).json({
       ok: false,

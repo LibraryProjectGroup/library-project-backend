@@ -137,7 +137,7 @@ router.post("/login", async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(503).json({
       ok: false,
-      message: "Unable to connect to the database",
+      message: "Something went wrong at our end, try again later",
     });
   }
 

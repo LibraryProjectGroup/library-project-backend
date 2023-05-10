@@ -48,12 +48,13 @@ async function createAuthClientById(
 ): Promise<{ client: Client; issuerData: OidcIssuer }> {
   const { issuer: clientIssuer, issuerData } =
     await resolveAndDiscoverIssuerById(issuerId);
+  const redirectUri = `${OIDC_AUTH_REDIRECT_URL!!}/auth/oidc/callback`;
   return {
     issuerData: issuerData,
     client: new clientIssuer.Client({
       client_id: issuerData.clientId,
       client_secret: issuerData.clientSecret,
-      redirect_uris: [`${OIDC_AUTH_REDIRECT_URL!!}/auth/oidc/callback`],
+      redirect_uris: [redirectUri],
       response_types: ["code"],
       id_token_signed_response_alg: "RS256",
       token_endpoint_auth_method: "client_secret_basic",
@@ -84,7 +85,7 @@ router.get(
 
     const { client } = await createAuthClientById(challengeData.oidcIssuerId);
     const tokenSet = await client.callback(
-      OIDC_AUTH_REDIRECT_URL,
+      OIDC_AUTH_REDIRECT_URL + "/auth/oidc/callback",
       { code: code },
       { code_verifier: challengeData.verificationCode }
     );
@@ -158,6 +159,7 @@ router.get(
     const url = client.authorizationUrl({
       scope: "openid email profile",
       code_challenge: codeChallenge,
+      redirect_uri: OIDC_AUTH_REDIRECT_URL + "/auth/oidc/callback",
       code_challenge_method: "S256",
     });
 

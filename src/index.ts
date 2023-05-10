@@ -13,6 +13,7 @@ import book_listRouter from "./routes/book_list";
 import book_list_entryRouter from "./routes/book_list_entry";
 import book_requestRouter from "./routes/book_request";
 import book_reservationRouter from "./routes/book_reservation";
+import callbackRoute from "./routes/auth/oidc/callback";
 import Session from "./interfaces/session.interface";
 import passwordreset, {
   publicRouter as publicPasswordReset,
@@ -20,6 +21,7 @@ import passwordreset, {
 import { querySelectSessionBySecret } from "./queries/session";
 import User from "./interfaces/user.interface";
 import { querySelectUserBySessionId } from "./queries/user";
+import cookieParser from "cookie-parser";
 
 declare global {
   namespace NodeJS {
@@ -53,11 +55,14 @@ process.on("uncaughtException", (err, origin) => {
 
 const app: Express = express();
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: true }));
 app.use(cors({ credentials: true, origin: "*" }));
 app.use(expressBearerToken());
 
 app.use("/health", healthRouter);
 
+app.use("/auth/oidc", callbackRoute);
 app.use("/auth", authRouter);
 app.use("/passwordreset", publicPasswordReset);
 app.use(async (req: Request, res: Response, next: NextFunction) => {

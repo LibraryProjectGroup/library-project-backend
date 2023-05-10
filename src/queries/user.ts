@@ -1,6 +1,8 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import User from "../interfaces/user.interface";
+import user from "../routes/user";
+import { OidcIssuerId } from "../interfaces/OidcIssuer";
 
 export const querySelectAllExistingUsers = async (): Promise<User[]> => {
   const promisePool = pool.promise();
@@ -81,7 +83,7 @@ export const querySoftDeleteUser = async (userId: number): Promise<boolean> => {
 export const queryInsertUser = async (
   username: string,
   email: string,
-  password: string,
+  password: string | null,
   isAdmin: boolean,
   deleted: boolean,
   homeOfficeId?: number
@@ -126,4 +128,62 @@ export const queryAdminUpdateUser = async (user: User): Promise<boolean> => {
     [user.username, user.email, user.administrator, user.homeOfficeId, user.id]
   );
   return rows.affectedRows != 0;
+};
+
+export const queryOrRegisterOidcUser = async (
+  issuerId: OidcIssuerId,
+  subject: string,
+  name: string,
+  email: string
+): Promise<User | null> => {
+  const conn = await pool.promise().getConnection();
+  try {
+    await conn.beginTransaction();
+    const [linkedConnectionRows] = await conn.query<RowDataPacket[]>(
+      "SELECT library_user_id FROM oidc_connection WHERE oidc_issuer_id = ? AND oidc_subject = ?;",
+      [issuerId, subject]
+    );
+
+    let userId;
+    if (linkedConnectionRows.length >= 1) {
+      // Update user details
+      // TODO: Also update e-mail address?
+      const currentLinkedUserId = linkedConnectionRows[0].library_user_id;
+      await conn.query("UPDATE library_user SET username = ? WHERE id = ?;", [
+        name,
+        currentLinkedUserId,
+      ]);
+      userId = currentLinkedUserId;
+    } else {
+      const [data] = await conn.query<ResultSetHeader>(
+        "INSERT INTO library_user (username, email, passw, administrator) VALUES (?, ?, NULL, FALSE);",
+        [name, email]
+      );
+      const insertedId = data.insertId;
+      // Create OIDC user
+      const [oidcUserData] = await conn.query<RowDataPacket[]>(
+        "INSERT INTO oidc_connection (oidc_issuer_id, oidc_subject, library_user_id) VALUES (?, ?, ?);",
+        [issuerId, subject, insertedId]
+      );
+      userId = insertedId;
+    }
+
+    const [rows] = await conn.query<RowDataPacket[]>(
+      "SELECT * FROM library_user WHERE id = ?;",
+      [userId]
+    );
+
+    await conn.commit();
+
+    return rows.length > 0 ? (rows[0] as User) : null;
+  } catch (error) {
+    if (conn) {
+      await conn.rollback();
+    }
+    throw error;
+  } finally {
+    if (conn) {
+      await conn.release();
+    }
+  }
 };

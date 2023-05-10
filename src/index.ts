@@ -13,6 +13,7 @@ import book_listRouter from "./routes/book_list";
 import book_list_entryRouter from "./routes/book_list_entry";
 import book_requestRouter from "./routes/book_request";
 import book_reservationRouter from "./routes/book_reservation";
+import callbackRoute from "./routes/auth/oidc/callback";
 import Session from "./interfaces/session.interface";
 import passwordreset, {
   publicRouter as publicPasswordReset,
@@ -22,6 +23,7 @@ import User from "./interfaces/user.interface";
 import { querySelectUserBySessionId } from "./queries/user";
 import { migrate } from "./sql_migrate";
 import { Sequelize } from "sequelize";
+import cookieParser from "cookie-parser";
 
 declare global {
   namespace NodeJS {
@@ -42,13 +44,27 @@ declare global {
   }
 }
 
+// This is not really considered good practice, but it is an easy fix
+// https://nodejs.org/api/process.html#process_warning_using_uncaughtexception_correctly
+process.on("uncaughtException", (err, origin) => {
+  console.log(
+    `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n`,
+    err,
+    "\nUncaught exception origin:\n",
+    origin
+  );
+});
+
 const app: Express = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: "*" }));
 app.use(expressBearerToken());
 
 app.use("/health", healthRouter);
 
+app.use("/auth/oidc", callbackRoute);
 app.use("/auth", authRouter);
 app.use("/passwordreset", publicPasswordReset);
 app.use(async (req: Request, res: Response, next: NextFunction) => {

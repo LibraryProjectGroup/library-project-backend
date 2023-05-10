@@ -1,41 +1,82 @@
 # library-project-backend
 
-### Note:
+## Installing the project
 
-The backend server is run during development with [ts-node](https://www.npmjs.com/package/ts-node). Ts-node is now included in development dependencies, and the server can be started with `npm start`. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
+You need to have npm installed to run this project, you can check if you have it installed by running `npm -v` in the command line.
 
-```sh
-$ npm install
-$ npm start
-# open http://localhost:3000
+Clone the repository on your computer. Detailed instructions can be found [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository?tool=webui).
+
+## Environment variables
+
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. You will not need this if you're using docker-compose. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
+
+Here's an example of a .env file you can use:
+
+```env
+    DATABASE_SERVER=localhost
+    DATABASE_NAME=efilibrarydb
+    DATABASE_USER=root
+    DATABASE_PASSWORD=admin <<< This should be whatever your root password is
+    PORT=3002
 ```
 
-### Note #2:
+# How to run
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create .env locally. <br> .env is in the form of: <br>
+You will need to run the backend application and the database. You can have them separately, or you can use docker-compose.
+
+## Using docker-compose
+
+Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder. [docker-compose-test.yml](docker-compose-test.yml) also contains the database credentials for local development as environment variables. These must only be used for local development.
+
+If you have Windows, make you have Docker Desktop running before running the command.
 
 ```
-    DATABASE_SERVER = ???
-    DATABASE_NAME = ???
-    DATABASE_USER = ???
-    DATABASE_PASSWORD = ???
-
+docker-compose -f docker-compose-test.yml up -d
 ```
 
-Database name, user, and password can be found on Discord at **#secrets**.
+The -f flag specifies the file since there are different ones. The -d flag (detach) runs the container in the background allowing you to close the terminal without killing the process.
 
-### Note #3:
+## Creating the database separately
+
+Having the database and the node project separately is more convenient if you want to make changes to the code.
+
+### Setting up the local database
+
+You can use Docker to create the MariaDB container:
+
+```cmd
+docker run -d --name efilibrary-mariadb -p "3306:3306" --env MARIADB_ROOT_PASSWORD=admin --volume efilbirary-mariadb-data:/var/lib/mysql mariadb:latest
+```
+
+Each time you start up the project, you can just start the existing container, you don't have to create a new database every time.
+
+Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder. [Here's a video](https://youtu.be/POcHaIwmAhw) on how to do it in MySQL Workbench, but you can also use DataGrip or another database explorer.
+
+### Running the node project
+
+Use `npm ci` or `npm install` to install node modules.
+
+Start the backend by running `npm start`.
+
+## What the previous team used:
 
 To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
 After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.
 
-### Developing in a container
+### Using DevContainers
+
+> Note: These files have not been used or updated in a while so it's possible that this does not work.
 
 The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
-[docker-compose.yml](.devcontainer/docker-compose.yml) file contains a container for both the Express application as well as the dabatase. Database initialization is handled automatically on creation using the _\*.sql_ files in [sql/](./sql/) folder. [docker-compose.yml](.devcontainer/docker-compose.yml) contains also the database credentials for local development as environment variables. These must only be used for local development.
-
 <br>
+
+# Workflows
+
+There are two workflows files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
+
+The Node.js CI workflow runs on every push and pull request to development or main so it will tell you if the new code can be merged.
+First thing it checks for is the formatting using Prettier, so remember to use `npm run fmt`. After that it will spin up the backend and use wait-on to check when the URL is available. If that times out, it's most likely a problem with building the container/app. Then it runs the robot tests. If those fail, update the code, or update the tests.
 
 # Endpoints
 
@@ -324,11 +365,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -392,6 +437,7 @@ Body:
 
 ```JSON
 {
+  "id": number,
   "name": string
 }
 ```
@@ -456,6 +502,7 @@ Body:
 
 ```JSON
 {
+  "userId": number,
   "isbn": string,
   "title": string,
   "reason": string
@@ -546,6 +593,7 @@ On Success Response schema:
   {
     "id": number,
     "username": string,
+    "image": string,
     "title": string,
     "bookId": number,
     "reservationDatetime": Date,
@@ -589,6 +637,7 @@ Body:
 
 ```JSON
 {
+  "userId": number,
   "bookId": number
 }
 ```
@@ -619,7 +668,7 @@ Body:
 
 ```JSON
 {
-  "userId": number
+  "userId": number,
 }
 ```
 
@@ -642,11 +691,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -663,11 +716,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -689,15 +746,27 @@ On Success Response schema:
   "id": number,
   "library_user": number,
   "title": string,
+  "image": string,
   "author": string,
-  "isbn": string,
+  "year": number,
   "topic": string,
-  "location": string,
-  "deleted": boolean
+  "isbn": string,
+  "deleted": boolean,
+  "homeOfficeId": number,
+  "homeOfficeName": string,
+  "homeOfficeCountry": string
 }
 ```
 
 ### /book?id={id} (DELETE)
+
+On Success Response schema:
+
+```JSON
+{
+  "id": number,
+}
+```
 
 ### /book (POST)
 
@@ -705,11 +774,14 @@ Body:
 
 ```JSON
 {
+  "userId": number,
   "title": string,
+  "image": string,
   "author": string,
+  "year": number,
   "isbn": string,
   "topic": string,
-  "location": string
+  "homeOfficeId": string
 }
 ```
 
@@ -721,10 +793,12 @@ Body:
 {
   "id": number,
   "title": string,
+  "image": string,
   "author": string,
+  "year": number,
   "isbn": string,
   "topic": string,
-  "location": string
+  "homeOfficeId": string,
 }
 ```
 
@@ -738,11 +812,15 @@ On Success Response schema:
     "id": number,
     "library_user": number,
     "title": string,
+    "image": string,
     "author": string,
-    "isbn": string,
+    "year": number,
     "topic": string,
-    "location": string,
-    "deleted": boolean
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
@@ -796,7 +874,7 @@ Body:
 
 ```JSON
 {
-    "bookId": number
+    "id": number
 }
 ```
 
@@ -806,7 +884,11 @@ Body:
 
 ```JSON
 {
-  "bookId": number
+  "userId": number,
+  "bookId": number,
+  "dueDate": Date,
+  "borrowDate": Date,
+  "returned": boolean
 }
 ```
 
@@ -826,6 +908,7 @@ Body:
 ```JSON
 {
   "id": number,
+  "library_user": number,
   "book": number,
   "dueDate": Date,
   "borrowDate": Date,
@@ -927,7 +1010,13 @@ Body:
 
 ```JSON
 {
-  "borrowId": number
+  "id": number,
+  "library_user": number,
+  "book": number,
+  "dueDate": Date,
+  "borrowDate": Date,
+  "returned": boolean,
+  "returnDate": Date | null
 }
 ```
 
@@ -948,6 +1037,61 @@ On Fail Response schema:
 {
   "ok": false,
   "error:": string
+}
+```
+
+</Details>
+
+## Office
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /office/all (GET)
+
+Body:
+
+```JSON
+{
+  "id": number,
+  "name": string,
+  "countryCode": string
+}
+```
+
+### /office/homeOfficeId (GET)
+
+Body:
+
+```JSON
+{
+  "id": number,
+  "name": string,
+  "countryCode": string
+}
+```
+
+### /office/homeOfficeId (DELETE)
+
+Body:
+
+```JSON
+{
+  "id": number
+}
+```
+
+### /office/homeOfficeId (PUT)
+
+Body:
+
+```JSON
+{
+  "id": number,
+  "name": string,
+  "countryCode": string
 }
 ```
 
@@ -977,8 +1121,12 @@ Body:
 
 ```JSON
 {
-  "secret": string,
-  "password": string
+  "id": number,
+  "username": string,
+  "email": string,
+  "passw": string,
+  "administrator": boolean,
+  "homeOfficeId?": number
 }
 ```
 
@@ -1007,10 +1155,11 @@ On Success Response schema:
 ```JSON
 [
   {
-    "id": number,
-    "username": string,
-    "email": string,
-    "administrator": boolean
+  "id": number,
+  "username": string,
+  "email": string,
+  "administrator": boolean,
+  "homeOfficeId?": number
   }
 ]
 ```
@@ -1061,7 +1210,8 @@ Body:
   "username": string,
   "email": string,
   "password": string,
-  "administrator": boolean
+  "administrator": boolean,
+  "deleted": boolean
 }
 ```
 
@@ -1071,7 +1221,7 @@ Body:
 
 </Details>
 
-# Database Diagram
+# Database Diagram (outdated)
 
 <Details>
     <Summary>
@@ -1079,8 +1229,3 @@ Body:
     </Summary>
     <img src="dbdiagram.png"></img>
 </Details>
-
-# Docker Help
-
-Building the docker image: `docker image build .`  
-Running the docker image: `docker run -p 3000:3000 <docker image>`

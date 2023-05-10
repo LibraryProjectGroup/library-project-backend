@@ -16,7 +16,7 @@ const maxPasswordLength = 150;
 
 const router = Router();
 
-async function createSession(userId: number) {
+export async function createSession(userId: number) {
   // TODO: Secret should be unique but duplicates shouldn't really cause any issues
   let secret = crypto.randomBytes(16).toString("hex");
   return await queryInsertSession(userId, secret, timeout);
@@ -131,14 +131,27 @@ router.post("/login", async (req: Request, res: Response) => {
       message: "Email and password required",
     });
 
-  let user = await querySelectUserByEmail(email);
+  let user;
+  try {
+    user = await querySelectUserByEmail(email);
+  } catch (error) {
+    return res.status(503).json({
+      ok: false,
+      message: "Something went wrong at our end, try again later",
+    });
+  }
+
   if (user == null)
     return res.status(400).json({
       ok: false,
       message: "Invalid Email or Password",
     });
 
-  if (password == null || !(await bcrypt.compare(password, user.passw)))
+  if (
+    password == null ||
+    !user.passw ||
+    !(await bcrypt.compare(password, user.passw))
+  )
     return res.status(403).json({
       ok: false,
       message: "Invalid Email or Password",

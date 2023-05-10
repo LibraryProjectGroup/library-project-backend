@@ -16,6 +16,7 @@ Verify that new book can be created
     &{data}=    Create dictionary
     ...    { library_user=2
     ...    title=Fake
+    ...    image=https://images.isbndb.com/covers/91/26/9789513119126.jpg
     ...    author=Test Author
     ...    year=2023
     ...    isbn=123-242-421
@@ -47,7 +48,7 @@ Verify that user can check borrowed book by id
     Should Be Equal    ${response.json()['id']}    ${1}
 
 # Verify that book can be updated
-#    &{data}=    Create dictionary    { library_user=2    title=Fake asdf    author=Test Author     year=2022    isbn=123-242-421    topic=js    location=Fake location    deleted=0}
+#    &{data}=    Create dictionary    { library_user=2    title=Fake asdf    image=http://books.google.com/books/content?id=ILqrxQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api    author=Test Author     year=2022    isbn=123-242-421    topic=js    location=Fake location    deleted=0}
 #    ${response}=    PUT    url=${URL}/book/?id=12&${bearerToken}    json=${data}    expected_status=200
 #    Should Be True    ${response.json()['ok']}
 

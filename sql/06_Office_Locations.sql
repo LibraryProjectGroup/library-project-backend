@@ -27,4 +27,4 @@ ALTER TABLE book
 
 # Add a reference to the user their home office (may be null)
 ALTER TABLE library_user
-    ADD COLUMN home_office_id BIGINT REFERENCES home_office (home_office_id)
+    ADD COLUMN home_office_id BIGINT REFERENCES home_office (home_office_id);

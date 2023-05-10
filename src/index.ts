@@ -95,6 +95,9 @@ const pool = mysql.createPool({
 (async () => {
   const sequelize = new Sequelize({
     dialect: "mysql",
+    dialectOptions: {
+      multipleStatements: true,
+    },
     host: process.env.DATABASE_SERVER,
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,

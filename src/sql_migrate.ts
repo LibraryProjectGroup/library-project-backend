@@ -1,4 +1,4 @@
-import { Umzug } from "umzug";
+import { SequelizeStorage, Umzug } from "umzug";
 import { RunnableMigration } from "umzug/lib/types";
 import { readFileSync } from "fs";
 import { basename, resolve } from "path";
@@ -33,7 +33,7 @@ function createMigration(
   return {
     name: migrationName,
     async up({ context }) {
-      const sql = resolveSql(migrationName);
+      const sql = resolveSql(migrationName).replace(/\r\n/g, "\n");
       return context.mysql.query(sql);
     },
     async down() {
@@ -54,6 +54,7 @@ export async function migrate(sequelize: Sequelize) {
     migrations: migrations,
     context: context,
     logger: console,
+    storage: new SequelizeStorage({ sequelize }),
   });
   await umzug.up();
   console.log("Finished running migrations");

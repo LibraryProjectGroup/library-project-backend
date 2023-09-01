@@ -10,7 +10,11 @@ The sql file can be found in teams under database folder.
 (Full table creation, inserting queries and table dropping queries are in the bottom of the document.)
 
 ## Relation Schema
-
+.
+.
+.
+.
+.
 
 
 ### CREATE TABLE Queries

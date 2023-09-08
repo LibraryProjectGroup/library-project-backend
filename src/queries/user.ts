@@ -1,7 +1,6 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import User from "../interfaces/user.interface";
-import user from "../routes/user";
 import { OidcIssuerId } from "../interfaces/OidcIssuer";
 
 export const querySelectAllExistingUsers = async (): Promise<User[]> => {

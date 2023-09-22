@@ -17,8 +17,7 @@ const maxPasswordLength = 150;
 const router = Router();
 
 export async function createSession(userId: number) {
-  // TODO: Secret should be unique but duplicates shouldn't really cause any issues
-  let secret = crypto.randomBytes(16).toString("hex");
+  let secret = crypto.randomUUID();
   return await queryInsertSession(userId, secret, timeout);
 }
 

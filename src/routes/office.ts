@@ -4,6 +4,7 @@ import {
   findAllHomeOffices,
   findHomeOffice,
   updateHomeOffice,
+  insertHomeOffice
 } from "../queries/office";
 import { HomeOffice } from "../interfaces/HomeOffice";
 
@@ -62,5 +63,23 @@ router.put(
     }
   }
 );
+
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (req.sessionUser.administrator) {
+      res.json({
+        ok: await insertHomeOffice(
+          req.body.name,
+          req.body.countryCode
+        ),
+      });
+    } else {
+      res.status(403).json({ ok: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 export default router;

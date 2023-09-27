@@ -71,18 +71,24 @@ router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json({
-      ok: await queryInsertBook(
-        req.sessionUser.id,
-        req.body.title,
-        req.body.image,
-        req.body.author,
-        req.body.year,
-        req.body.isbn,
-        req.body.topic,
-        req.body.homeOfficeId
-      ),
-    });
+    const result = await queryInsertBook(
+      req.sessionUser.id,
+      req.body.title,
+      req.body.image,
+      req.body.author,
+      req.body.year,
+      req.body.isbn,
+      req.body.topic,
+      req.body.homeOfficeId
+    )
+    if (await result) {
+      const books = await querySelectAllBooks()
+
+      res.json({
+        ok: result,
+        books: await books
+      });
+    }
   } catch (err) {
     next(err);
   }

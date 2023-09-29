@@ -103,7 +103,10 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
       book &&
       (req.sessionUser.id == book.library_user || req.sessionUser.administrator)
     ) {
-      res.json({ ok: await queryUpdateBook(updatedBook) });
+      
+      const ok = await queryUpdateBook(updatedBook)
+      const updated = await ok? await querySelectBook(book.id): null
+      res.json({ ok: await ok, book: await updated});
     } else {
       res.status(403).json({ ok: false });
     }

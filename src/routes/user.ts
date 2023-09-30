@@ -39,6 +39,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         username: user.username,
         email: user.email,
         administrator: user.administrator,
+        homeOfficeId: user.homeOfficeId,
       });
     } else {
       res.status(404).json({ ok: false });

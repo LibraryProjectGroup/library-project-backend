@@ -45,6 +45,15 @@ export async function updateHomeOffice(
   return ok.affectedRows >= 1;
 }
 
+export async function insertHomeOffice(name: string, countryCode: string): Promise<boolean> {
+  const promisePool = pool.promise();
+  const [result] = await promisePool.query<OkPacket>(
+    "INSERT INTO home_office (name, country_code) VALUES (?, ?)",
+    [name, countryCode]
+  );
+  return result.affectedRows === 1;
+}
+
 function convertDatabaseRowToOffice(sqlDataPacket: RowDataPacket): HomeOffice {
   return {
     id: sqlDataPacket.home_office_id,

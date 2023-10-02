@@ -47,12 +47,8 @@ declare global {
 // This is not really considered good practice, but it is an easy fix
 // https://nodejs.org/api/process.html#process_warning_using_uncaughtexception_correctly
 process.on('uncaughtException', (err, origin) => {
-  console.log(
-    `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n`,
-    err,
-    '\nUncaught exception origin:\n',
-    origin
-  )
+  const errorMessage = `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n${err}\nUncaught exception origin:\n${origin}`
+  Logger.error(errorMessage)
 })
 
 const app: Express = express()

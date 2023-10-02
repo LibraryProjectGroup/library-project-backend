@@ -3,11 +3,11 @@ import { Client, generators, Issuer } from "openid-client";
 import {
   getChallengeVerificationCodeByCodeParameter,
   getOidcIssuerDataById,
-  storeOidcChallenge,
+  insertOidcChallenge,
 } from "../../../queries/session";
 import { StatusCodes } from "http-status-codes";
 import { randomBytes } from "crypto";
-import { queryOrRegisterOidcUser } from "../../../queries/user";
+import { registerOrGetOidcUser } from "../../../queries/user";
 import { createSession } from "../../auth";
 import { OidcIssuer, OidcIssuerId } from "../../../interfaces/OidcIssuer";
 
@@ -104,7 +104,7 @@ router.get(
       throw new Error("Claims are missing from id token: " + errorObject);
     }
 
-    const user = await queryOrRegisterOidcUser(
+    const user = await registerOrGetOidcUser(
       challengeData.oidcIssuerId,
       sub,
       name,
@@ -154,7 +154,7 @@ router.get(
     // Stored in a cookie to couple the (secret) verification code in the database
     const authId = randomBytes(20).toString("hex");
 
-    await storeOidcChallenge(authId, codeVerifier, issuerData.databaseId);
+    await insertOidcChallenge(authId, codeVerifier, issuerData.databaseId);
 
     const url = client.authorizationUrl({
       scope: "openid email profile",

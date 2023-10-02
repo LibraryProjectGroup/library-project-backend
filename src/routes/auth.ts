@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
 import {
-  queryInsertUser,
-  querySelectUserByEmail,
-  querySelectUserByUsername,
+  insertUser,
+  getUserByEmail,
+  getUserByUsername,
 } from "../queries/user";
-import { queryInsertSession, queryInvalidateSession } from "../queries/session";
+import { insertSession, invalidateSession } from "../queries/session";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 
@@ -18,7 +18,7 @@ const router = Router();
 
 export async function createSession(userId: number) {
   let secret = crypto.randomUUID();
-  return await queryInsertSession(userId, secret, timeout);
+  return await insertSession(userId, secret, timeout);
 }
 
 const isValidEmail = (email: string) => {
@@ -74,14 +74,14 @@ router.post("/register", async (req: Request, res: Response) => {
       message: "Password has to be between 3 and 50 characters",
     });
 
-  let userByEmail = await querySelectUserByEmail(email);
+  let userByEmail = await getUserByEmail(email);
   if (userByEmail != null)
     return res.status(400).json({
       ok: false,
       message: "Email is already taken",
     });
 
-  let user = await querySelectUserByUsername(username);
+  let user = await getUserByUsername(username);
   if (user != null)
     return res.status(400).json({
       ok: false,
@@ -90,7 +90,7 @@ router.post("/register", async (req: Request, res: Response) => {
 
   let hashedPassword = await bcrypt.hash(password, 8);
 
-  let newUser = await queryInsertUser(
+  let newUser = await insertUser(
     username,
     email,
     hashedPassword,
@@ -120,7 +120,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
   let user;
   try {
-    user = await querySelectUserByEmail(email);
+    user = await getUserByEmail(email);
   } catch (error) {
     return res.status(503).json({
       ok: false,
@@ -158,7 +158,7 @@ router.post("/logout", async (req: Request, res: Response) => {
   if (!req.token)
     return res.status(400).json({ ok: false, message: "No session" });
 
-  if (await queryInvalidateSession(req.token)) {
+  if (await invalidateSession(req.token)) {
     res.json({ ok: true });
   } else {
     res.status(404).json({ ok: false, message: "Unknown session" });

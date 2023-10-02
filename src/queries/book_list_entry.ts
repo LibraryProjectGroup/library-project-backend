@@ -2,13 +2,13 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../index";
 import Book_list_entry from "../interfaces/book_list_entry.interface";
 
-export const querySelectAllEntries = async () => {
+export const getAllEntries = async () => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query("SELECT * FROM book_list_entry");
   return rows as Array<Book_list_entry>;
 };
 
-export const querySelectAllEntriesByList = async (listId: number) => {
+export const getEntriesByList = async (listId: number) => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query(
     "SELECT * FROM book_list_entry WHERE list = ?",
@@ -17,7 +17,7 @@ export const querySelectAllEntriesByList = async (listId: number) => {
   return rows as Array<Book_list_entry>;
 };
 
-export const querySelectEntry = async (entryId: number) => {
+export const getEntryById = async (entryId: number) => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<RowDataPacket[]>(
     "SELECT * FROM book_list_entry WHERE id = ?",
@@ -26,7 +26,7 @@ export const querySelectEntry = async (entryId: number) => {
   return rows.length > 0 ? (rows[0] as Book_list_entry) : null;
 };
 
-export const queryInsertEntry = async (book_list_entry: Book_list_entry) => {
+export const insertNewEntry = async (book_list_entry: Book_list_entry) => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<ResultSetHeader>(
     "INSERT INTO book_list_entry (list, book) VALUES (?)",
@@ -35,7 +35,7 @@ export const queryInsertEntry = async (book_list_entry: Book_list_entry) => {
   return rows.affectedRows != 0;
 };
 
-export const queryRemoveFromList = async (entryId: number) => {
+export const removeEntryById = async (entryId: number) => {
   const promisePool = pool.promise();
   const [rows] = await promisePool.query<ResultSetHeader>(
     "DELETE FROM book_list_entry WHERE id = ?",
@@ -44,7 +44,7 @@ export const queryRemoveFromList = async (entryId: number) => {
   return rows.affectedRows != 0;
 };
 
-export const queryDeleteListBook = async (
+export const deleteListBook = async (
   listId: number,
   bookId: number
 ): Promise<boolean> => {

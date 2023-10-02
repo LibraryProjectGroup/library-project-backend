@@ -1,55 +1,52 @@
 import { Response, Request, Router, NextFunction } from "express";
 import {
-  querySelectAllReservations,
-  //querySelectReservation, //currently unused
-  queryInsertReservation,
-  //queryUpdateReservation, //currently unused
-  queryCancelReservation,
-  queryLoanReservation,
-  querySelectCurrentReservations,
-  querySelectAllExtendedReservations,
-  querySelectUserCurrentExtendedReservations,
-  querySelectCurrentReservationForBook,
+  getAllReservations,
+  // getReservationById, // Currently unused
+  insertReservation,
+  // updateReservation, // Currently unused
+  cancelReservation,
+  loanReservation,
+  getCurrentReservations,
+  getAllExtendedReservations,
+  getUserCurrentExtendedReservations,
+  getCurrentReservationForBook,
 } from "../queries/book_reservation";
 
 const router = Router();
 
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectAllReservations());
+    res.json(await getAllReservations());
   } catch (err) {
     next(err);
   }
 });
 
-// Filtered
 router.get(
   "/all/current",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await querySelectCurrentReservations());
+      res.json(await getCurrentReservations());
     } catch (err) {
       next(err);
     }
   }
 );
 
-// Filtered
 router.get(
   "/all/extended",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await querySelectAllExtendedReservations());
+      res.json(await getAllExtendedReservations());
     } catch (err) {
       next(err);
     }
   }
 );
 
-// Filtered
 router.get("/book", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectCurrentReservationForBook(req.body.bookId));
+    res.json(await getCurrentReservationForBook(req.body.bookId));
   } catch (err) {
     next(err);
   }
@@ -58,7 +55,7 @@ router.get("/book", async (req: Request, res: Response, next: NextFunction) => {
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({
-      ok: await queryInsertReservation(req.sessionUser.id, req.body.bookId),
+      ok: await insertReservation(req.sessionUser.id, req.body.bookId),
     });
   } catch (err) {
     next(err);
@@ -70,7 +67,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json({
-        ok: await queryCancelReservation(req.body.bookId),
+        ok: await cancelReservation(req.body.bookId),
       });
     } catch (err) {
       next(err);
@@ -83,7 +80,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json({
-        ok: await queryLoanReservation(req.body.bookId),
+        ok: await loanReservation(req.body.bookId),
       });
     } catch (err) {
       next(err);
@@ -91,13 +88,12 @@ router.post(
   }
 );
 
-// Filtered
 router.post(
   "/user/current",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json(
-        await querySelectUserCurrentExtendedReservations(req.body.userId)
+        await getUserCurrentExtendedReservations(req.body.userId)
       );
     } catch (err) {
       next(err);

@@ -1,13 +1,14 @@
 import { Response, Request, Router, NextFunction } from "express";
 import {
-  querySelectBook,
-  querySelectAllBooks,
-  querySoftDeleteBook,
-  queryInsertBook,
-  queryUpdateBook,
-  querySelectAllReservedBooks,
-  querySelectAllBooksPaged,
-  queryCountAllBooks,
+  getAllExistingBooks,
+  getAllBooksPaged,
+  getCountOfAllBooks,
+  deleteBook,
+  insertNewBook,
+  updateBook,
+  getAllReservedBooks,
+  getBookById,
+  markBookAsDeleted, 
 } from "../queries/book";
 import Book from "../interfaces/book.interface";
 
@@ -15,7 +16,7 @@ const router = Router();
 
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectAllBooks());
+    res.json(await getAllExistingBooks());
   } catch (err) {
     next(err);
   }
@@ -24,7 +25,7 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
 router.get("/page", async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json(
-      await querySelectAllBooksPaged(
+      await getAllBooksPaged(
         Number(req.query.page),
         Number(req.query.pageSize)
       )
@@ -38,7 +39,7 @@ router.get(
   "/count",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await queryCountAllBooks());
+      res.json(await getCountOfAllBooks());
     } catch (err) {
       next(err);
     }
@@ -47,7 +48,7 @@ router.get(
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectBook(Number(req.query.id)));
+    res.json(await getBookById(Number(req.query.id)));
   } catch (err) {
     next(err);
   }
@@ -55,12 +56,12 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
 router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const book = await querySelectBook(Number(req.query.id));
+    const book = await getBookById(Number(req.query.id));
     if (
       book &&
       (req.sessionUser.id == book.library_user || req.sessionUser.administrator)
     ) {
-      res.json({ ok: await querySoftDeleteBook(book.id) });
+      res.json({ ok: await markBookAsDeleted(book.id) });
     } else {
       res.status(403).json({ ok: false });
     }
@@ -72,7 +73,7 @@ router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({
-      ok: await queryInsertBook(
+      ok: await insertNewBook(
         req.sessionUser.id,
         req.body.title,
         req.body.image,
@@ -92,12 +93,12 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const updatedBook: Book = req.body;
     updatedBook.library_user = req.sessionUser.id;
-    const book = await querySelectBook(updatedBook.id);
+    const book = await getBookById(updatedBook.id);
     if (
       book &&
       (req.sessionUser.id == book.library_user || req.sessionUser.administrator)
     ) {
-      res.json({ ok: await queryUpdateBook(updatedBook) });
+      res.json({ ok: await updateBook(updatedBook) });
     } else {
       res.status(403).json({ ok: false });
     }
@@ -110,7 +111,7 @@ router.get(
   "/all/reserved",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await querySelectAllReservedBooks());
+      res.json(await getAllReservedBooks());
     } catch (err) {
       next(err);
     }

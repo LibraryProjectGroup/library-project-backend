@@ -1,5 +1,5 @@
 import { Response, Request, Router, NextFunction } from "express";
-import { querySelectUser, queryUpdateUser } from "../queries/user";
+import { getUserById, updateUser } from "../queries/user";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 
@@ -21,7 +21,7 @@ router.get(
   "/secret",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await querySelectUser(Number(req.query.id));
+      const user = await getUserById(Number(req.query.id));
       if (user && req.sessionUser.administrator) {
         let secret;
         do {
@@ -57,7 +57,7 @@ publicRouter.post(
       }
       if (req.body.password) {
         const userId = activeResets[secret].userId;
-        let user = await querySelectUser(userId);
+        let user = await getUserById(userId);
         if (!user) {
           res.status(404).json({ ok: false });
           return;
@@ -73,7 +73,7 @@ publicRouter.post(
         let hashedPassword = await bcrypt.hash(req.body.password, 8);
         user.passw = hashedPassword;
         delete activeResets[secret];
-        res.json({ ok: queryUpdateUser(user) });
+        res.json({ ok: updateUser(user) });
       } else {
         res.json({ ok: true });
       }

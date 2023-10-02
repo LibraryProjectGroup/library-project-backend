@@ -1,11 +1,11 @@
 import { Response, Request, Router, NextFunction } from "express";
 import {
-  querySelectAllUsers,
-  querySelectUser,
-  querySoftDeleteUser,
-  queryInsertUser,
-  queryUpdateUser,
-  queryAdminUpdateUser,
+  getAllActiveUsers,
+  getUserById,
+  deleteUserSoft,
+  insertUser,
+  updateUser,
+  updateUserByAdmin,
 } from "../queries/user";
 import User from "../interfaces/user.interface";
 
@@ -13,7 +13,7 @@ const router = Router();
 
 router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await querySelectAllUsers();
+    const users = await getAllActiveUsers();
     const formattedUsers = [];
     for (const user of users) {
       formattedUsers.push({
@@ -32,7 +32,7 @@ router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await querySelectUser(Number(req.query.id));
+    const user = await getUserById(Number(req.query.id));
     if (user) {
       res.json({
         id: user.id,
@@ -65,7 +65,7 @@ router.get(
 router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.sessionUser.administrator) {
-      res.json({ ok: await querySoftDeleteUser(Number(req.body.id)) });
+      res.json({ ok: await deleteUserSoft(Number(req.body.id)) });
     } else {
       res.status(403).json({ ok: false });
     }
@@ -83,7 +83,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       const administrator = Boolean(Number(req.query.administrator));
       const deleted = false;
       res.json({
-        ok: await queryInsertUser(
+        ok: await insertUser(
           username,
           email,
           password,
@@ -111,7 +111,7 @@ router.put("/", async (req: Request, res: Response, next: NextFunction) => {
         deleted: false,
         homeOfficeId: parseInt(req.query.homeOfficeId as string),
       };
-      res.json({ ok: await queryUpdateUser(user) });
+      res.json({ ok: await updateUser(user) });
     } else {
       res.status(403).json({ ok: false });
     }
@@ -135,7 +135,7 @@ router.put(
           deleted: false,
           homeOfficeId: parseInt(req.query.homeOfficeId as string),
         };
-        res.json({ ok: await queryAdminUpdateUser(user) });
+        res.json({ ok: await updateUserByAdmin(user) });
       } else {
         res.status(403).json({ ok: false });
       }

@@ -24,6 +24,8 @@ import { querySelectSessionBySecret } from './queries/session'
 import User from './interfaces/user.interface'
 import { querySelectUserBySessionId } from './queries/user'
 import cookieParser from 'cookie-parser'
+import Logger from './lib/logger'
+import morganMiddleware from './config/morganMiddleware'
 
 declare global {
   namespace NodeJS {
@@ -57,9 +59,9 @@ app.use(cookieParser())
 app.use(cors({ credentials: true, origin: true }))
 app.use(cors({ credentials: true, origin: '*' }))
 app.use(expressBearerToken())
+app.use(morganMiddleware)
 
 app.use('/health', healthRouter)
-
 app.use('/auth/oidc', callbackRoute)
 app.use('/auth', authRouter)
 app.use('/passwordreset', publicPasswordReset)
@@ -76,10 +78,18 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     next()
     return
   } catch (err) {
-    console.error(err)
+    if (err instanceof Error) {
+      // Log the error message and stack trace
+      Logger.error(err.message) // Log the error message
+      Logger.error(err.stack) // Log the stack trace
+    } else {
+      // Log a generic error message if 'error' is not an instance of Error
+      Logger.error('An error occurred:', err)
+    }
   }
   res.sendStatus(500)
 })
+
 app.use('/book', bookRouter)
 app.use('/office', officeRouter)
 app.use('/user', userRouter)
@@ -89,11 +99,9 @@ app.use('/booklistentry', book_list_entryRouter)
 app.use('/bookrequest', book_requestRouter)
 app.use('/bookreservation', book_reservationRouter)
 app.use('/passwordreset', passwordreset)
-app.use('/review', reviewRouter)
-app.use('/favorite', bookfavorite)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err)
+  Logger.error(err.message)
   res.status(500).send({
     ok: false,
   })

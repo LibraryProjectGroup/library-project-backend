@@ -75,8 +75,11 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 
 There are two workflows files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
 
-The Node.js CI workflow runs on every push and pull request to development or main so it will tell you if the new code can be merged.
-First thing it checks for is the formatting using Prettier. After that it will spin up the backend and use wait-on to check when the URL is available. If that times out, it's most likely a problem with building the container/app. Then it runs the robot tests. If those fail, update the code, or update the tests.
+The Node.js CI workflow is designed to ensure code quality and functionality before changes are merged. It triggers on every push or when a pull request is made to `development`, `main`, or `s23-staging` branches. Here's a step-by-step breakdown of the workflow:
+
+1. **Code Formatting Check**: Utilizes Prettier to ensure code is following the project's formatting standards.
+2. **Backend Spin-up**: Initiates the backend and employs `wait-on` to verify when the URL is available. A timeout here often indicates an issue with container/app build.
+3. **Robot Tests**: Executes robot tests to verify code functionality. If tests fail, review and update your code or the tests accordingly.
 
 ## The Prettier workflow
 

@@ -76,7 +76,11 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 There are two workflows files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
 
 The Node.js CI workflow runs on every push and pull request to development or main so it will tell you if the new code can be merged.
-First thing it checks for is the formatting using Prettier, so remember to use `npm run fmt`. After that it will spin up the backend and use wait-on to check when the URL is available. If that times out, it's most likely a problem with building the container/app. Then it runs the robot tests. If those fail, update the code, or update the tests.
+First thing it checks for is the formatting using Prettier. After that it will spin up the backend and use wait-on to check when the URL is available. If that times out, it's most likely a problem with building the container/app. Then it runs the robot tests. If those fail, update the code, or update the tests.
+
+## The Prettier workflow
+
+The Prettier workflow is setup in the code with Pretty-quick (https://github.com/azz/pretty-quick) and Husky (https://typicode.github.io/husky/) to ensure consistent foramtting. Pretty-Quick checks formatting when a developer tries to commit to the repo, and fixes formatting using our prettier config (.prettierrc.json file in the root of the project). Husky ensures that the pre-commit checks works with a pre-commit hook. Make sure you have all dependencies installed by running: `npm install` before you start. In your code editor, you can also set prettier checks on save, which will help the process.
 
 # Endpoints
 

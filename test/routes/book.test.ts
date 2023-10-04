@@ -1,4 +1,4 @@
-import { test, describe, jest, afterAll } from "@jest/globals";
+import { test, describe, jest, afterAll, expect } from "@jest/globals";
 import request from "supertest";
 import { app, pool } from "../../src";
 

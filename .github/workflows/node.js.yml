@@ -2,9 +2,10 @@ name: Node.js CI
 
 on:
   push:
-    branches: ['main', 'development', 's23-CI/CD']
+    branches:
+      - '**'
   pull_request:
-    branches: ['main', 'development']
+    branches: ['main', 'development', 's23-staging']
 
 env:
   TESTUSERNAME: ${{ secrets.REACT_APP_TEST_EMAIL }}

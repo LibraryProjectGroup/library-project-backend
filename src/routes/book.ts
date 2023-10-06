@@ -71,7 +71,6 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-
     const result = await queryInsertBook(
       req.sessionUser.id,
       req.body.title,
@@ -87,8 +86,8 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 
       res.json({
         ok: result,
-        books: await books
-      });
+        books: await books,
+      })
     }
   } catch (err) {
     next(err)
@@ -104,11 +103,9 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
       book &&
       (req.sessionUser.id == book.library_user || req.sessionUser.administrator)
     ) {
-
-      
       const ok = await queryUpdateBook(updatedBook)
-      const updated = await ok? await querySelectBook(book.id): null
-      res.json({ ok: await ok, book: await updated});
+      const updated = (await ok) ? await querySelectBook(book.id) : null
+      res.json({ ok: await ok, book: await updated })
     } else {
       res.status(403).json({ ok: false })
     }

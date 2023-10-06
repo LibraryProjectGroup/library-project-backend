@@ -1,4 +1,3 @@
-
 import { ResultSetHeader, RowDataPacket } from 'mysql2'
 import { pool } from '../index'
 import User from '../interfaces/user.interface'

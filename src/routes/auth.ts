@@ -17,32 +17,28 @@ const maxPasswordLength = 150
 const router = Router()
 
 export async function createSession(userId: number) {
-
-  let secret = crypto.randomUUID();
-  return await queryInsertSession(userId, secret, timeout);
+  let secret = crypto.randomUUID()
+  return await queryInsertSession(userId, secret, timeout)
 }
 
 const isValidEmail = (email: string) => {
   // regex to validate the email format
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
   if (emailRegex.test(email)) {
-    
-    const parts = email.split('@');
-    const prefix = parts[0];
-    const domain = parts[1];
+    const parts = email.split('@')
+    const prefix = parts[0]
+    const domain = parts[1]
 
-    
     if (prefix.length > 0 && domain.length > 0) {
-      
       if (domain.indexOf('.') !== -1) {
-        return true;
+        return true
       }
     }
   }
 
-  return false;
-};
+  return false
+}
 
 router.post('/register', async (req: Request, res: Response) => {
   const username = req.body.username as string

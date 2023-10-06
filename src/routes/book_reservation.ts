@@ -1,9 +1,9 @@
 import { Response, Request, Router, NextFunction } from 'express'
 import {
   querySelectAllReservations,
-  querySelectReservation,
+  //querySelectReservation, //currently unused
   queryInsertReservation,
-  queryUpdateReservation,
+  //queryUpdateReservation, //currently unused
   queryCancelReservation,
   queryLoanReservation,
   querySelectCurrentReservations,

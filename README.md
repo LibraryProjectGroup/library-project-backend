@@ -91,6 +91,9 @@ The Prettier workflow is setup in the code with Pretty-quick (https://github.com
 
 Endpoints that use body will be in JSON format. Endpoint requires either query or body, if query is present, the body section will not be shown and vice versa.
 <br>
+
+[Postman files](https://github.com/LibraryProjectGroup/library-project-backend/tree/s23-refactor/docs/postman)
+
 If not separately mentioned, On Success Response schema is:
 
 ```JSON

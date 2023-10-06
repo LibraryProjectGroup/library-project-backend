@@ -1,22 +1,12 @@
 import { Response, Request, Router, NextFunction } from 'express'
 import {
-  querySelectBook,
-  querySelectAllBooks,
-  querySoftDeleteBook,
-  queryInsertBook,
-  queryUpdateBook,
-  querySelectAllReservedBooks,
-  querySelectAllBooksPaged,
-  queryCountAllBooks,
-} from '../queries/book'
-import Book from '../interfaces/book.interface'
-import {
   deleteHomeOffice,
   findAllHomeOffices,
   findHomeOffice,
   updateHomeOffice,
-} from '../queries/office'
-import { HomeOffice } from '../interfaces/HomeOffice'
+  insertHomeOffice
+} from "../queries/office";
+import { HomeOffice } from "../interfaces/HomeOffice";
 
 const router = Router()
 
@@ -74,4 +64,23 @@ router.put(
   }
 )
 
-export default router
+
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (req.sessionUser.administrator) {
+      res.json({
+        ok: await insertHomeOffice(
+          req.body.name,
+          req.body.countryCode
+        ),
+      });
+    } else {
+      res.status(403).json({ ok: false });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+
+export default router;

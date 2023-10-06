@@ -17,44 +17,32 @@ const maxPasswordLength = 150
 const router = Router()
 
 export async function createSession(userId: number) {
-  // TODO: Secret should be unique but duplicates shouldn't really cause any issues
-  let secret = crypto.randomBytes(16).toString('hex')
-  return await queryInsertSession(userId, secret, timeout)
-}
 
-const isAlphaNumeric = (charCode: number) => {
-  if (
-    (charCode > 47 && charCode < 58) || // (0-9)
-    (charCode > 64 && charCode < 91) || // (A-Z)
-    (charCode > 96 && charCode < 123) // (a-z)
-  )
-    return true
-  else return false
+  let secret = crypto.randomUUID();
+  return await queryInsertSession(userId, secret, timeout);
 }
 
 const isValidEmail = (email: string) => {
-  // "Email has to be in the form of [ prefix@domain ]"
-  // note: add check to only allow .-_ inside prefix symbols when followed by alphanumeric(s);
-  //      don't allow any other symbol (unless we care about +)
-  if (email && email.includes('@')) {
-    let parts = email.split('@')
-    let prefix = parts[0]
-    let domain = parts[1]
-    if (prefix.length > 0) {
-      let first = prefix.slice(0, 1).charCodeAt(0)
-      let last = prefix.slice(-1).charCodeAt(0)
-      if (isAlphaNumeric(first) && isAlphaNumeric(last)) {
-        if (domain.includes('.')) {
-          let domainparts = domain.split('.')
-          return domainparts[domainparts.length - 1].length >= 2
-        } else {
-          return domain.length >= 2
-        }
+  // regex to validate the email format
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (emailRegex.test(email)) {
+    
+    const parts = email.split('@');
+    const prefix = parts[0];
+    const domain = parts[1];
+
+    
+    if (prefix.length > 0 && domain.length > 0) {
+      
+      if (domain.indexOf('.') !== -1) {
+        return true;
       }
     }
   }
-  return false
-}
+
+  return false;
+};
 
 router.post('/register', async (req: Request, res: Response) => {
   const username = req.body.username as string

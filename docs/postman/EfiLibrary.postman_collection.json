@@ -1,1393 +1,1117 @@
 {
-	"info": {
-		"_postman_id": "730e9d92-bd38-4ace-b185-5f5cd9b4b0d3",
-		"name": "EfiLibrary",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "25744360"
-	},
-	"item": [
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "/auth/register (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"test\", //string\r\n  \"email\": \"test@test.com\", //string\r\n  \"password\": \"testi123\" //string\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/auth/register",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/auth/login (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"test@test.com\", //string\r\n  \"password\": \"testi123\" //string\r\n}\r\n\r\n// select and set the response secret string to a secret variable =>\r\n// select the secret string and right click and select set set:softala then click secret",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/auth/login",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/auth/logout (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/auth/logout{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"auth",
-								"logout{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Book",
-			"item": [
-				{
-					"name": "/book/all (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/book/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book?id={id} (GET)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/book{{token}}{{secret}}&id=2",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book{{token}}{{secret}}&id=2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book/count (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/book/count{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book",
-								"count{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book?id={id} (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/book{{token}}{{secret}}&id=10",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book{{token}}{{secret}}&id=10"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book/page?page={page}&pageSize={pageSize} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/book/page{{token}}{{secret}}&page=1&pageSize=1",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book",
-								"page{{token}}{{secret}}&page=1&pageSize=1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book/all/reserved (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/book/all/reserved{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book",
-								"all",
-								"reserved{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2, //number\r\n    \"title\": \"Java for Babies!!\", //string\r\n    \"image\": \"https://images.isbndb.com/covers/91/26/9789513119126.jpg\", //string\r\n    \"author\": \"John Doe\", //string\r\n    \"year\": 2015, //number\r\n    \"isbn\": \"123-5223-789\", //string\r\n    \"topic\": \"Java\", //string\r\n    \"homeOfficeId\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/book{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/book (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"library_user\": 11, //number\r\n    \"title\": \"Testi1231231231231123123123\", //string\r\n    \"image\": \"https://images.isbndb.com/covers/91/26/9789513119126.jpg\", //string\r\n    \"author\": \"Mikko Mallikas\", //string\r\n    \"year\": 2000, //number\r\n    \"isbn\": \"123-456-465\", //string\r\n    \"topic\": \"JS\", //string\r\n    \"deleted\": 0, //boolean\r\n    \"homeOfficeId\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/book{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"book{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Book List",
-			"item": [
-				{
-					"name": "/booklist/all (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist/user (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist/user{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist",
-								"user{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist/books?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist/books{{token}}{{secret}}&id=1",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist",
-								"books{{token}}{{secret}}&id=1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist/info?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist/info{{token}}{{secret}}&id=1",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist",
-								"info{{token}}{{secret}}&id=1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}&id=1",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist{{token}}{{secret}}&id=1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1, //number\r\n    \"name\": \"string\" //string\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2, //number\r\n    \"name\": \"string!!\" //string\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklist (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklist{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Book List Entry",
-			"item": [
-				{
-					"name": "/booklistentry/all (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklistentry/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklistentry",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklistentry/list?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklistentry/list{{token}}{{secret}}&id=7",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklistentry",
-								"list{{token}}{{secret}}&id=7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklistentry?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklistentry{{token}}{{secret}}&id=7",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklistentry{{token}}{{secret}}&id=7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklistentry (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"list\": 3, //number\r\n  \"book\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklistentry{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklistentry{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklistentry (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 7 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklistentry{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklistentry{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/booklistentry/book (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"listId\": 3, //number\r\n  \"bookId\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/booklistentry/book{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"booklistentry",
-								"book{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Book Request",
-			"item": [
-				{
-					"name": "/bookrequest/all (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookrequest/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookrequest",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookrequest (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"userId\": 11, //number\r\n  \"isbn\": \"string\", //string\r\n  \"title\": \"string\", //string\r\n  \"reason\": \"string\" //string\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookrequest{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookrequest{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookrequest/updatestatus (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": 1, //number\r\n  \"status\": 0 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookrequest/updatestatus{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookrequest",
-								"updatestatus{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Book Reservation",
-			"item": [
-				{
-					"name": "/bookreservation/all (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation/all/current (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/all/current{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"all",
-								"current{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation/all/extended (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/all/extended{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"all",
-								"extended{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation/book (GET)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"bookId\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/book{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"book{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"userId\": {{user_id}}, //number\r\n  \"bookId\": 3 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation/cancel (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"bookId\": 2 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/cancel{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"cancel{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation/loan (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"reservationId\": 2 //number\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/loan{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"loan{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/bookreservation/user/current (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"userId\": {{user_id}} //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/bookreservation/user/current{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"bookreservation",
-								"user",
-								"current{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Borrow",
-			"item": [
-				{
-					"name": "/borrow/all (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}&id=1",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow{{token}}{{secret}}&id=1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1 //number\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"userId\": {{user_id}}, //number\r\n  \"bookId\": 10, //number\r\n  \"dueDate\": \"2022-08-20T00:00:00.000Z\", //date\r\n  \"borrowDate\": \"2022-08-13T00:00:00.000Z\", //date\r\n  \"returned\": false //boolean\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1, //number\r\n    \"library_user\": 1, //number\r\n    \"book\": 2, //number\r\n    \"dueDate\": \"2022-08-20T00:00:00.000Z\", //date\r\n    \"borrowDate\": \"2022-08-13T00:00:00.000Z\", //date\r\n    \"returned\": false, // boolean\r\n    \"returnDate\": null //date | null\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow/current (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/current{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"current{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow/expired/admin (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/expired/admin{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"expired",
-								"admin{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow/current/admin (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/current/admin{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"current",
-								"admin{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow/expired (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/expired{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"expired{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow/session (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/session{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"session{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/borrow/return (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n        \"id\": 8,\r\n        \"library_user\": 11,\r\n        \"book\": 1,\r\n        \"dueDate\": \"2023-09-26T00:00:00.000Z\",\r\n        \"borrowDate\": \"2023-09-16T00:00:00.000Z\",\r\n        \"returned\": 0,\r\n        \"returnDate\": null\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/borrow/return{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"borrow",
-								"return{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Office",
-			"item": [
-				{
-					"name": "/office/all",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/office/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"office",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/office/:homeOfficeId (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/office/1{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"office",
-								"1{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/office/:homeOfficeId (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/office/1{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"office",
-								"1{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/office/:homeOfficeId (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"string\", //string\r\n  \"countryCode\": \"xx\" //string max:3\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/office/1{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"office",
-								"1{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Password Reset",
-			"item": [
-				{
-					"name": "/passwordreset/secret?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/passwordreset/secret{{token}}{{secret}}&id={{user_id}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"passwordreset",
-								"secret{{token}}{{secret}}&id={{user_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/passwordreset (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 11, //number\r\n    \"username\": \"test\", //string\r\n    \"email\": \"test@test.com\", //string\r\n    \"password\": \"testi1234\", //string\r\n    \"administrator\": true //boolean\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/passwordreset{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"passwordreset{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "/user/all (GET)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/user/all{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"user",
-								"all{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/user/session (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/user/session{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"user",
-								"session{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/user?id={id} (GET)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BACKEND_URL}}/user{{token}}{{secret}}&id={{user_id}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"user{{token}}{{secret}}&id={{user_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/user (DELETE)",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/user{{token}}{{secret}}",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"user{{token}}{{secret}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/user (POST)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/user{{token}}{{secret}}&username=testuser121&email=test121@user.com&administrator=true&password=testi123&deleted=true",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"user{{token}}{{secret}}&username=testuser121&email=test121@user.com&administrator=true&password=testi123&deleted=true"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/user (PUT)",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BACKEND_URL}}/user{{token}}{{secret}}&id=14&username=testuser&email=test@user.com&administrator=true&password=testi123&home_office_id=3",
-							"host": [
-								"{{BACKEND_URL}}"
-							],
-							"path": [
-								"user{{token}}{{secret}}&id=14&username=testuser&email=test@user.com&administrator=true&password=testi123&home_office_id=3"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "/health",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{BACKEND_URL}}/health",
-					"host": [
-						"{{BACKEND_URL}}"
-					],
-					"path": [
-						"health"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "730e9d92-bd38-4ace-b185-5f5cd9b4b0d3",
+    "name": "EfiLibrary",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25744360"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "/auth/register (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"test\", //string\r\n  \"email\": \"test@test.com\", //string\r\n  \"password\": \"testi123\" //string\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/auth/register",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/auth/login (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"test@test.com\", //string\r\n  \"password\": \"testi123\" //string\r\n}\r\n\r\n// select and set the response secret string to a secret variable =>\r\n// select the secret string and right click and select set set:softala then click secret",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/auth/login",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/auth/logout (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/auth/logout{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["auth", "logout{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Book",
+      "item": [
+        {
+          "name": "/book/all (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/book/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book?id={id} (GET)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/book{{token}}{{secret}}&id=2",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book{{token}}{{secret}}&id=2"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book/count (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/book/count{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book", "count{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book?id={id} (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/book{{token}}{{secret}}&id=10",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book{{token}}{{secret}}&id=10"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book/page?page={page}&pageSize={pageSize} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/book/page{{token}}{{secret}}&page=1&pageSize=1",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book", "page{{token}}{{secret}}&page=1&pageSize=1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book/all/reserved (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/book/all/reserved{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book", "all", "reserved{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 2, //number\r\n    \"title\": \"Java for Babies!!\", //string\r\n    \"image\": \"https://images.isbndb.com/covers/91/26/9789513119126.jpg\", //string\r\n    \"author\": \"John Doe\", //string\r\n    \"year\": 2015, //number\r\n    \"isbn\": \"123-5223-789\", //string\r\n    \"topic\": \"Java\", //string\r\n    \"homeOfficeId\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/book{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/book (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"library_user\": 11, //number\r\n    \"title\": \"Testi1231231231231123123123\", //string\r\n    \"image\": \"https://images.isbndb.com/covers/91/26/9789513119126.jpg\", //string\r\n    \"author\": \"Mikko Mallikas\", //string\r\n    \"year\": 2000, //number\r\n    \"isbn\": \"123-456-465\", //string\r\n    \"topic\": \"JS\", //string\r\n    \"deleted\": 0, //boolean\r\n    \"homeOfficeId\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/book{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["book{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Book List",
+      "item": [
+        {
+          "name": "/booklist/all (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist/user (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist/user{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist", "user{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist/books?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist/books{{token}}{{secret}}&id=1",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist", "books{{token}}{{secret}}&id=1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist/info?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist/info{{token}}{{secret}}&id=1",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist", "info{{token}}{{secret}}&id=1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}&id=1",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist{{token}}{{secret}}&id=1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 1, //number\r\n    \"name\": \"string\" //string\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 2, //number\r\n    \"name\": \"string!!\" //string\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklist (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklist{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklist{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Book List Entry",
+      "item": [
+        {
+          "name": "/booklistentry/all (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklistentry/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklistentry", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklistentry/list?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklistentry/list{{token}}{{secret}}&id=7",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklistentry", "list{{token}}{{secret}}&id=7"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklistentry?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklistentry{{token}}{{secret}}&id=7",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklistentry{{token}}{{secret}}&id=7"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklistentry (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"list\": 3, //number\r\n  \"book\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklistentry{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklistentry{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklistentry (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 7 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklistentry{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklistentry{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/booklistentry/book (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"listId\": 3, //number\r\n  \"bookId\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/booklistentry/book{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["booklistentry", "book{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Book Request",
+      "item": [
+        {
+          "name": "/bookrequest/all (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookrequest/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookrequest", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookrequest (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 11, //number\r\n  \"isbn\": \"string\", //string\r\n  \"title\": \"string\", //string\r\n  \"reason\": \"string\" //string\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookrequest{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookrequest{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookrequest/updatestatus (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 1, //number\r\n  \"status\": 0 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookrequest/updatestatus{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookrequest", "updatestatus{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Book Reservation",
+      "item": [
+        {
+          "name": "/bookreservation/all (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation/all/current (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/all/current{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "all", "current{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation/all/extended (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/all/extended{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "all", "extended{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation/book (GET)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bookId\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/book{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "book{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": {{user_id}}, //number\r\n  \"bookId\": 3 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation/cancel (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bookId\": 2 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/cancel{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "cancel{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation/loan (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"reservationId\": 2 //number\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/loan{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "loan{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/bookreservation/user/current (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": {{user_id}} //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/bookreservation/user/current{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["bookreservation", "user", "current{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Borrow",
+      "item": [
+        {
+          "name": "/borrow/all (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}&id=1",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow{{token}}{{secret}}&id=1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 1 //number\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": {{user_id}}, //number\r\n  \"bookId\": 10, //number\r\n  \"dueDate\": \"2022-08-20T00:00:00.000Z\", //date\r\n  \"borrowDate\": \"2022-08-13T00:00:00.000Z\", //date\r\n  \"returned\": false //boolean\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 1, //number\r\n    \"library_user\": 1, //number\r\n    \"book\": 2, //number\r\n    \"dueDate\": \"2022-08-20T00:00:00.000Z\", //date\r\n    \"borrowDate\": \"2022-08-13T00:00:00.000Z\", //date\r\n    \"returned\": false, // boolean\r\n    \"returnDate\": null //date | null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow/current (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/current{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "current{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow/expired/admin (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/expired/admin{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "expired", "admin{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow/current/admin (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/current/admin{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "current", "admin{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow/expired (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/expired{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "expired{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow/session (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/session{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "session{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/borrow/return (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"id\": 8,\r\n        \"library_user\": 11,\r\n        \"book\": 1,\r\n        \"dueDate\": \"2023-09-26T00:00:00.000Z\",\r\n        \"borrowDate\": \"2023-09-16T00:00:00.000Z\",\r\n        \"returned\": 0,\r\n        \"returnDate\": null\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/borrow/return{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["borrow", "return{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Office",
+      "item": [
+        {
+          "name": "/office/all",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/office/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["office", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/office/:homeOfficeId (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/office/1{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["office", "1{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/office/:homeOfficeId (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/office/1{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["office", "1{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/office/:homeOfficeId (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"string\", //string\r\n  \"countryCode\": \"xx\" //string max:3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/office/1{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["office", "1{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Password Reset",
+      "item": [
+        {
+          "name": "/passwordreset/secret?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/passwordreset/secret{{token}}{{secret}}&id={{user_id}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": [
+                "passwordreset",
+                "secret{{token}}{{secret}}&id={{user_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/passwordreset (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 11, //number\r\n    \"username\": \"test\", //string\r\n    \"email\": \"test@test.com\", //string\r\n    \"password\": \"testi1234\", //string\r\n    \"administrator\": true //boolean\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/passwordreset{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["passwordreset{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "/user/all (GET)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/user/all{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["user", "all{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/user/session (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/user/session{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["user", "session{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/user?id={id} (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/user{{token}}{{secret}}&id={{user_id}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["user{{token}}{{secret}}&id={{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/user (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/user{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["user{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/user (POST)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/user{{token}}{{secret}}&username=testuser121&email=test121@user.com&administrator=true&password=testi123&deleted=true",
+              "host": ["{{BACKEND_URL}}"],
+              "path": [
+                "user{{token}}{{secret}}&username=testuser121&email=test121@user.com&administrator=true&password=testi123&deleted=true"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/user (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BACKEND_URL}}/user{{token}}{{secret}}&id=14&username=testuser&email=test@user.com&administrator=true&password=testi123&home_office_id=3",
+              "host": ["{{BACKEND_URL}}"],
+              "path": [
+                "user{{token}}{{secret}}&id=14&username=testuser&email=test@user.com&administrator=true&password=testi123&home_office_id=3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "/health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BACKEND_URL}}/health",
+          "host": ["{{BACKEND_URL}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    }
+  ]
 }

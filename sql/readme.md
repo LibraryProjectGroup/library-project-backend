@@ -160,33 +160,47 @@ classDiagram
 
 
 # Tables
+Updated: 11.10.2023
 
 ### Name:	library_user 
-### Definition:	A user of the software
+Definition: A user of the software
 | Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL |
 |------------------|------------------------------|---------------------------------|--------------|-----------------|
 |                  | id                           |                                 | Integer      | PK              |
 |                  | username                     | Username to log in              | Varchar(50)  | NOT NULL        |
+|                  | email                     | User's email address               | Varchar(80)  | NOT NULL        |
 | Type length depends on encryption | passw       | Password to log in           | Varchar(150) | NOT NULL        |
 |                  | administrator    | Determines admin status      | Bit(1)                          |              |
+|                  | deleted    | Determines if user has been deleted      | Bit(1)                          |              |
+
+### Name:	office_locations 
+Definition: Offices and locations
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | name                         | Name of the office              | Varchar(255)  | NOT NULL        |
+|                  | country_code                 | country code of the location    | Varchar(3)  | NOT NULL        |
 
 ##
 ### Name: book
-### Definition: A book that’s been registered to the library
+Definition: A book that’s been registered to the library
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
 |                  | id                |                                | Integer      | PK              |
 |                  | library_user      | id of the user who owns the book | Integer      | FK              |
-|                  | topic             | Books topic taken from Topic    | Varchar(50)  | FK              |
 |                  | title             | Name of book                    | Varchar(250) | NOT NULL        |
+|                  | image             | Url of the coverpicture                    | Varchar(500) |         |
 |                  | author            | Name of author                  | Varchar(250) | NOT NULL        |
+|                  | year             | Year published                    | Year | NOT NULL         |
 |                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
+| not implemented                 | topic             | Books topic taken from Topic    | Varchar(50)  | FK              |
 |                  | location          | Location of book                | Varchar(20)  | NOT NULL        |
+|                  | deleted    | Determines if book has been deleted      | Bit(1)                          |              |
 
 ##
 ### Name: borrowing
-### Definition: A borrow card that shows if a book is borrowed, by who, and until when.
+Definition: A borrow card that shows if a book is borrowed, by who, and until when.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
@@ -196,10 +210,11 @@ classDiagram
 |                  | dueDate           | Date of return                  | Date         | NOT NULL        |
 |                  | borrowDate        | Date of borrow                  | Date         | NOT NULL        |
 |                  | returned          | Is the borrow completed or not  | Bit(1)       | NOT NULL        |
+|                  | returnDate        | Date of actual return           | Date         |         |
 
 ##
-### Name: recommendation
-### Definition: A recommendation that is given to a book by a user.
+### Name: recommendation (not implemented)
+Definition: A recommendation that is given to a book by a user.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
@@ -209,37 +224,32 @@ classDiagram
 |                  | recommendation    | Is the book recommended or not  | Bit(1)       | NOT NULL        |
 
 ##
-### Name: reservation
-### Definition: A reservation of a book made by a user.
+### Name: book_reservation 
+Definition: A reservation of a book made by a user.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
 |                  | id                |                                | Integer      | PK              |
 |                  | library_user      | id of the user who is doing the reserving | Integer      | FK              |
 |                  | book              | id of book that is being reserved | Integer      | FK              |
-|                  | date              | The beginning date of the reservation | Date         | NOT NULL        |
-|                  | duration          | The duration of the reservation in days(?) | Integer      |                 |
+|                  | borrow_id              | id of borrow card | Integer      | FK              |
+|                  | reservationDate              | The beginning date of the reservation | Date         | NOT NULL        |
+|  not implemented                | duration          | The duration of the reservation in days(?) | Integer      |                 |
+|                  | loaned    | Is the book loaned or not  | Bit(1)       | NOT NULL        |
+|                  | canceled    | Is the reservation canceled or not  | Bit(1)       | NOT NULL        |
 
 ### Name: book_list
-### Definition: A list of books made by a user.
+Definition: A list of books made by a user.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
 |                  | id                |                                | Integer      | PK              |
 |                  | library_user      | id of the user that owns the list | Integer      | FK              |
-|                  | name              | Name of the list                | Varchar(20)  |                 |
-
-##
-### Name: topic
-### Definition: Contains topics for books.
-
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | topic             | Topic names for books           | Varchar(50)  | PK              |
+|                  | name              | Name of the list                | Varchar(250)  |                 |
 
 ##
 ### Name: book_list_entry
-### Definition: Helper table that binds books to different lists.
+Definition: Helper table that binds books to different lists.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
@@ -248,16 +258,37 @@ classDiagram
 |                  | list              | id of a list the book is in | Integer      | FK              |
 
 ##
-### Name: keyword
-### Definition: Table contains a list of keywords that books can be labeled with. Useful for keyword searches.
+### Name: book_requests 
+Definition: A request of a book made by a user.
+
+| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
+|------------------|-------------------|--------------------------------|--------------|-----------------|
+|                  | id                |                                | Integer      | PK              |
+|                  | library_user      | id of the user who is doing the request | Integer      | FK              |
+|                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
+|                  | title             | Name of book                    | Varchar(250) | NOT NULL        |
+|                  | reason             | Reason for requesting the book                  | Varchar(150) | NOT NULL        |
+|                  | status    | Status of the request  | Integer       | NOT NULL        |
+
+##
+### Name: topic (not implemented)
+Definition: Contains topics for books.
+
+| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
+|------------------|-------------------|--------------------------------|--------------|-----------------|
+|                  | topic             | Topic names for books           | Varchar(50)  | PK              |
+
+##
+### Name: keyword (not implemented)
+Definition: Table contains a list of keywords that books can be labeled with. Useful for keyword searches.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
 |                  | keyword           | The keyword to label books with | Varchar(30)  | PK              |
 
 ##
-### Name: book_keyword
-### Definition: Helper table that binds keywords to books.
+### Name: book_keyword (not implemented)
+Definition: Helper table that binds keywords to books.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
@@ -267,6 +298,7 @@ classDiagram
 
 ##
 ### CREATE TABLE Queries
+Not updated
 
 ```sql
 CREATE TABLE book (
@@ -288,7 +320,7 @@ CREATE TABLE library_user (
 
 ALTER TABLE library_user ADD CONSTRAINT UQ_libary_user_username UNIQUE(username);
 ALTER TABLE book ADD CONSTRAINT FK_book_library_user FOREIGN KEY(library_user) REFERENCES library_user(id)
-````
+```
 
 ### INSERT INTO Queries
 ```sql
@@ -306,4 +338,5 @@ INSERT INTO book VALUES (
 ```sql
 DROP TABLE book;
 DROP TABLE library_user;
+```
 

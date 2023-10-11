@@ -10,93 +10,152 @@ The sql file can be found in teams under database folder.
 (Full table creation, inserting queries and table dropping queries are in the bottom of the document.)
 
 ## Relation Schema
+Updated 11.10.2023
 
 ```mermaid
 classDiagram
-    book "1" -- "0..*" book_keyword
-    book_keyword "0..*" -- "1" keyword
+  book "0..*" -- "1" library_user
+  book "0..*" -- "1" topic
+  book "0..*" -- "1" home_office
 
-    book "1" -- "0..*" recommendation
-    book "1" -- "0..*" borrowing
-    book "0..*" -- "1" library_user
-    book "0..*" -- "1" topic
+  borrowing "0..*" -- "1" book
+  borrowing "0..*" -- "1" library_user
+
+  recommendation "0..*" -- "1" book
+  recommendation "0..*" -- "1" library_user
+
+  book "0..*" -- "0..*" book_list_entry
+  book "1" -- "0..*" book_reservation
+  
+  book_reservation "0..*" -- "1" library_user
+  book_reservation "0..*" -- "1" book
+  book_reservation "0..*" -- "1" borrowing
     
-    book "1" -- "0..*" book_list_entry
-    book "1" -- "0..*" reservation
- 
-    book_list "1" -- "0..*" book_list_entry
-    book_list "0..*" -- "1" library_user
-    reservation "0..*" -- "1" library_user
-    library_user "1" -- "0..*" borrowing
+  book_list "0..*" -- "1" library_user
+
+  book_list_entry "0..*" -- "1" book
+  book_list_entry "0..*" -- "1" book_list
+
+  book_request "0..*" -- "1" library_user
     
+  sessions "0..*" -- "1" library_user
+  
+  oidc_connection "0..*" -- "1" oidc_issuer
+  oidc_connection "0..*" -- "1" library_user
 
+  oauth_challenge_storage "0..*" -- "1" oidc_issuer
 
-    class book{
-        id [PK]
-        library [FK]
-        topic [FK]
-        title 
-        author
-        isbn
-        location
-    }
+  class library_user{
+    id	[PK]
+	  username
+    email
+    passw
+	  administrator
+    deleted
+  }
 
-    class borrowing{
-       	id [PK]
-     	library_user [FK]	
-        book [FK]
-	    dueDate	
-	    borrowDate
-	    returned
+  class book{
+    id [PK]
+    library_user [FK]
+    topic [FK]
+    location [FK]
+    book_title 
+    image
+    author
+    year
+    isbn
+    deleted
+  }
 
-    }
-    class library_user{
-      	id	[PK]
-	    username
-        passw
-	    administrator
+  class borrowing{
+    id [PK]
+    library_user [FK]	
+    book [FK]
+	  dueDate	
+	  borrowDate
+	  returned
+    returnDate
+  }
 
-    }
-    class topic{
-      topic [PK]
-    }
+  class topic{
+    topic [PK]
+  }
 
-    class recommendation{
-        id [PK]
-	    book [FK]
-	    library_user [FK]
-	    recommendation
-    }
+  class recommendation{
+    id [PK]
+	  book [FK]
+	  library_user [FK]
+	  recommendation
+  }
 
-    class reservation {
-        id [PK]
-	    library_user [FK]
-	    book [FK]
-	    date
-	    duration
-    }
+  class book_reservation {
+    id [PK]
+	  library_user [FK]
+	  book [FK]
+    borrowId [FK]
+	  reservationDate
+	  loaned
+    canceled
+  }
 
-    class book_list {
-        id [PK]
-        library_user [FK]
-        name
-    }
+  class book_list {
+    id [PK]
+    library_user [FK]
+    name
+  }
 
-    class book_list_entry {
-        id [PK]
-        book [FK]
-        list [FK]
-    }
-    
-    class keyword {
-        keyword [PK]
-    }
-    
-    class book_keyword {
-        id [PK]
-        book [FK]
-        keyword [FK]
-    }
+  class book_list_entry {
+    id [PK]
+    book [FK]
+    list [FK]
+  }
+
+  class book_request {
+    id [PK]
+    userId [FK]
+    isbn
+    book_title
+    reason
+    status
+  }
+
+  class home_office {
+    id [PK]
+    name
+    country_code
+  }
+
+  class sessions {
+    id [PK]
+    userId [FK]
+    secret
+    expires
+    invalidated
+  }
+
+  class oidc_issuer {
+    id [PK]
+    issuer_name
+    oidc_well_known_url
+    oauth_client_id
+    oauth_client_secret
+    metadata
+  }
+
+  class oauth_challenge_storage {
+    id [PK]
+    oidc_issuer_id [FK]
+    code_parameter
+    code_verifier
+    created_at
+  }
+
+  class oidc_connection {
+    id [PK]
+    oidc_issuer_id [FK]
+    library_user_id [FK]
+    oidc_subject
+  }
 ```
 
 

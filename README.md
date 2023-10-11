@@ -1214,11 +1214,7 @@ Body:
 
 </Details>
 
-# Database Diagram (outdated)
+# Database Documentation
 
-<Details>
-    <Summary>
-        Show Diagram
-    </Summary>
-    <img src="dbdiagram.png"></img>
-</Details>
+[Database Diagram and Documentation](./sql/readme.md)
+

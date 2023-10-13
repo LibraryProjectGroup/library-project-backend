@@ -14,6 +14,7 @@ import book_list_entryRouter from "./routes/book_list_entry";
 import book_requestRouter from "./routes/book_request";
 import book_reservationRouter from "./routes/book_reservation";
 import callbackRoute from "./routes/auth/oidc/callback";
+import bookfavorite from "./routes/book_favorite"
 import Session from "./interfaces/session.interface";
 import passwordreset, {
   publicRouter as publicPasswordReset,
@@ -91,6 +92,7 @@ app.use("/booklistentry", book_list_entryRouter);
 app.use("/bookrequest", book_requestRouter);
 app.use("/bookreservation", book_reservationRouter);
 app.use("/passwordreset", passwordreset);
+app.use("/favorite", bookfavorite )
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);

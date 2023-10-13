@@ -1172,6 +1172,32 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/office (POST)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"uus\", //string\r\n  \"countryCode\": \"FIN\" //string max:3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BACKEND_URL}}/office{{token}}{{secret}}",
+							"host": [
+								"{{BACKEND_URL}}"
+							],
+							"path": [
+								"office{{token}}{{secret}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1365,6 +1391,123 @@
 							],
 							"path": [
 								"user{{token}}{{secret}}&id=14&username=testuser&email=test@user.com&administrator=true&password=testi123&home_office_id=3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorite",
+			"item": [
+				{
+					"name": "/favorite (POST)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\": 1 \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BACKEND_URL}}/favorite{{token}}{{secret}}",
+							"host": [
+								"{{BACKEND_URL}}"
+							],
+							"path": [
+								"favorite{{token}}{{secret}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favorite (DELETE)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BACKEND_URL}}/favorite{{token}}{{secret}}",
+							"host": [
+								"{{BACKEND_URL}}"
+							],
+							"path": [
+								"favorite{{token}}{{secret}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favorite/check (GET)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BACKEND_URL}}/favorite/check{{token}}{{secret}}",
+							"host": [
+								"{{BACKEND_URL}}"
+							],
+							"path": [
+								"favorite",
+								"check{{token}}{{secret}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favorite/count (GET)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bookId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BACKEND_URL}}/favorite/count{{token}}{{secret}}",
+							"host": [
+								"{{BACKEND_URL}}"
+							],
+							"path": [
+								"favorite",
+								"count{{token}}{{secret}}"
 							]
 						}
 					},

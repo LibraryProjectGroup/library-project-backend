@@ -94,7 +94,7 @@ router.post("/register", async (req: Request, res: Response) => {
     username,
     email,
     hashedPassword,
-    false,
+    true,
     false
   );
   if (newUser == null) return res.status(500).json({ ok: false });

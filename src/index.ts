@@ -5,6 +5,7 @@ import mysql from "mysql2";
 import expressBearerToken from "express-bearer-token";
 import healthRouter from "./routes/health";
 import authRouter from "./routes/auth";
+import reviewRouter from "./routes/book_review"
 import bookRouter from "./routes/book";
 import userRouter from "./routes/user";
 import officeRouter from "./routes/office";
@@ -92,6 +93,7 @@ app.use("/booklistentry", book_list_entryRouter);
 app.use("/bookrequest", book_requestRouter);
 app.use("/bookreservation", book_reservationRouter);
 app.use("/passwordreset", passwordreset);
+app.use("/review", reviewRouter)
 app.use("/favorite", bookfavorite )
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

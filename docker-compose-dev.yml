@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 
 services:
   efilibrary-backend:
@@ -12,9 +12,9 @@ services:
       DATABASE_SERVER: efilibrary-mysql
       DATABASE_NAME: efilibrarydb
       DATABASE_USER: app
-      DATABASE_PASSWORD: 'not_secure'
-      OIDC_AUTH_BACKLINK_URL: 'http://notworking:80/backlink'
-      OIDC_AUTH_REDIRECT_URL: 'http://notworking:80/redirect'
+      DATABASE_PASSWORD: "not_secure"
+      OIDC_AUTH_BACKLINK_URL: "http://notworking:80/backlink"
+      OIDC_AUTH_REDIRECT_URL: "http://notworking:80/redirect"
       PORT: 3002
     ports:
       - 3002:3002
@@ -30,8 +30,8 @@ services:
     environment:
       MYSQL_DATABASE: efilibrarydb
       MYSQL_USER: app
-      MYSQL_PASSWORD: 'not_secure'
-      MYSQL_ROOT_PASSWORD: 'not_secure_root_password'
+      MYSQL_PASSWORD: "not_secure"
+      MYSQL_ROOT_PASSWORD: "not_secure_root_password"
 
     ports:
       - 3306:3306

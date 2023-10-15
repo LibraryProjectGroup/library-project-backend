@@ -77,14 +77,14 @@ docker run --name eflibrary-nginx --network=efilibrary -v <somepath?>nginx-gatew
 
 # Actions steps (backend AND frontend):
 
-- Build Docker image and "tag" it with current Git commit
-- Publish image to GitHub container
+* Build Docker image and "tag" it with current Git commit
+* Publish image to GitHub container
   registry (https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-github-packages)
 
-- Connect to VPS using SSH
-  - Remove old Docker container [ docker cotnainer rm eflibrary-(staging/production)-(frontend/backend) ]
-  - Start new Docker
-    contaienr [ docker container run eflibrary-(staging/production)-(frontend/backend) --restart=always -d <docker image location> ]
-  - Restart NGINX [ docker container restart eflibrary-nginx ]
+* Connect to VPS using SSH
+    * Remove old Docker container [ docker cotnainer rm eflibrary-(staging/production)-(frontend/backend) ]
+    * Start new Docker
+      contaienr [ docker container run eflibrary-(staging/production)-(frontend/backend) --restart=always -d <docker image location> ]
+    * Restart NGINX [ docker container restart eflibrary-nginx ]
 
 IMPORTANT **Please reference the GitHub actions**

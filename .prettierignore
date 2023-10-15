@@ -2,7 +2,7 @@
 /package-lock.json
 /.devcontainer/
 
-
+*.md
 /test/report.html
 /test/log.html
 /build/

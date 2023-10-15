@@ -1,48 +1,48 @@
-import { test, describe, jest, afterAll } from "@jest/globals";
-import request from "supertest";
-import { app, pool } from "../../src";
+import { test, describe, jest, afterAll } from '@jest/globals'
+import request from 'supertest'
+import { app, pool } from '../../src'
 
-jest.mock("../../src/queries/session");
-jest.mock("../../src/queries/user");
+jest.mock('../../src/queries/session')
+jest.mock('../../src/queries/user')
 
-describe("tests for route /user", () => {
-  test("get /user/all", async () => {
+describe('tests for route /user', () => {
+  test('get /user/all', async () => {
     return request(app)
-      .get("/user/all")
-      .set("Authorization", `Bearer 123`)
+      .get('/user/all')
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("get /user", async () => {
+  test('get /user', async () => {
     return request(app)
-      .get("/user?id=1")
-      .set("Authorization", `Bearer 123`)
+      .get('/user?id=1')
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("get /user/session", async () => {
+  test('get /user/session', async () => {
     return request(app)
-      .get("/user/session")
-      .set("Authorization", `Bearer 123`)
+      .get('/user/session')
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("delete /user", async () => {
+  test('delete /user', async () => {
     return request(app)
-      .delete("/user?id=1")
-      .set("Authorization", `Bearer 123`)
+      .delete('/user?id=1')
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("post /user //not admin", async () => {
+  test('post /user //not admin', async () => {
     return (
       request(app)
         .post(
-          "/user?username=testy&password=encrypted gibberish&administrator=0"
+          '/user?username=testy&password=encrypted gibberish&administrator=0'
         )
         /* 
                 //replace above .post with this commented code to switch to using body
@@ -53,24 +53,24 @@ describe("tests for route /user", () => {
                     administrator: 0,
                 })
         */
-        .set("Authorization", `Bearer 123`)
+        .set('Authorization', `Bearer 123`)
         .expect(200)
         .expect({
           ok: {
             id: 3,
-            username: "testy",
-            passw: "encrypted gibberish",
+            username: 'testy',
+            passw: 'encrypted gibberish',
             administrator: false,
           },
         })
-    );
-  });
+    )
+  })
 
-  test("post /user //admin", async () => {
+  test('post /user //admin', async () => {
     return (
       request(app)
         .post(
-          "/user?username=testy&password=encrypted gibberish&administrator=1"
+          '/user?username=testy&password=encrypted gibberish&administrator=1'
         )
         /* 
                 //replace above .post with this commented code to switch to using body
@@ -81,24 +81,24 @@ describe("tests for route /user", () => {
                     administrator: 1,
                 })
         */
-        .set("Authorization", `Bearer 123`)
+        .set('Authorization', `Bearer 123`)
         .expect(200)
         .expect({
           ok: {
             id: 3,
-            username: "testy",
-            passw: "encrypted gibberish",
+            username: 'testy',
+            passw: 'encrypted gibberish',
             administrator: true,
           },
         })
-    );
-  });
+    )
+  })
 
-  test("put /user", async () => {
+  test('put /user', async () => {
     return (
       request(app)
         .put(
-          "/user?id=1&username=testy&password=encrypted gibberish&administrator=0"
+          '/user?id=1&username=testy&password=encrypted gibberish&administrator=0'
         )
         /* 
                 //replace above .put with this commented code to switch to using body
@@ -110,14 +110,14 @@ describe("tests for route /user", () => {
                     administrator: 0,
                 })
                 */
-        .set("Authorization", `Bearer 123`)
+        .set('Authorization', `Bearer 123`)
         .expect(200)
         .expect({ ok: true })
-    );
-  });
-});
+    )
+  })
+})
 
 afterAll((done) => {
-  pool.end();
-  done();
-});
+  pool.end()
+  done()
+})

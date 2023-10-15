@@ -1,4 +1,4 @@
-import { Response, Request, Router, NextFunction } from "express";
+import { Response, Request, Router, NextFunction } from 'express'
 import {
   querySelectBook,
   querySelectAllBooks,
@@ -8,68 +8,68 @@ import {
   querySelectAllReservedBooks,
   querySelectAllBooksPaged,
   queryCountAllBooks,
-} from "../queries/book";
-import Book from "../interfaces/book.interface";
+} from '../queries/book'
+import Book from '../interfaces/book.interface'
 
-const router = Router();
+const router = Router()
 
-router.get("/all", async (req: Request, res: Response, next: NextFunction) => {
+router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectAllBooks());
+    res.json(await querySelectAllBooks())
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
-router.get("/page", async (req: Request, res: Response, next: NextFunction) => {
+router.get('/page', async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json(
       await querySelectAllBooksPaged(
         Number(req.query.page),
         Number(req.query.pageSize)
       )
-    );
+    )
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
 router.get(
-  "/count",
+  '/count',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await queryCountAllBooks());
+      res.json(await queryCountAllBooks())
     } catch (err) {
-      next(err);
+      next(err)
     }
   }
-);
+)
 
-router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectBook(Number(req.query.id)));
+    res.json(await querySelectBook(Number(req.query.id)))
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
-router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const book = await querySelectBook(Number(req.query.id));
+    const book = await querySelectBook(Number(req.query.id))
     if (
       book &&
       (req.sessionUser.id == book.library_user || req.sessionUser.administrator)
     ) {
-      res.json({ ok: await querySoftDeleteBook(book.id) });
+      res.json({ ok: await querySoftDeleteBook(book.id) })
     } else {
-      res.status(403).json({ ok: false });
+      res.status(403).json({ ok: false })
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await queryInsertBook(
       req.sessionUser.id,
@@ -86,44 +86,43 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
 
       res.json({
         ok: result,
-        books: await books
-      });
+        books: await books,
+      })
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
-router.put("/", async (req: Request, res: Response, next: NextFunction) => {
+router.put('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const updatedBook: Book = req.body;
-    updatedBook.library_user = req.sessionUser.id;
-    const book = await querySelectBook(updatedBook.id);
+    const updatedBook: Book = req.body
+    updatedBook.library_user = req.sessionUser.id
+    const book = await querySelectBook(updatedBook.id)
     if (
       book &&
       (req.sessionUser.id == book.library_user || req.sessionUser.administrator)
     ) {
-      
       const ok = await queryUpdateBook(updatedBook)
-      const updated = await ok? await querySelectBook(book.id): null
-      res.json({ ok: await ok, book: await updated});
+      const updated = (await ok) ? await querySelectBook(book.id) : null
+      res.json({ ok: await ok, book: await updated })
     } else {
-      res.status(403).json({ ok: false });
+      res.status(403).json({ ok: false })
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
 router.get(
-  "/all/reserved",
+  '/all/reserved',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await querySelectAllReservedBooks());
+      res.json(await querySelectAllReservedBooks())
     } catch (err) {
-      next(err);
+      next(err)
     }
   }
-);
+)
 
-export default router;
+export default router

@@ -156,8 +156,8 @@ classDiagram
     library_user_id [FK]
     oidc_subject
   }
-```
 
+```
 
 # Tables
 Updated: 11.10.2023
@@ -198,7 +198,9 @@ Definition: A book that’s been registered to the library
 |                  | location          | Location of book                | Varchar(20)  | NOT NULL        |
 |                  | deleted    | Determines if book has been deleted      | Bit(1)                          |              |
 
+
 ##
+
 ### Name: borrowing
 Definition: A borrow card that shows if a book is borrowed, by who, and until when.
 
@@ -216,12 +218,13 @@ Definition: A borrow card that shows if a book is borrowed, by who, and until wh
 ### Name: recommendation (not implemented)
 Definition: A recommendation that is given to a book by a user.
 
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | id                |                                | Integer      | PK              |
-|                  | book              | id of the book that’s being rated | Integer      | FK              |
-|                  | library_user      | id of user who is doing the recommendation | Integer      | FK              |
-|                  | recommendation    | Is the book recommended or not  | Bit(1)       | NOT NULL        |
+
+| Properties | Name           | Description                                | Type    | PK/FK/NOT NULL |
+| ---------- | -------------- | ------------------------------------------ | ------- | -------------- |
+|            | id             |                                            | Integer | PK             |
+|            | book           | id of the book that’s being rated          | Integer | FK             |
+|            | library_user   | id of user who is doing the recommendation | Integer | FK             |
+|            | recommendation | Is the book recommended or not             | Bit(1)  | NOT NULL       |
 
 ##
 ### Name: book_reservation 
@@ -282,19 +285,19 @@ Definition: Contains topics for books.
 ### Name: keyword (not implemented)
 Definition: Table contains a list of keywords that books can be labeled with. Useful for keyword searches.
 
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | keyword           | The keyword to label books with | Varchar(30)  | PK              |
+| Properties | Name    | Description                     | Type        | PK/FK/NOT NULL |
+| ---------- | ------- | ------------------------------- | ----------- | -------------- |
+|            | keyword | The keyword to label books with | Varchar(30) | PK             |
 
 ##
 ### Name: book_keyword (not implemented)
 Definition: Helper table that binds keywords to books.
 
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | id                |                                | Integer      | PK              |
-|                  | book              | id of a book taken from Book table | Integer      | FK              |
-|                  | keyword           | keyword taken from Keyword table | Varchar(30)  | FK              |
+| Properties | Name    | Description                        | Type        | PK/FK/NOT NULL |
+| ---------- | ------- | ---------------------------------- | ----------- | -------------- |
+|            | id      |                                    | Integer     | PK             |
+|            | book    | id of a book taken from Book table | Integer     | FK             |
+|            | keyword | keyword taken from Keyword table   | Varchar(30) | FK             |
 
 ##
 ### CREATE TABLE Queries
@@ -323,6 +326,7 @@ ALTER TABLE book ADD CONSTRAINT FK_book_library_user FOREIGN KEY(library_user) R
 ```
 
 ### INSERT INTO Queries
+
 ```sql
 INSERT INTO library_user VALUES (
   1, "mikkomallikas", "1234", TRUE
@@ -340,3 +344,4 @@ DROP TABLE book;
 DROP TABLE library_user;
 ```
 
+```

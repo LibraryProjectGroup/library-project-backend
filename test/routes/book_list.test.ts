@@ -1,74 +1,74 @@
-import { test, describe, jest, afterAll } from "@jest/globals";
-import request from "supertest";
-import { app, pool } from "../../src";
+import { test, describe, jest, afterAll } from '@jest/globals'
+import request from 'supertest'
+import { app, pool } from '../../src'
 
-jest.mock("../../src/queries/session");
-jest.mock("../../src/queries/book_list");
+jest.mock('../../src/queries/session')
+jest.mock('../../src/queries/book_list')
 
-describe("basic endpoint testing for /booklist", () => {
-  test("get /booklist/all", async () => {
+describe('basic endpoint testing for /booklist', () => {
+  test('get /booklist/all', async () => {
     return request(app)
-      .get("/booklist/all")
-      .set("Authorization", `Bearer 123`)
+      .get('/booklist/all')
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("get /booklist/user", async () => {
+  test('get /booklist/user', async () => {
     return request(app)
-      .get("/booklist/user")
-      .set("Authorization", `Bearer 123`)
+      .get('/booklist/user')
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("get /booklist", async () => {
+  test('get /booklist', async () => {
     return request(app)
-      .get("/booklist")
+      .get('/booklist')
       .send({
         id: 1,
       })
-      .set("Authorization", `Bearer 123`)
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect("Content-Type", /json/);
-  });
+      .expect('Content-Type', /json/)
+  })
 
-  test("put /booklist", async () => {
+  test('put /booklist', async () => {
     return request(app)
-      .put("/booklist")
+      .put('/booklist')
       .send({
         id: 1,
-        name: "editedname",
+        name: 'editedname',
       })
-      .set("Authorization", `Bearer 123`)
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect({ ok: true });
-  });
+      .expect({ ok: true })
+  })
 
-  test("post /booklist", async () => {
+  test('post /booklist', async () => {
     return request(app)
-      .post("/booklist")
+      .post('/booklist')
       .send({
-        name: "name",
+        name: 'name',
       })
-      .set("Authorization", `Bearer 123`)
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect({ ok: true });
-  });
+      .expect({ ok: true })
+  })
 
-  test("delete /booklist", async () => {
+  test('delete /booklist', async () => {
     return request(app)
-      .delete("/booklist")
+      .delete('/booklist')
       .send({
         id: 1,
       })
-      .set("Authorization", `Bearer 123`)
+      .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect({ ok: true });
-  });
-});
+      .expect({ ok: true })
+  })
+})
 
 afterAll((done) => {
-  pool.end();
-  done();
-});
+  pool.end()
+  done()
+})

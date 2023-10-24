@@ -1,8 +1,8 @@
 interface Book_favorite {
-  id: number;
-  userId: number;
-  bookId: number;
-  favoritedDatetime: Date;
+  id: number
+  userId: number
+  bookId: number
+  favoritedDatetime: Date
 }
 
-export default Book_favorite;
+export default Book_favorite

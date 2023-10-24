@@ -1,22 +1,22 @@
-import "dotenv/config";
-import express, { Express, NextFunction, Request, Response } from "express";
-import cors from "cors";
-import mysql from "mysql2";
-import expressBearerToken from "express-bearer-token";
-import healthRouter from "./routes/health";
-import authRouter from "./routes/auth";
-import reviewRouter from "./routes/book_review"
-import bookRouter from "./routes/book";
-import userRouter from "./routes/user";
-import officeRouter from "./routes/office";
-import borrowRouter from "./routes/borrow";
-import book_listRouter from "./routes/book_list";
-import book_list_entryRouter from "./routes/book_list_entry";
-import book_requestRouter from "./routes/book_request";
-import book_reservationRouter from "./routes/book_reservation";
-import callbackRoute from "./routes/auth/oidc/callback";
-import bookfavorite from "./routes/book_favorite"
-import Session from "./interfaces/session.interface";
+import 'dotenv/config'
+import express, { Express, NextFunction, Request, Response } from 'express'
+import cors from 'cors'
+import mysql from 'mysql2'
+import expressBearerToken from 'express-bearer-token'
+import healthRouter from './routes/health'
+import authRouter from './routes/auth'
+import reviewRouter from './routes/book_review'
+import bookRouter from './routes/book'
+import userRouter from './routes/user'
+import officeRouter from './routes/office'
+import borrowRouter from './routes/borrow'
+import book_listRouter from './routes/book_list'
+import book_list_entryRouter from './routes/book_list_entry'
+import book_requestRouter from './routes/book_request'
+import book_reservationRouter from './routes/book_reservation'
+import callbackRoute from './routes/auth/oidc/callback'
+import bookfavorite from './routes/book_favorite'
+import Session from './interfaces/session.interface'
 import passwordreset, {
   publicRouter as publicPasswordReset,
 } from './routes/password_reset'
@@ -82,20 +82,19 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     console.error(err)
   }
-  res.sendStatus(500);
-});
-app.use("/book", bookRouter);
-app.use("/office", officeRouter);
-app.use("/user", userRouter);
-app.use("/borrow", borrowRouter);
-app.use("/booklist", book_listRouter);
-app.use("/booklistentry", book_list_entryRouter);
-app.use("/bookrequest", book_requestRouter);
-app.use("/bookreservation", book_reservationRouter);
-app.use("/passwordreset", passwordreset);
-app.use("/review", reviewRouter)
-app.use("/favorite", bookfavorite )
-
+  res.sendStatus(500)
+})
+app.use('/book', bookRouter)
+app.use('/office', officeRouter)
+app.use('/user', userRouter)
+app.use('/borrow', borrowRouter)
+app.use('/booklist', book_listRouter)
+app.use('/booklistentry', book_list_entryRouter)
+app.use('/bookrequest', book_requestRouter)
+app.use('/bookreservation', book_reservationRouter)
+app.use('/passwordreset', passwordreset)
+app.use('/review', reviewRouter)
+app.use('/favorite', bookfavorite)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err)

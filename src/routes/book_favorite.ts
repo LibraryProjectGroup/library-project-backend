@@ -1,88 +1,88 @@
-import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { Response, Request, Router, NextFunction } from "express";
+import { ResultSetHeader, RowDataPacket } from 'mysql2'
+import { Response, Request, Router, NextFunction } from 'express'
 import {
   addFavoriteBook,
   deleteFavoriteBook,
   isBookFavoritedByUser,
   getFavoriteCountForBook,
-} from "../queries/book_favorite";
-import Book_favorite from "../interfaces/book_favorite.interface";
+} from '../queries/book_favorite'
+import Book_favorite from '../interfaces/book_favorite.interface'
 
-const router = Router();
+const router = Router()
 
 // Add a favorite book for a user
-router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { bookId } = req.body;
-    const added = await addFavoriteBook(req.session.userId, bookId);
+    const { bookId } = req.body
+    const added = await addFavoriteBook(req.session.userId, bookId)
     if (added) {
-      res.json({ ok: true });
+      res.json({ ok: true })
     } else {
       res
         .status(400)
-        .json({ ok: false, message: "Failed to add favorite book" });
+        .json({ ok: false, message: 'Failed to add favorite book' })
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
 // Remove a favorite book for a user
-router.delete("/", async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { bookId } = req.body;
-    const deleted = await deleteFavoriteBook(req.session.userId, bookId);
+    const { bookId } = req.body
+    const deleted = await deleteFavoriteBook(req.session.userId, bookId)
     if (deleted) {
-      res.json({ ok: true });
+      res.json({ ok: true })
     } else {
       res
         .status(400)
-        .json({ ok: false, message: "Failed to delete favorite book" });
+        .json({ ok: false, message: 'Failed to delete favorite book' })
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
 // Check if a book is favorited by a user
 router.get(
-  "/check",
+  '/check',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { bookId } = req.body;
+      const { bookId } = req.body
       const isFavorited = await isBookFavoritedByUser(
         Number(req.session.userId),
         Number(bookId)
-      );
+      )
 
       if (isFavorited) {
-        res.json({ isFavorited: true });
+        res.json({ isFavorited: true })
       } else {
-        res.json({ isFavorited: false });
+        res.json({ isFavorited: false })
       }
     } catch (err) {
-      next(err);
+      next(err)
     }
   }
-);
+)
 
 // Get the count of favorites for a book
 router.get(
-  "/count",
+  '/count',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { bookId } = req.body;
-      const count = await getFavoriteCountForBook(Number(bookId));
+      const { bookId } = req.body
+      const count = await getFavoriteCountForBook(Number(bookId))
 
       if (count !== undefined) {
-        res.json({ count });
+        res.json({ count })
       } else {
-        res.status(404).json({ error: "Book not found" });
+        res.status(404).json({ error: 'Book not found' })
       }
     } catch (err) {
-      next(err);
+      next(err)
     }
   }
-);
+)
 
-export default router;
+export default router

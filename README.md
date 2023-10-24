@@ -58,16 +58,6 @@ Use `npm ci` or `npm install` to install node modules.
 
 Start the backend by running `npm start`.
 
-## What the previous team used:
-
-To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
-After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.
-
-### Using DevContainers
-
-> Note: These files have not been used or updated in a while so it's possible that this does not work.
-
-The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
 <br>
 
@@ -1231,11 +1221,7 @@ Body:
 
 </Details>
 
-# Database Diagram (outdated)
+# Database Documentation
 
-<Details>
-    <Summary>
-        Show Diagram
-    </Summary>
-    <img src="dbdiagram.png"></img>
-</Details>
+[Database Diagram and Documentation](./sql/readme.md)
+

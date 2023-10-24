@@ -1,63 +1,63 @@
-import { test, describe, jest, afterAll } from '@jest/globals'
-import request from 'supertest'
-import { app, pool } from '../../src'
+import { test, describe, jest, afterAll } from "@jest/globals";
+import request from "supertest";
+import { app, pool } from "../../src";
 
-jest.mock('../../src/queries/session')
-jest.mock('../../src/queries/borrow')
-jest.mock('../../src/queries/book')
+jest.mock("../../src/queries/session");
+jest.mock("../../src/queries/borrow");
+jest.mock("../../src/queries/book");
 
-describe('basic endpoint testing for /borrow', () => {
-  test('get /borrow/all', async () => {
+describe("basic endpoint testing for /borrow", () => {
+  test("get /borrow/all", async () => {
     return request(app)
-      .get('/borrow/all')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow/all")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('get /borrow', async () => {
+  test("get /borrow", async () => {
     return request(app)
-      .get('/borrow?id=1')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow?id=1")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('delete /borrow', async () => {
+  test("delete /borrow", async () => {
     return (
       request(app)
-        .delete('/borrow')
+        .delete("/borrow")
         .send({
           borrowId: 2,
         })
-        .set('Authorization', `Bearer 123`)
+        .set("Authorization", `Bearer 123`)
         //.expect(200)
         //.expect({ ok: true });
         .then(() => {
-          expect(200)
-          console.log('borrow delete test sucessful')
+          expect(200);
+          console.log("borrow delete test sucessful");
         })
         .catch((error) => {
-          console.error('failed: ', error)
+          console.error("failed: ", error);
         })
-    )
-  })
+    );
+  });
 
-  test('post /borrow', async () => {
+  test("post /borrow", async () => {
     return request(app)
-      .post('/borrow')
+      .post("/borrow")
       .send({
         bookId: 3,
       })
-      .set('Authorization', `Bearer 123`)
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect({ ok: true })
-  })
+      .expect({ ok: true });
+  });
 
-  test('put /borrow', async () => {
+  test("put /borrow", async () => {
     return (
       request(app)
-        .put('/borrow')
+        .put("/borrow")
         .send({
           id: 1,
           book: 1,
@@ -65,83 +65,83 @@ describe('basic endpoint testing for /borrow', () => {
           dueDate: new Date(),
           returned: false,
         })
-        .set('Authorization', `Bearer 123`)
+        .set("Authorization", `Bearer 123`)
         //.expect(200)
         //.expect({ ok: true });
         .then(() => {
-          expect(200)
-          expect({ ok: true })
-          console.log('borrow put test sucessful')
+          expect(200);
+          expect({ ok: true });
+          console.log("borrow put test sucessful");
         })
         .catch((error) => {
-          console.error('failed: ', error)
+          console.error("failed: ", error);
         })
-    )
-  })
+    );
+  });
 
-  test('get /borrow/current', async () => {
+  test("get /borrow/current", async () => {
     return request(app)
-      .get('/borrow/current')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow/current")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('get /borrow/expired/admin', async () => {
+  test("get /borrow/expired/admin", async () => {
     return request(app)
-      .get('/borrow/expired/admin')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow/expired/admin")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('get /borrow/current/admin', async () => {
+  test("get /borrow/current/admin", async () => {
     return request(app)
-      .get('/borrow/current/admin')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow/current/admin")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('get /borrow/expired', async () => {
+  test("get /borrow/expired", async () => {
     return request(app)
-      .get('/borrow/expired')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow/expired")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('get /borrow/session', async () => {
+  test("get /borrow/session", async () => {
     return request(app)
-      .get('/borrow/session')
-      .set('Authorization', `Bearer 123`)
+      .get("/borrow/session")
+      .set("Authorization", `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
-  })
+      .expect("Content-Type", /json/);
+  });
 
-  test('put /borrow/return', async () => {
+  test("put /borrow/return", async () => {
     return (
       request(app)
-        .put('/borrow/return')
+        .put("/borrow/return")
         .send({
           borrowId: 1,
         })
-        .set('Authorization', `Bearer 123`)
+        .set("Authorization", `Bearer 123`)
         //.expect(200)
         //.expect({ ok: true });
         .then(() => {
-          expect(200)
-          expect({ ok: true })
-          console.log('borrow return test sucessful')
+          expect(200);
+          expect({ ok: true });
+          console.log("borrow return test sucessful");
         })
         .catch((error) => {
-          console.error('failed: ', error)
+          console.error("failed: ", error);
         })
-    )
-  })
-})
+    );
+  });
+});
 
 afterAll((done) => {
-  pool.end()
-  done()
-})
+  pool.end();
+  done();
+});

@@ -1,14 +1,14 @@
 interface User {
-  id: number
-  username: string
-  email: string
-  passw: string | null
-  administrator: boolean
-  deleted: boolean
+  id: number;
+  username: string;
+  email: string;
+  passw: string | null;
+  administrator: boolean;
+  deleted: boolean;
   /**
    * An optional home office.
    */
-  homeOfficeId?: number
+  homeOfficeId?: number;
 }
 
-export default User
+export default User;

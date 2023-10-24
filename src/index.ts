@@ -23,7 +23,7 @@ import User from "./interfaces/user.interface";
 import { querySelectUserBySessionId } from "./queries/user";
 import cookieParser from "cookie-parser";
 import Logger from "./lib/logger";
-import morganMiddleware from './config/morganMiddleware'
+import morganMiddleware from "./config/morganMiddleware";
 
 declare global {
   namespace NodeJS {
@@ -51,14 +51,13 @@ process.on("uncaughtException", (err, origin) => {
   Logger.error(errorMessage);
 });
 
-
 const app: Express = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: true }));
 app.use(cors({ credentials: true, origin: "*" }));
 app.use(expressBearerToken());
-app.use(morganMiddleware)
+app.use(morganMiddleware);
 
 app.use("/health", healthRouter);
 app.use("/auth/oidc", callbackRoute);
@@ -80,10 +79,10 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     if (err instanceof Error) {
       // Log the error message and stack trace
       Logger.error(err.message); // Log the error message
-      Logger.error(err.stack);   // Log the stack trace
+      Logger.error(err.stack); // Log the stack trace
     } else {
       // Log a generic error message if 'error' is not an instance of Error
-      Logger.error('An error occurred:', err);
+      Logger.error("An error occurred:", err);
     }
   }
   res.sendStatus(500);

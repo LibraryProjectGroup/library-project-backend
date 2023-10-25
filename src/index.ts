@@ -99,6 +99,8 @@ app.use('/booklistentry', book_list_entryRouter)
 app.use('/bookrequest', book_requestRouter)
 app.use('/bookreservation', book_reservationRouter)
 app.use('/passwordreset', passwordreset)
+app.use('/review', reviewRouter)
+app.use('/favorite', bookfavorite)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   Logger.error(err.message)

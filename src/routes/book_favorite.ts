@@ -49,7 +49,7 @@ router.get(
   '/check',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { bookId } = req.body
+      const { bookId } = req.query
       const isFavorited = await isBookFavoritedByUser(
         Number(req.session.userId),
         Number(bookId)
@@ -71,7 +71,7 @@ router.get(
   '/count',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { bookId } = req.body
+      const { bookId } = req.query
       const count = await getFavoriteCountForBook(Number(bookId))
 
       if (count !== undefined) {

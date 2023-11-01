@@ -212,7 +212,7 @@ Definition: A borrow card that shows if a book is borrowed, by who, and until wh
 |                  | dueDate           | Date of return                  | Date         | NOT NULL        |
 |                  | borrowDate        | Date of borrow                  | Date         | NOT NULL        |
 |                  | returned          | Is the borrow completed or not  | Bit(1)       | NOT NULL        |
-|                  | returnDate        | Date of actual return           | Date         |         |
+|                  | returnDate        | Date of actual return           | Date         |        	  |
 
 ##
 ### Name: recommendation (not implemented)
@@ -274,6 +274,31 @@ Definition: A request of a book made by a user.
 |                  | status    | Status of the request  | Integer       | NOT NULL        |
 
 ##
+
+### Name: favorite_book
+Definition: Offices and locations
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL  |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | user_id                      | id of the user who favorited    | Integer      | FK	             |
+|                  | book_id                      | id of book that is favorited    | Integer      | FK              |
+|		   | favorited_at		  | time when favoritted 	    | Date	   | 		     |
+
+##
+
+### Name: book_review
+Definition: User review and rating for books
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL  |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | user_id                      | id of user that is reviewing    | Integer      | FK	             |
+|                  | book_id                      | id of the reviewed book	    | Integer      | FK              |
+|		   | comment		  	  | comment for a book review	    | TEXT	   | 		     |
+|		   | rating			  | rating of the book		    | Integer	   |		     |
+|		   | review_date		  | time when reviewd		    | Date	   | 		     |
+
+##
+
 ### Name: topic (not implemented)
 Definition: Contains topics for books.
 

@@ -10,60 +10,61 @@ The sql file can be found in teams under database folder.
 (Full table creation, inserting queries and table dropping queries are in the bottom of the document.)
 
 ## Relation Schema
-Updated 11.10.2023
+Updated 3.11.2023
 
 ```mermaid
+
 classDiagram
   book "0..*" -- "1" library_user
-  book "0..*" -- "1" topic
-  book "0..*" -- "1" home_office
 
   borrowing "0..*" -- "1" book
   borrowing "0..*" -- "1" library_user
 
-  recommendation "0..*" -- "1" book
-  recommendation "0..*" -- "1" library_user
-
-  book "0..*" -- "0..*" book_list_entry
-  book "1" -- "0..*" book_reservation
-  
+  book_reservation "0..*" -- "1" borrowing
   book_reservation "0..*" -- "1" library_user
   book_reservation "0..*" -- "1" book
-  book_reservation "0..*" -- "1" borrowing
-    
+
   book_list "0..*" -- "1" library_user
 
   book_list_entry "0..*" -- "1" book
-  book_list_entry "0..*" -- "1" book_list
+  book_list_entry "0..*" -- "1" book_list 
 
-  book_request "0..*" -- "1" library_user
-    
   sessions "0..*" -- "1" library_user
-  
+
   oidc_connection "0..*" -- "1" oidc_issuer
   oidc_connection "0..*" -- "1" library_user
 
   oauth_challenge_storage "0..*" -- "1" oidc_issuer
 
+  home_office "1" -- "0..*" book 
+  home_office -- library_user
+
+  book_review -- book
+  book_review -- library_user
+
+  favorite_book -- book
+  favorite_book -- library_user
+
   class library_user{
     id	[PK]
-	  username
+	username
     email
     passw
-	  administrator
+	administrator
     deleted
+    home_office_id
   }
 
   class book{
     id [PK]
     library_user [FK]
-    topic [FK]
-    location [FK]
-    book_title 
+    home_office_id [FK]
+    book_title
     image
     author
     year
     isbn
+    topic
     deleted
   }
 
@@ -75,17 +76,6 @@ classDiagram
 	  borrowDate
 	  returned
     returnDate
-  }
-
-  class topic{
-    topic [PK]
-  }
-
-  class recommendation{
-    id [PK]
-	  book [FK]
-	  library_user [FK]
-	  recommendation
   }
 
   class book_reservation {
@@ -110,14 +100,7 @@ classDiagram
     list [FK]
   }
 
-  class book_request {
-    id [PK]
-    userId [FK]
-    isbn
-    book_title
-    reason
-    status
-  }
+  
 
   class home_office {
     id [PK]
@@ -156,6 +139,45 @@ classDiagram
     library_user_id [FK]
     oidc_subject
   }
+
+  class book_review {
+    id [PK]
+    user_id [FK]
+    book_id [FK]
+    comment
+    rating
+    review_date
+  }
+
+  class favorite_book {
+    id [PK]
+    user_id [FK]
+    book_id [FK]
+    favorited_at
+  }
+
+
+
+    class topic {
+    topic [PK]
+  }
+
+  class recommendation{
+    id [PK]
+	  book [FK]
+	  library_user [FK]
+	  recommendation
+  }
+
+  class book_request {
+    id [PK]
+    userId [FK]
+    isbn
+    book_title
+    reason
+    status
+  }
+
 
 ```
 

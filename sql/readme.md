@@ -10,60 +10,61 @@ The sql file can be found in teams under database folder.
 (Full table creation, inserting queries and table dropping queries are in the bottom of the document.)
 
 ## Relation Schema
-Updated 11.10.2023
+Updated 3.11.2023
 
 ```mermaid
+
 classDiagram
   book "0..*" -- "1" library_user
-  book "0..*" -- "1" topic
-  book "0..*" -- "1" home_office
 
   borrowing "0..*" -- "1" book
   borrowing "0..*" -- "1" library_user
 
-  recommendation "0..*" -- "1" book
-  recommendation "0..*" -- "1" library_user
-
-  book "0..*" -- "0..*" book_list_entry
-  book "1" -- "0..*" book_reservation
-  
+  book_reservation "0..*" -- "1" borrowing
   book_reservation "0..*" -- "1" library_user
   book_reservation "0..*" -- "1" book
-  book_reservation "0..*" -- "1" borrowing
-    
+
   book_list "0..*" -- "1" library_user
 
   book_list_entry "0..*" -- "1" book
-  book_list_entry "0..*" -- "1" book_list
+  book_list_entry "0..*" -- "1" book_list 
 
-  book_request "0..*" -- "1" library_user
-    
   sessions "0..*" -- "1" library_user
-  
+
   oidc_connection "0..*" -- "1" oidc_issuer
   oidc_connection "0..*" -- "1" library_user
 
   oauth_challenge_storage "0..*" -- "1" oidc_issuer
 
+  home_office "1" -- "0..*" book 
+  home_office -- library_user
+
+  book_review -- book
+  book_review -- library_user
+
+  favorite_book -- book
+  favorite_book -- library_user
+
   class library_user{
     id	[PK]
-	  username
+	username
     email
     passw
-	  administrator
+	administrator
     deleted
+    home_office_id
   }
 
   class book{
     id [PK]
     library_user [FK]
-    topic [FK]
-    location [FK]
-    book_title 
+    home_office_id [FK]
+    book_title
     image
     author
     year
     isbn
+    topic
     deleted
   }
 
@@ -75,17 +76,6 @@ classDiagram
 	  borrowDate
 	  returned
     returnDate
-  }
-
-  class topic{
-    topic [PK]
-  }
-
-  class recommendation{
-    id [PK]
-	  book [FK]
-	  library_user [FK]
-	  recommendation
   }
 
   class book_reservation {
@@ -110,14 +100,7 @@ classDiagram
     list [FK]
   }
 
-  class book_request {
-    id [PK]
-    userId [FK]
-    isbn
-    book_title
-    reason
-    status
-  }
+  
 
   class home_office {
     id [PK]
@@ -157,31 +140,52 @@ classDiagram
     oidc_subject
   }
 
+  class book_review {
+    id [PK]
+    user_id [FK]
+    book_id [FK]
+    comment
+    rating
+    review_date
+  }
+
+  class favorite_book {
+    id [PK]
+    user_id [FK]
+    book_id [FK]
+    favorited_at
+  }
+
+
+
+    class topic {
+    topic [PK]
+  }
+
+  class recommendation{
+    id [PK]
+	  book [FK]
+	  library_user [FK]
+	  recommendation
+  }
+
+  class book_request {
+    id [PK]
+    userId [FK]
+    isbn
+    book_title
+    reason
+    status
+  }
+
+
 ```
 
 # Tables
 Updated: 11.10.2023
 
-### Name:	library_user 
-Definition: A user of the software
-| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL |
-|------------------|------------------------------|---------------------------------|--------------|-----------------|
-|                  | id                           |                                 | Integer      | PK              |
-|                  | username                     | Username to log in              | Varchar(50)  | NOT NULL        |
-|                  | email                     | User's email address               | Varchar(80)  | NOT NULL        |
-| Type length depends on encryption | passw       | Password to log in           | Varchar(150) | NOT NULL        |
-|                  | administrator    | Determines admin status      | Bit(1)                          |              |
-|                  | deleted    | Determines if user has been deleted      | Bit(1)                          |              |
-
-### Name:	office_locations 
-Definition: Offices and locations
-| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL |
-|------------------|------------------------------|---------------------------------|--------------|-----------------|
-|                  | id                           |                                 | Integer      | PK              |
-|                  | name                         | Name of the office              | Varchar(255)  | NOT NULL        |
-|                  | country_code                 | country code of the location    | Varchar(3)  | NOT NULL        |
-
 ##
+
 ### Name: book
 Definition: A book that’s been registered to the library
 
@@ -198,35 +202,44 @@ Definition: A book that’s been registered to the library
 |                  | location          | Location of book                | Varchar(20)  | NOT NULL        |
 |                  | deleted    | Determines if book has been deleted      | Bit(1)                          |              |
 
-
 ##
 
-### Name: borrowing
-Definition: A borrow card that shows if a book is borrowed, by who, and until when.
+### Name: book_list
+Definition: A list of books made by a user.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
 |                  | id                |                                | Integer      | PK              |
-|                  | library_user      | id of the user who is borrowing the book | Integer      | FK              |
-|                  | book              | id of the book that’s being borrowed | Integer      | FK              |
-|                  | dueDate           | Date of return                  | Date         | NOT NULL        |
-|                  | borrowDate        | Date of borrow                  | Date         | NOT NULL        |
-|                  | returned          | Is the borrow completed or not  | Bit(1)       | NOT NULL        |
-|                  | returnDate        | Date of actual return           | Date         |         |
+|                  | library_user      | id of the user that owns the list | Integer      | FK              |
+|                  | name              | Name of the list                | Varchar(250)  |                 |
 
 ##
-### Name: recommendation (not implemented)
-Definition: A recommendation that is given to a book by a user.
 
+### Name: book_list_entry
+Definition: Helper table that binds books to different lists.
 
-| Properties | Name           | Description                                | Type    | PK/FK/NOT NULL |
-| ---------- | -------------- | ------------------------------------------ | ------- | -------------- |
-|            | id             |                                            | Integer | PK             |
-|            | book           | id of the book that’s being rated          | Integer | FK             |
-|            | library_user   | id of user who is doing the recommendation | Integer | FK             |
-|            | recommendation | Is the book recommended or not             | Bit(1)  | NOT NULL       |
+| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
+|------------------|-------------------|--------------------------------|--------------|-----------------|
+|                  | id                |                                | Integer      | PK              |
+|                  | book              | id of a book that is being binded | Integer      | FK              |
+|                  | list              | id of a list the book is in | Integer      | FK              |
 
 ##
+
+### Name: book_requests 
+Definition: A request of a book made by a user.
+
+| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
+|------------------|-------------------|--------------------------------|--------------|-----------------|
+|                  | id                |                                | Integer      | PK              |
+|                  | library_user      | id of the user who is doing the request | Integer      | FK              |
+|                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
+|                  | title             | Name of book                    | Varchar(250) | NOT NULL        |
+|                  | reason             | Reason for requesting the book                  | Varchar(150) | NOT NULL        |
+|                  | status    | Status of the request  | Integer       | NOT NULL        |
+
+##
+
 ### Name: book_reservation 
 Definition: A reservation of a book made by a user.
 
@@ -241,39 +254,72 @@ Definition: A reservation of a book made by a user.
 |                  | loaned    | Is the book loaned or not  | Bit(1)       | NOT NULL        |
 |                  | canceled    | Is the reservation canceled or not  | Bit(1)       | NOT NULL        |
 
-### Name: book_list
-Definition: A list of books made by a user.
+##
+
+### Name: book_reviews
+Definition: User review and rating for books
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL  |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | user_id                      | id of user that is reviewing    | Integer      | FK	             |
+|                  | book_id                      | id of the reviewed book	    | Integer      | FK              |
+|		   | comment		  	  | comment for a book review	    | TEXT	   | 		     |
+|		   | rating			  | rating of the book		    | Integer	   |		     |
+|		   | review_date		  | time when reviewd		    | Date	   | 		     |
+
+##
+
+### Name: borrowing
+Definition: A borrow card that shows if a book is borrowed, by who, and until when.
 
 | Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
 |------------------|-------------------|--------------------------------|--------------|-----------------|
 |                  | id                |                                | Integer      | PK              |
-|                  | library_user      | id of the user that owns the list | Integer      | FK              |
-|                  | name              | Name of the list                | Varchar(250)  |                 |
+|                  | library_user      | id of the user who is borrowing the book | Integer      | FK              |
+|                  | book              | id of the book that’s being borrowed | Integer      | FK              |
+|                  | dueDate           | Date of return                  | Date         | NOT NULL        |
+|                  | borrowDate        | Date of borrow                  | Date         | NOT NULL        |
+|                  | returned          | Is the borrow completed or not  | Bit(1)       | NOT NULL        |
+|                  | returnDate        | Date of actual return           | Date         |        	  |
 
 ##
-### Name: book_list_entry
-Definition: Helper table that binds books to different lists.
 
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | id                |                                | Integer      | PK              |
-|                  | book              | id of a book that is being binded | Integer      | FK              |
-|                  | list              | id of a list the book is in | Integer      | FK              |
-
-##
-### Name: book_requests 
-Definition: A request of a book made by a user.
-
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | id                |                                | Integer      | PK              |
-|                  | library_user      | id of the user who is doing the request | Integer      | FK              |
-|                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
-|                  | title             | Name of book                    | Varchar(250) | NOT NULL        |
-|                  | reason             | Reason for requesting the book                  | Varchar(150) | NOT NULL        |
-|                  | status    | Status of the request  | Integer       | NOT NULL        |
+### Name: favorite_book
+Definition: Offices and locations
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL  |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | user_id                      | id of the user who favorited    | Integer      | FK	             |
+|                  | book_id                      | id of book that is favorited    | Integer      | FK              |
+|		   | favorited_at		  | time when favoritted 	    | Date	   | 		     |
 
 ##
+
+### Name:	home_office 
+Definition: Offices and locations
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | name                         | Name of the office              | Varchar(255)  | NOT NULL        |
+|                  | country_code                 | country code of the location    | Varchar(3)  | NOT NULL        |
+
+##
+
+### Name:	library_user 
+Definition: A user of the software
+| Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL |
+|------------------|------------------------------|---------------------------------|--------------|-----------------|
+|                  | id                           |                                 | Integer      | PK              |
+|                  | username                     | Username to log in              | Varchar(50)  | NOT NULL        |
+|                  | email                     | User's email address               | Varchar(80)  | NOT NULL        |
+| Type length depends on encryption | passw       | Password to log in           | Varchar(150) | NOT NULL        |
+|                  | administrator    | Determines admin status      | Bit(1)                          |              |
+|                  | deleted    | Determines if user has been deleted      | Bit(1)                          |              |
+
+##
+
+## not implemented
+
 ### Name: topic (not implemented)
 Definition: Contains topics for books.
 
@@ -282,6 +328,7 @@ Definition: Contains topics for books.
 |                  | topic             | Topic names for books           | Varchar(50)  | PK              |
 
 ##
+
 ### Name: keyword (not implemented)
 Definition: Table contains a list of keywords that books can be labeled with. Useful for keyword searches.
 
@@ -290,6 +337,7 @@ Definition: Table contains a list of keywords that books can be labeled with. Us
 |            | keyword | The keyword to label books with | Varchar(30) | PK             |
 
 ##
+
 ### Name: book_keyword (not implemented)
 Definition: Helper table that binds keywords to books.
 
@@ -300,6 +348,20 @@ Definition: Helper table that binds keywords to books.
 |            | keyword | keyword taken from Keyword table   | Varchar(30) | FK             |
 
 ##
+
+### Name: recommendation (not implemented)
+Definition: A recommendation that is given to a book by a user.
+
+
+| Properties | Name           | Description                                | Type    | PK/FK/NOT NULL |
+| ---------- | -------------- | ------------------------------------------ | ------- | -------------- |
+|            | id             |                                            | Integer | PK             |
+|            | book           | id of the book that’s being rated          | Integer | FK             |
+|            | library_user   | id of user who is doing the recommendation | Integer | FK             |
+|            | recommendation | Is the book recommended or not             | Bit(1)  | NOT NULL       |
+
+##
+
 ### CREATE TABLE Queries
 Not updated
 

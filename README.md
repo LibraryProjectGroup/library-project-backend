@@ -87,16 +87,18 @@ Endpoints that use body will be in JSON format. Endpoint requires either query o
 If not separately mentioned, On Success Response schema is:
 
 ```JSON
+
 {
-  "ok": true
+"ok": true
 }
+
 ```
 
 If not separately mentioned, On Fail Response schema is:
 
 ```JSON
 {
-  "ok": fail
+"ok": false
 }
 ```
 
@@ -1218,6 +1220,176 @@ Body:
 ### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
 
 ### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
+
+</Details>
+
+## FavoriteBooks
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /favorite/check (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "isFavorited": boolean
+}
+```
+
+### /favorite/count (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "count": number
+}
+```
+
+### /favorite (DELETE)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /favorite (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number 
+}
+```
+
+</Details>
+
+
+## BookReview
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /review/all (GET)
+
+On Success Response schema:
+
+```JSON
+[
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
+]
+```
+
+### /review/book (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+[
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
+]
+```
+
+### /review/average (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "averageRating": number
+}
+```
+
+
+### /review (DELETE)
+
+Body:
+
+```JSON
+{
+    "reviewId": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number,
+    "comment": string,
+    "rating": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{ 
+    "comment": string,
+    "rating": number,
+    "reviewId": number
+}
+```
 
 </Details>
 

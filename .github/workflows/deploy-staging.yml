@@ -2,7 +2,7 @@ name: Deploy backend to staging
 
 on:
   push:
-    branches: ['development']
+    branches: ['development', 'gh-actions']
 
 env:
   REGISTRY: ghcr.io

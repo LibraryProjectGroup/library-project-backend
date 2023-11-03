@@ -9,12 +9,12 @@ services:
     #    stdin_open: true
 
     environment:
-      DATABASE_SERVER: efilibrary-mysql
-      DATABASE_NAME: efilibrarydb
-      DATABASE_USER: app
-      DATABASE_PASSWORD: 'not_secure'
-      OIDC_AUTH_BACKLINK_URL: 'http://notworking:80/backlink'
-      OIDC_AUTH_REDIRECT_URL: 'http://notworking:80/redirect'
+      DATABASE_SERVER: ${DATABASE_SERVER}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      OIDC_AUTH_BACKLINK_URL: ${OIDC_AUTH_BACKLINK_URL}
+      OIDC_AUTH_REDIRECT_URL: ${OIDC_AUTH_REDIRECT_URL}
       PORT: 3002
     ports:
       - 3002:3002
@@ -28,10 +28,10 @@ services:
       #- efilibrary-db:/var/lib/mysql
 
     environment:
-      MYSQL_DATABASE: efilibrarydb
-      MYSQL_USER: app
-      MYSQL_PASSWORD: 'not_secure'
-      MYSQL_ROOT_PASSWORD: 'not_secure_root_password'
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
     ports:
       - 3306:3306

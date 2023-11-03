@@ -5,6 +5,7 @@ import mysql from 'mysql2'
 import expressBearerToken from 'express-bearer-token'
 import healthRouter from './routes/health'
 import authRouter from './routes/auth'
+import reviewRouter from './routes/book_review'
 import bookRouter from './routes/book'
 import userRouter from './routes/user'
 import officeRouter from './routes/office'
@@ -14,6 +15,7 @@ import book_list_entryRouter from './routes/book_list_entry'
 import book_requestRouter from './routes/book_request'
 import book_reservationRouter from './routes/book_reservation'
 import callbackRoute from './routes/auth/oidc/callback'
+import bookfavorite from './routes/book_favorite'
 import Session from './interfaces/session.interface'
 import passwordreset, {
   publicRouter as publicPasswordReset,
@@ -22,6 +24,8 @@ import { querySelectSessionBySecret } from './queries/session'
 import User from './interfaces/user.interface'
 import { querySelectUserBySessionId } from './queries/user'
 import cookieParser from 'cookie-parser'
+import Logger from './lib/logger'
+import morganMiddleware from './config/morganMiddleware'
 
 declare global {
   namespace NodeJS {
@@ -45,12 +49,8 @@ declare global {
 // This is not really considered good practice, but it is an easy fix
 // https://nodejs.org/api/process.html#process_warning_using_uncaughtexception_correctly
 process.on('uncaughtException', (err, origin) => {
-  console.log(
-    `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n`,
-    err,
-    '\nUncaught exception origin:\n',
-    origin
-  )
+  const errorMessage = `[UNCAUGHT EXCEPTION] at ${new Date().toISOString()}:\n${err}\nUncaught exception origin:\n${origin}`
+  Logger.error(errorMessage)
 })
 
 const app: Express = express()
@@ -59,9 +59,9 @@ app.use(cookieParser())
 app.use(cors({ credentials: true, origin: true }))
 app.use(cors({ credentials: true, origin: '*' }))
 app.use(expressBearerToken())
+app.use(morganMiddleware)
 
 app.use('/health', healthRouter)
-
 app.use('/auth/oidc', callbackRoute)
 app.use('/auth', authRouter)
 app.use('/passwordreset', publicPasswordReset)
@@ -78,10 +78,18 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     next()
     return
   } catch (err) {
-    console.error(err)
+    if (err instanceof Error) {
+      // Log the error message and stack trace
+      Logger.error(err.message) // Log the error message
+      Logger.error(err.stack) // Log the stack trace
+    } else {
+      // Log a generic error message if 'error' is not an instance of Error
+      Logger.error('An error occurred:', err)
+    }
   }
   res.sendStatus(500)
 })
+
 app.use('/book', bookRouter)
 app.use('/office', officeRouter)
 app.use('/user', userRouter)
@@ -91,9 +99,11 @@ app.use('/booklistentry', book_list_entryRouter)
 app.use('/bookrequest', book_requestRouter)
 app.use('/bookreservation', book_reservationRouter)
 app.use('/passwordreset', passwordreset)
+app.use('/review', reviewRouter)
+app.use('/favorite', bookfavorite)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err)
+  Logger.error(err.message)
   res.status(500).send({
     ok: false,
   })

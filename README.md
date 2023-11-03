@@ -58,16 +58,6 @@ Use `npm ci` or `npm install` to install node modules.
 
 Start the backend by running `npm start`.
 
-## What the previous team used:
-
-To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
-After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.
-
-### Using DevContainers
-
-> Note: These files have not been used or updated in a while so it's possible that this does not work.
-
-The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
 <br>
 
@@ -97,16 +87,18 @@ Endpoints that use body will be in JSON format. Endpoint requires either query o
 If not separately mentioned, On Success Response schema is:
 
 ```JSON
+
 {
-  "ok": true
+"ok": true
 }
+
 ```
 
 If not separately mentioned, On Fail Response schema is:
 
 ```JSON
 {
-  "ok": fail
+"ok": false
 }
 ```
 
@@ -1231,11 +1223,177 @@ Body:
 
 </Details>
 
-# Database Diagram (outdated)
+## FavoriteBooks
 
 <Details>
     <Summary>
-        Show Diagram
+        Show Endpoints
     </Summary>
-    <img src="dbdiagram.png"></img>
+
+### /favorite/check (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "isFavorited": boolean
+}
+```
+
+### /favorite/count (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "count": number
+}
+```
+
+### /favorite (DELETE)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /favorite (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number 
+}
+```
+
 </Details>
+
+
+## BookReview
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /review/all (GET)
+
+On Success Response schema:
+
+```JSON
+[
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
+]
+```
+
+### /review/book (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+[
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
+]
+```
+
+### /review/average (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "averageRating": number
+}
+```
+
+
+### /review (DELETE)
+
+Body:
+
+```JSON
+{
+    "reviewId": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number,
+    "comment": string,
+    "rating": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{ 
+    "comment": string,
+    "rating": number,
+    "reviewId": number
+}
+```
+
+</Details>
+
+# Database Documentation
+
+[Database Diagram and Documentation](./sql/readme.md)
+

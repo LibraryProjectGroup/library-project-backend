@@ -13,8 +13,8 @@ services:
       DATABASE_USER: root
       DATABASE_PASSWORD: '3c35281b8a5104e58c84'
       PORT: '3000'
-      OIDC_AUTH_BACKLINK_URL: 'https://frontend-staging-efilibrary.jrdie.nl'
-      OIDC_AUTH_REDIRECT_URL: 'https://backend-staging-efilibrary.jrdie.nl'
+      OIDC_AUTH_BACKLINK_URL: 'https://host.docker.internal:3002'
+      OIDC_AUTH_REDIRECT_URL: 'https://localhost:3002'
     networks:
       - efilibrary
 

@@ -25,5 +25,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add 'latest' tag ghcr.io/libraryprojectgroup/library-project-backend:latest
+        run: docker tag ${{ github.sha }} 
       - name: Push image
         run: docker-compose -f docker-compose-staging.yml push -a

@@ -108,15 +108,8 @@ export const queryInsertUser = async (
 export const queryUpdateUser = async (user: User): Promise<boolean> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<ResultSetHeader>(
-    'UPDATE library_user SET username=(?), email=(?), passw=(?), administrator=(?), home_office_id=(?) WHERE id=(?)',
-    [
-      user.username,
-      user.email,
-      user.passw,
-      user.administrator,
-      user.homeOfficeId,
-      user.id,
-    ]
+    'UPDATE library_user SET username=(?), email=(?), home_office_id=(?) WHERE id=(?)',
+    [user.username, user.email, user.homeOfficeId, user.id]
   )
   return rows.affectedRows != 0
 }

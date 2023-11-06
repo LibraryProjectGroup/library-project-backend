@@ -101,22 +101,18 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.put('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (req.sessionUser.administrator) {
-      const user: User = {
-        id: Number(req.query.id),
-        username: req.query.username as string,
-        email: req.query.email as string,
-        passw: req.query.password as string,
-        administrator: req.query.administrator === 'true' ? true : false,
-        deleted: false,
-        homeOfficeId: parseInt(req.query.homeOfficeId as string),
-      }
-      res.json({ ok: await queryUpdateUser(user) })
-    } else {
-      res.status(403).json({ ok: false })
+    const user: User = {
+      id: Number(req.query.id),
+      username: req.query.username as string,
+      email: req.query.email as string,
+      passw: 'null',
+      deleted: false,
+      homeOfficeId: parseInt(req.query.homeOfficeId as string),
     }
+    res.json({ ok: await queryUpdateUser(user) })
   } catch (err) {
     next(err)
+    console.log('failed to update user')
   }
 })
 

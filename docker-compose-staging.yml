@@ -11,6 +11,8 @@ services:
       - efilibrary
     ports:
       - 3002:3002
+    expose: 
+      - 3002
 
 networks:
   efilibrary:

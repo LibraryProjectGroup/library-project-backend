@@ -26,4 +26,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push image
-        run: docker-compose -f docker-compose-staging.yml push -a
+        run: docker-compose -f docker-compose-staging.yml push

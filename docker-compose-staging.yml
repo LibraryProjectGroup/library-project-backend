@@ -11,9 +11,25 @@ services:
       - efilibrary
     ports:
       - 3002:3002
-    expose: 
-      - 3002
+  
+  efilibrary-mysql:
+    image: mysql
 
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      #- efilibrary-db:/var/lib/mysql
+
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    ports:
+      - 3306:3306
+
+    expose:
+      - 3306
 networks:
   efilibrary:
     external: true

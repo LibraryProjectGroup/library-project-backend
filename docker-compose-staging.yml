@@ -13,11 +13,13 @@ services:
       DATABASE_USER: root
       DATABASE_PASSWORD: '3c35281b8a5104e58c84'
       PORT: '3002'
-      OIDC_AUTH_BACKLINK_URL: 'https://host.docker.internal:3002'
+      OIDC_AUTH_BACKLINK_URL: 'https://host.docker.internal:3000'
       OIDC_AUTH_REDIRECT_URL: 'https://localhost:3002'
     networks:
       - efilibrary
-      
+    ports:
+      - 3002:3002
+
   efilibrary-mysql:
     image: mysql
 
@@ -28,8 +30,8 @@ services:
     environment:
       MYSQL_DATABASE: efilibrarydb
       MYSQL_USER: app
-      MYSQL_PASSWORD: "not_secure"
-      MYSQL_ROOT_PASSWORD: "not_secure_root_password"
+      MYSQL_PASSWORD: 'not_secure'
+      MYSQL_ROOT_PASSWORD: 'not_secure_root_password'
 
     ports:
       - 3306:3306

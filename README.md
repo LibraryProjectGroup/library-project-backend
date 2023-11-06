@@ -28,7 +28,7 @@ You will need to run the backend application and the database. You can have them
 
 Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder. [docker-compose-test.yml](docker-compose-test.yml) also contains the database credentials for local development as environment variables. These must only be used for local development.
 
-If you have Windows, make you have Docker Desktop running before running the command.
+If you have Windows, make sure you have Docker Desktop running before running the command.
 
 ```
 docker-compose -f docker-compose-test.yml up -d

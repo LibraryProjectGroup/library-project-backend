@@ -19,7 +19,7 @@ services:
       - efilibrary
     ports:
       - 3002:3002
-  
+
   efilibrary-mysql:
     image: mysql
 

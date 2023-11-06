@@ -8,13 +8,13 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      DATABASE_SERVER: ${{secrets.DATABASE_SERVER}}
-      DATABASE_NAME: ${{secrets.DATABASE_NAME}
-      DATABASE_USER: ${{secrets.DATABASE_USER}}
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-      PORT: ${{secrets.DATABASE_SERVER}}
-      OIDC_AUTH_BACKLINK_URL: ${{secrets.OIDC_AUTH_BACKLINK_URL}}
-      OIDC_AUTH_REDIRECT_URL: ${{secrets.OIDC_AUTH_REDIRECT_URL}}
+      DATABASE_SERVER: ${DATABASE_SERVER}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      PORT: ${PORT}
+      OIDC_AUTH_BACKLINK_URL: ${OIDC_AUTH_BACKLINK_URL}
+      OIDC_AUTH_REDIRECT_URL: ${OIDC_AUTH_REDIRECT_URL}
     networks:
       - efilibrary
     ports:
@@ -28,10 +28,10 @@ services:
       #- efilibrary-db:/var/lib/mysql
 
     environment:
-      MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
-      MYSQL_USER: ${{secrets.MYSQL_USER}}
-      MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
-      MYSQL_ROOT_PASSWORD: ${{secrets.MYSQL_ROOT_PASSWORD}}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
     ports:
       - 3306:3306

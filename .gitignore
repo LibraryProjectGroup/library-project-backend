@@ -14,3 +14,5 @@
 /robot/results/
 
 .DS_Store
+
+/logs/

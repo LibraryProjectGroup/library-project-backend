@@ -6,6 +6,7 @@ import {
   queryInsertUser,
   queryUpdateUser,
   queryAdminUpdateUser,
+  queryHardDeleteUser,
 } from '../queries/user'
 import User from '../interfaces/user.interface'
 
@@ -65,7 +66,7 @@ router.get(
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.sessionUser.administrator) {
-      res.json({ ok: await querySoftDeleteUser(Number(req.body.id)) })
+      res.json({ ok: await queryHardDeleteUser(Number(req.body.id)) })
     } else {
       res.status(403).json({ ok: false })
     }

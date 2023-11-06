@@ -8,7 +8,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/libraryprojectgroup/library-project-backend:${{ github.sha }}
   DATABASE_SERVER: ${{  secrets.DATABASE_SERVER  }}
-  DATABASE_NAME: ${{secrets.DATABASE_NAME}
+  DATABASE_NAME: ${{secrets.DATABASE_NAME}}
   DATABASE_USER: ${{secrets.DATABASE_USER}}
   DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
   PORT: ${{secrets.DATABASE_SERVER}}

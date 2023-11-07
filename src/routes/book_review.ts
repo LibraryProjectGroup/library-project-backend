@@ -21,7 +21,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
 
 router.get('/book', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await getReviewByBookId(Number(req.body.bookId)))
+    res.json(await getReviewByBookId(Number(req.query.bookId)))
   } catch (err) {
     next(err)
   }
@@ -31,8 +31,8 @@ router.get(
   '/average',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { bookId } = req.body
-      const averageRating = await getAverageRatingForBook(bookId)
+      const { bookId } = req.query
+      const averageRating = await getAverageRatingForBook(Number(bookId))
       if (averageRating !== null) {
         res.json({ averageRating })
       } else {

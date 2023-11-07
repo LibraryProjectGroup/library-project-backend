@@ -38,7 +38,7 @@ export const updateReview = async (
     'UPDATE book_reviews SET comment=(?), rating=(?) WHERE id=(?)',
     [comment, rating, reviewId]
   )
-  return rows.changedRows != 0
+  return rows.affectedRows != 0
 }
 
 export const insertReview = async (

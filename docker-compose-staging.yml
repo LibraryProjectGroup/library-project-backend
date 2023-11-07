@@ -9,3 +9,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3002:3002
+
+  efilibrary-mysql:
+    image: mysql
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      #- efilibrary-db:/var/lib/mysql
+
+    ports:
+      - 3306:3306
+
+    expose:
+      - 3306

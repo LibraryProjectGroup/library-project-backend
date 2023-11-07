@@ -13,6 +13,7 @@ services:
       - 3002:3002
     volumes:
       - ./src:/app/src
+      - ./sql:/app/sql
 
 networks:
   efilibrary:

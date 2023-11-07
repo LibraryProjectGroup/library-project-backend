@@ -7,14 +7,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    networks:
-      - efilibrary
     ports:
       - 3002:3002
-    volumes:
-      - ./src:/app/src
-      - ./sql:/app/sql
-
-networks:
-  efilibrary:
-    external: true

@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # Expose port 3000 to host
-EXPOSE 3000
+EXPOSE 3002
 
 # Run the project
 CMD ["node", "build/server.js"]

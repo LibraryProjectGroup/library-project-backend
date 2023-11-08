@@ -3,7 +3,7 @@ interface User {
   username: string
   email: string
   passw: string | null
-  administrator: boolean
+  administrator?: boolean
   deleted: boolean
   /**
    * An optional home office.

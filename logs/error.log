@@ -1,0 +1,24 @@
+2023-11-06 16:45:42:4542 [31merror[39m: [31mgetaddrinfo ENOTFOUND efilibrary-mysql[39m
+2023-11-06 16:45:42:4542 [31merror[39m: [31mError: getaddrinfo ENOTFOUND efilibrary-mysql[39m
+[31m    at PromisePool.query (/Users/lauri/Documents/eficode/library-project-backend/node_modules/mysql2/promise.js:356:22)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:32:36[39m
+[31m    at Generator.next (<anonymous>)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:8:71[39m
+[31m    at new Promise (<anonymous>)[39m
+[31m    at __awaiter (/Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:4:12)[39m
+[31m    at querySelectSessionBySecret (/Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:32:12)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/index.ts:71:51[39m
+[31m    at Generator.next (<anonymous>)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/index.ts:31:71[39m
+2023-11-06 16:45:42:4542 [31merror[39m: [31mgetaddrinfo ENOTFOUND efilibrary-mysql[39m
+2023-11-06 16:45:42:4542 [31merror[39m: [31mError: getaddrinfo ENOTFOUND efilibrary-mysql[39m
+[31m    at PromisePool.query (/Users/lauri/Documents/eficode/library-project-backend/node_modules/mysql2/promise.js:356:22)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:32:36[39m
+[31m    at Generator.next (<anonymous>)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:8:71[39m
+[31m    at new Promise (<anonymous>)[39m
+[31m    at __awaiter (/Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:4:12)[39m
+[31m    at querySelectSessionBySecret (/Users/lauri/Documents/eficode/library-project-backend/src/queries/session.ts:32:12)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/index.ts:71:51[39m
+[31m    at Generator.next (<anonymous>)[39m
+[31m    at /Users/lauri/Documents/eficode/library-project-backend/src/index.ts:31:71[39m

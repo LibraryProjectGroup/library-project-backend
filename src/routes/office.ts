@@ -1,8 +1,8 @@
 import { Response, Request, Router, NextFunction } from 'express'
 import {
   deleteHomeOffice,
-  findAllHomeOffices,
-  findHomeOffice,
+  getAllHomeOffices,
+  getHomeOfficeById,
   updateHomeOffice,
   insertHomeOffice,
 } from '../queries/office'
@@ -12,7 +12,7 @@ const router = Router()
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await findAllHomeOffices())
+    res.json(await getAllHomeOffices())
   } catch (err) {
     next(err)
   }
@@ -23,7 +23,7 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const homeOfficeId = Number(req.params.homeOfficeId)
-      res.json(await findHomeOffice(homeOfficeId))
+      res.json(await getHomeOfficeById(homeOfficeId))
     } catch (err) {
       next(err)
     }
@@ -51,7 +51,7 @@ router.put(
         ...req.body,
         id: homeOfficeId,
       }
-      const officeExists = !!(await findHomeOffice(homeOfficeId))
+      const officeExists = !!(await getHomeOfficeById(homeOfficeId))
       if (officeExists && req.sessionUser.administrator) {
         const ok = await updateHomeOffice(updatedOffice)
         res.json({ ok: ok })

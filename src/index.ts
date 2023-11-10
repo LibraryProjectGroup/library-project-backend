@@ -20,9 +20,9 @@ import Session from './interfaces/session.interface'
 import passwordreset, {
   publicRouter as publicPasswordReset,
 } from './routes/password_reset'
-import { querySelectSessionBySecret } from './queries/session'
+import { getSessionBySecret } from './queries/session'
 import User from './interfaces/user.interface'
-import { querySelectUserBySessionId } from './queries/user'
+import { getUserBySessionId } from './queries/user'
 import cookieParser from 'cookie-parser'
 import Logger from './lib/logger'
 import morganMiddleware from './config/morganMiddleware'
@@ -68,10 +68,10 @@ app.use('/passwordreset', publicPasswordReset)
 app.use(async (req: Request, res: Response, next: NextFunction) => {
   if (!req.token) return res.sendStatus(401)
   try {
-    let session = await querySelectSessionBySecret(req.token)
+    let session = await getSessionBySecret(req.token)
     if (session == null) return res.sendStatus(401)
     req.session = session
-    let user = await querySelectUserBySessionId(session.id)
+    let user = await getUserBySessionId(session.id)
     if (user == null) return res.sendStatus(401)
     req.sessionUser = user
 

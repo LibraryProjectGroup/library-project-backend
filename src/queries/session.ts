@@ -3,7 +3,7 @@ import { pool } from '../index'
 import Session from '../interfaces/session.interface'
 import { OidcIssuer, OidcIssuerId } from '../interfaces/OidcIssuer'
 
-export async function queryInsertSession(
+export async function insertSession(
   userId: number,
   secret: string,
   length: number
@@ -24,7 +24,7 @@ export async function queryInsertSession(
   }
 }
 
-export async function querySelectSessionBySecret(
+export async function getSessionBySecret(
   secret: string
 ): Promise<Session | null> {
   const promisePool = pool.promise()
@@ -36,7 +36,7 @@ export async function querySelectSessionBySecret(
   return rows.length > 0 ? (rows[0] as Session) : null
 }
 
-export async function queryInvalidateSession(secret: string): Promise<boolean> {
+export async function invalidateSession(secret: string): Promise<boolean> {
   const promisePool = pool.promise()
   const [res] = await promisePool.query<ResultSetHeader>(
     'UPDATE sessions SET invalidated = 1 WHERE secret = ?',
@@ -45,7 +45,7 @@ export async function queryInvalidateSession(secret: string): Promise<boolean> {
   return res.affectedRows != 0
 }
 
-export async function storeOidcChallenge(
+export async function insertOidcChallenge(
   code: string,
   challenge: string,
   issuerId: OidcIssuerId

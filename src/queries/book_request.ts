@@ -4,13 +4,13 @@ import Book_request, {
   Book_request_status,
 } from '../interfaces/book_request.interface'
 
-const querySelectRequests = async (): Promise<Book_request[]> => {
+const getAllRequests = async (): Promise<Book_request[]> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query('SELECT * FROM book_requests')
   return rows as Book_request[]
 }
 
-const querySelectRequest = async (id: number): Promise<Book_request | null> => {
+const getRequestById = async (id: number): Promise<Book_request | null> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<RowDataPacket[]>(
     'SELECT * FROM book_requests WHERE id = ?',
@@ -19,7 +19,7 @@ const querySelectRequest = async (id: number): Promise<Book_request | null> => {
   return rows.length > 0 ? (rows[0] as Book_request) : null
 }
 
-const queryInsertRequest = async (
+const insertRequest = async (
   userId: number,
   isbn: string,
   title: string,
@@ -33,7 +33,7 @@ const queryInsertRequest = async (
   return rows.affectedRows != 0
 }
 
-const queryUpdateRequest = async (
+const updateRequestStatus = async (
   id: number,
   status: Book_request_status
 ): Promise<boolean> => {
@@ -45,9 +45,4 @@ const queryUpdateRequest = async (
   return rows.affectedRows != 0
 }
 
-export {
-  querySelectRequests,
-  querySelectRequest,
-  queryInsertRequest,
-  queryUpdateRequest,
-}
+export { getAllRequests, getRequestById, insertRequest, updateRequestStatus }

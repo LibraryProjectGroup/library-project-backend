@@ -67,8 +67,20 @@ router.get(
 
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (req.sessionUser.administrator) {
+    if (req.sessionUser.administrator || req.sessionUser) {
       res.json({ ok: await deleteUserSoft(Number(req.body.id)) })
+    } else {
+      res.status(403).json({ ok: false })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.delete('/admin/', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (req.sessionUser.administrator) {
+      res.json({ ok: await deleteUserHard(Number(req.body.id)) })
     } else {
       res.status(403).json({ ok: false })
     }

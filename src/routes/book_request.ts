@@ -1,16 +1,16 @@
 import { Response, Request, Router, NextFunction } from 'express'
 import {
-  querySelectRequests,
-  queryInsertRequest,
-  queryUpdateRequest,
-  querySelectRequest,
+  getAllRequests,
+  insertRequest,
+  updateRequestStatus,
+  getRequestById,
 } from '../queries/book_request'
 
 const router = Router()
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectRequests())
+    res.json(await getAllRequests())
   } catch (err) {
     next(err)
   }
@@ -19,7 +19,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({
-      ok: await queryInsertRequest(
+      ok: await insertRequest(
         req.sessionUser.id,
         req.body.isbn,
         req.body.title,
@@ -37,7 +37,7 @@ router.put(
     try {
       if (req.sessionUser.administrator) {
         res.json({
-          ok: await queryUpdateRequest(req.body.id, req.body.status),
+          ok: await updateRequestStatus(req.body.id, req.body.status),
         })
       } else {
         return res.status(403).json({ ok: false })

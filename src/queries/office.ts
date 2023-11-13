@@ -2,7 +2,7 @@ import { HomeOffice } from '../interfaces/HomeOffice'
 import { pool } from '../index'
 import { OkPacket, RowDataPacket } from 'mysql2'
 
-export async function findHomeOffice(
+export async function getHomeOfficeById(
   homeOfficeId: number
 ): Promise<HomeOffice | null> {
   const promisePool = pool.promise()
@@ -13,7 +13,7 @@ export async function findHomeOffice(
   return rows.length ? convertDatabaseRowToOffice(rows[0]) : null
 }
 
-export async function findAllHomeOffices(): Promise<HomeOffice[]> {
+export async function getAllHomeOffices(): Promise<HomeOffice[]> {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<RowDataPacket[]>(
     'SELECT home_office_id, name, country_code FROM home_office;'

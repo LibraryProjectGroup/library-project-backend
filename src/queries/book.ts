@@ -2,7 +2,7 @@ import { ResultSetHeader, RowDataPacket } from 'mysql2'
 import { pool } from '../index'
 import Book from '../interfaces/book.interface'
 
-export const querySelectBook = async (bookId: number): Promise<Book | null> => {
+export const getBookById = async (bookId: number): Promise<Book | null> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<RowDataPacket[]>(
     'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book JOIN home_office ho USING (home_office_id) WHERE book.id = ?',
@@ -11,7 +11,7 @@ export const querySelectBook = async (bookId: number): Promise<Book | null> => {
   return rows.length > 0 ? (rows[0] as Book) : null
 }
 
-export const querySelectAllBooks = async (): Promise<Book[]> => {
+export const getAllExistingBooks = async (): Promise<Book[]> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query(
     'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book JOIN home_office ho USING (home_office_id) WHERE deleted != 1;'
@@ -19,7 +19,7 @@ export const querySelectAllBooks = async (): Promise<Book[]> => {
   return rows as Book[]
 }
 
-export const querySelectAllBooksPaged = async (
+export const getAllBooksPaged = async (
   page: number,
   pageSize: number | null
 ): Promise<Book[]> => {
@@ -33,7 +33,7 @@ export const querySelectAllBooksPaged = async (
   return rows as Book[]
 }
 
-export const queryCountAllBooks = async (): Promise<Number | null> => {
+export const getCountOfAllBooks = async (): Promise<Number | null> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<RowDataPacket[]>(
     'SELECT COUNT(*) as bookCount FROM book WHERE deleted != 1'
@@ -41,13 +41,13 @@ export const queryCountAllBooks = async (): Promise<Number | null> => {
   return rows.length > 0 ? (rows[0].bookCount as Number) : null
 }
 
-export const querySelectAllExistingBooks = async (): Promise<Book[]> => {
+export const getAllBooks = async (): Promise<Book[]> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query('SELECT * FROM book')
   return rows as Book[]
 }
 
-export const queryHardDeleteBook = async (bookId: number): Promise<boolean> => {
+export const deleteBook = async (bookId: number): Promise<boolean> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<ResultSetHeader>(
     'DELETE FROM book WHERE id=?',
@@ -56,7 +56,7 @@ export const queryHardDeleteBook = async (bookId: number): Promise<boolean> => {
   return rows.affectedRows != 0
 }
 
-export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
+export const markBookAsDeleted = async (bookId: number): Promise<boolean> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<ResultSetHeader>(
     'UPDATE book SET deleted=1 WHERE id=(?)',
@@ -65,7 +65,7 @@ export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
   return rows.changedRows != 0
 }
 
-export const queryInsertBook = async (
+export const insertNewBook = async (
   userId: number,
   title: string,
   image: string,
@@ -83,7 +83,7 @@ export const queryInsertBook = async (
   return rows.affectedRows != 0
 }
 
-export const queryUpdateBook = async (book: Book): Promise<boolean> => {
+export const updateBook = async (book: Book): Promise<boolean> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<ResultSetHeader>(
     'UPDATE book SET title=(?), image=(?), author=(?), year=(?), topic=(?), isbn=(?), home_office_id=(?) WHERE id=(?)',
@@ -101,7 +101,7 @@ export const queryUpdateBook = async (book: Book): Promise<boolean> => {
   return rows.changedRows != 0
 }
 
-export const querySelectAllReservedBooks = async (): Promise<Book[]> => {
+export const getAllReservedBooks = async (): Promise<Book[]> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query(
     'select book.id, book.library_user, book.title, book.image, book.author, book.year, book.isbn, book.topic, book.deleted, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry from book JOIN book_reservation AS reservation ON reservation.bookId = book.id JOIN home_office ho USING (home_office_id) WHERE reservation.canceled = 0 AND reservation.loaned = 0 AND book.deleted != 1;'

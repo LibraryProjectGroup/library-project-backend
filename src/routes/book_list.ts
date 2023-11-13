@@ -1,13 +1,13 @@
 import { Response, Request, Router, NextFunction } from 'express'
 import {
-  queryDeleteList,
-  queryInsertNewList,
-  querySelectAllLists,
-  querySelectListByUser,
-  querySelectList,
-  queryUpdateList,
-  queryBooksByList,
-  querySelectListInfo,
+  deleteList,
+  insertNewList,
+  getAllLists,
+  getListsByUser,
+  getListById,
+  updateList,
+  getBooksByListId,
+  getListInfoById,
 } from '../queries/book_list'
 import Book_list from '../interfaces/book_list.interface'
 
@@ -17,7 +17,7 @@ const router = Router()
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectAllLists())
+    res.json(await getAllLists())
   } catch (err) {
     next(err)
   }
@@ -25,7 +25,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
 
 router.get('/user', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const booklists = await querySelectListByUser(req.sessionUser.id)
+    const booklists = await getListsByUser(req.sessionUser.id)
     res.json(booklists)
   } catch (err) {
     next(err)
@@ -36,7 +36,7 @@ router.get(
   '/books',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await queryBooksByList(Number(req.query.id)))
+      res.json(await getBooksByListId(Number(req.query.id)))
     } catch (err) {
       next(err)
     }
@@ -45,7 +45,7 @@ router.get(
 
 router.get('/info', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectListInfo(Number(req.query.id)))
+    res.json(await getListInfoById(Number(req.query.id)))
   } catch (err) {
     next(err)
   }
@@ -54,7 +54,7 @@ router.get('/info', async (req: Request, res: Response, next: NextFunction) => {
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   const listId = req.query.id
   try {
-    res.json(await querySelectList(Number(listId)))
+    res.json(await getListById(Number(listId)))
   } catch (err) {
     next(err)
   }
@@ -63,7 +63,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 router.put('/', async (req: Request, res: Response, next: NextFunction) => {
   const list: Book_list = req.body
   try {
-    res.json({ ok: await queryUpdateList(list) })
+    res.json({ ok: await updateList(list) })
   } catch (err) {
     next(err)
   }
@@ -73,7 +73,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const list: Book_list = { ...req.body }
   try {
     res.json({
-      ok: await queryInsertNewList(req.sessionUser.id, req.body.name),
+      ok: await insertNewList(req.sessionUser.id, req.body.name),
     })
   } catch (err) {
     next(err)
@@ -83,7 +83,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   const listId = req.body.id
   try {
-    res.json({ ok: await queryDeleteList(listId) })
+    res.json({ ok: await deleteList(listId) })
   } catch (err) {
     next(err)
   }

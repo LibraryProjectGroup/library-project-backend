@@ -1,16 +1,16 @@
 import { Response, Request, Router, NextFunction } from 'express'
 import {
-  queryInsertBorrow,
-  querySelectAllBorrows,
-  querySelectBorrow,
-  queryDeleteBorrow,
-  queryUpdateBorrow,
-  querySelectAllCurrentBorrows,
-  querySelectAllCurrentBorrows2,
-  queryBookIsAvailable,
-  queryBorrowsByUserId,
-  queryExpiredBorrows,
-  queryDetailedExpiredBorrows,
+  insertBorrow,
+  getAllBorrows,
+  getBorrowById,
+  deleteBorrow,
+  updateBorrow,
+  getAllCurrentBorrows,
+  getAllCurrentDetailedBorrows,
+  isBookAvailable,
+  getBorrowsByUserId,
+  getExpiredBorrows,
+  getDetailedExpiredBorrows,
 } from '../queries/borrow'
 import Borrow from '../interfaces/borrow.interface'
 
@@ -20,7 +20,7 @@ const router = Router()
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectAllBorrows())
+    res.json(await getAllBorrows())
   } catch (err) {
     next(err)
   }
@@ -28,7 +28,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await querySelectBorrow(Number(req.query.id)))
+    res.json(await getBorrowById(Number(req.query.id)))
   } catch (err) {
     next(err)
   }
@@ -36,10 +36,10 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const borrow = await querySelectBorrow(req.body.borrowId)
+    const borrow = await getBorrowById(req.body.borrowId)
     if (borrow && req.sessionUser.administrator) {
       res.json({
-        ok: await queryDeleteBorrow(req.body.borrowId),
+        ok: await deleteBorrow(req.body.borrowId),
       })
     } else {
       res.status(403).json({ ok: false })
@@ -51,12 +51,12 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let bookAvailable = await queryBookIsAvailable(req.body.bookId)
+    let bookAvailable = await isBookAvailable(req.body.bookId)
     if (bookAvailable) {
       let dueDate = new Date()
       dueDate.setDate(dueDate.getDate() + BORROW_LENGTH)
       res.json({
-        ok: await queryInsertBorrow(
+        ok: await insertBorrow(
           req.sessionUser.id,
           req.body.bookId,
           new Date(),
@@ -78,13 +78,13 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const updatedBorrow: Borrow = req.body
     updatedBorrow.library_user = req.sessionUser.id
-    const borrow = await querySelectBorrow(updatedBorrow.id)
+    const borrow = await getBorrowById(updatedBorrow.id)
     if (
       borrow &&
       (borrow.library_user == req.sessionUser.id ||
         req.sessionUser.administrator)
     ) {
-      res.json({ ok: await queryUpdateBorrow(borrow) })
+      res.json({ ok: await updateBorrow(borrow) })
     } else {
       res.status(403).json({ ok: false })
     }
@@ -97,7 +97,7 @@ router.get(
   '/current',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await querySelectAllCurrentBorrows())
+      res.json(await getAllCurrentBorrows())
     } catch (err) {
       next(err)
     }
@@ -108,7 +108,7 @@ router.get(
   '/expired/admin',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await queryDetailedExpiredBorrows())
+      res.json(await getDetailedExpiredBorrows())
     } catch (err) {
       next(err)
     }
@@ -119,7 +119,7 @@ router.get(
   '/current/admin',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await querySelectAllCurrentBorrows2())
+      res.json(await getAllCurrentDetailedBorrows())
     } catch (err) {
       next(err)
     }
@@ -130,7 +130,7 @@ router.get(
   '/expired',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await queryExpiredBorrows())
+      res.json(await getExpiredBorrows())
     } catch (err) {
       next(err)
     }
@@ -141,7 +141,7 @@ router.get(
   '/session',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(await queryBorrowsByUserId(req.sessionUser.id))
+      res.json(await getBorrowsByUserId(req.sessionUser.id))
     } catch (err) {
       next(err)
     }
@@ -152,7 +152,7 @@ router.put(
   '/return',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const borrow = await querySelectBorrow(req.body.borrowId)
+      const borrow = await getBorrowById(req.body.borrowId)
       if (
         borrow &&
         (borrow.library_user == req.sessionUser.id ||
@@ -160,7 +160,7 @@ router.put(
       ) {
         borrow.returned = true
         borrow.returnDate = new Date()
-        res.json({ ok: await queryUpdateBorrow(borrow) })
+        res.json({ ok: await updateBorrow(borrow) })
       } else {
         res.status(403).json({ ok: false })
       }

@@ -7,6 +7,7 @@ import {
   updateUser,
   updateUserByAdmin,
   deleteUserHard,
+  getAllUsers,
 } from '../queries/user'
 import User from '../interfaces/user.interface'
 
@@ -14,7 +15,7 @@ const router = Router()
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await getAllActiveUsers()
+    const users = await getAllUsers()
     const formattedUsers = []
     for (const user of users) {
       formattedUsers.push({
@@ -22,6 +23,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
         username: user.username,
         email: user.email,
         administrator: user.administrator,
+        deleted: user.deleted,
         homeOfficeId: user.homeOfficeId,
       })
     }
@@ -66,7 +68,7 @@ router.get(
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.sessionUser.administrator) {
-      res.json({ ok: await deleteUserHard(Number(req.body.id)) })
+      res.json({ ok: await deleteUserSoft(Number(req.body.id)) })
     } else {
       res.status(403).json({ ok: false })
     }

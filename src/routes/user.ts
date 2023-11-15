@@ -10,6 +10,7 @@ import {
   getAllUsers,
 } from '../queries/user'
 import User from '../interfaces/user.interface'
+import { userHasBooksInLoan } from '../queries/borrow'
 
 const router = Router()
 
@@ -67,8 +68,18 @@ router.get(
 
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const booksInLoan = await userHasBooksInLoan(Number(req.body.id))
+
     if (req.sessionUser.administrator || req.sessionUser) {
-      res.json({ ok: await deleteUserSoft(Number(req.body.id)) })
+      if (booksInLoan) {
+        res.status(400).json({
+          ok: false,
+          message:
+            'Käyttäjällä on lainassa olevia kirjoja. Poista lainaukset ennen käyttäjän poistamista.',
+        })
+      } else {
+        res.json({ ok: await deleteUserSoft(Number(req.body.id)) })
+      }
     } else {
       res.status(403).json({ ok: false })
     }
@@ -77,17 +88,20 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 })
 
-router.delete('/admin/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    if (req.sessionUser.administrator) {
-      res.json({ ok: await deleteUserHard(Number(req.body.id)) })
-    } else {
-      res.status(403).json({ ok: false })
+router.delete(
+  '/admin/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (req.sessionUser.administrator) {
+        res.json({ ok: await deleteUserHard(Number(req.body.id)) })
+      } else {
+        res.status(403).json({ ok: false })
+      }
+    } catch (err) {
+      next(err)
     }
-  } catch (err) {
-    next(err)
   }
-})
+)
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {

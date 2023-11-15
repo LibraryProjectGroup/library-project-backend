@@ -76,6 +76,8 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
       req.body.year,
       req.body.isbn,
       req.body.topic,
+      req.body.description,
+      req.body.language,
       req.body.homeOfficeId
     )
     if (await result) {

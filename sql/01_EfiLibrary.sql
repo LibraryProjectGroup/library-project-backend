@@ -62,6 +62,8 @@ CREATE TABLE IF NOT EXISTS `book` (
   `year` YEAR NOT NULL,
   `isbn` varchar(20) NOT NULL,
   `topic` varchar(50) NOT NULL,
+  `description` TEXT,
+  `language` varchar(3),
   `location` varchar(20) NOT NULL,
   `deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),

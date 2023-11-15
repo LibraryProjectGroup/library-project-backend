@@ -74,8 +74,7 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
       if (booksInLoan) {
         res.status(400).json({
           ok: false,
-          message:
-            'Käyttäjällä on lainassa olevia kirjoja. Poista lainaukset ennen käyttäjän poistamista.',
+          message: 'Please return borrowed books before deleting the user.',
         })
       } else {
         res.json({ ok: await deleteUserSoft(Number(req.body.id)) })

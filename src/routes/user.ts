@@ -11,6 +11,7 @@ import {
 } from '../queries/user'
 import User from '../interfaces/user.interface'
 import { userHasBooksInLoan } from '../queries/borrow'
+import { cancelUsersAllReservations } from '../queries/book_reservation'
 
 const router = Router()
 
@@ -77,7 +78,10 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
           message: 'Please return borrowed books before deleting the user.',
         })
       } else {
-        res.json({ ok: await deleteUserSoft(Number(req.body.id)) })
+        const softDeleteResult = await deleteUserSoft(Number(req.body.id))
+        await cancelUsersAllReservations(Number(req.body.id))
+
+        return res.json({ ok: softDeleteResult })
       }
     } else {
       res.status(403).json({ ok: false })

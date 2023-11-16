@@ -68,6 +68,22 @@ export const getAverageRatingForBook = async (
   return avgRating !== null ? avgRating : null
 }
 
+export const getAllAverageRatingsForBooks = async (): Promise<
+  { bookId: number; avgRating: number }[]
+> => {
+  const promisePool = pool.promise()
+  const [rows] = await promisePool.query<RowDataPacket[]>(
+    'SELECT book_id, AVG(rating) as avgRating FROM book_reviews GROUP BY book_id'
+  )
+
+  const allAverageRatingsForBooks = rows.map((row) => ({
+    bookId: row.book_id,
+    avgRating: row.avgRating,
+  }))
+
+  return allAverageRatingsForBooks
+}
+
 export const getReviewById = async (
   reviewId: number
 ): Promise<Book_review | null> => {

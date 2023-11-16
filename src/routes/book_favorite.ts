@@ -5,6 +5,7 @@ import {
   deleteFavoriteBook,
   isBookFavoritedByUser,
   getFavoriteCountForBook,
+  getAllFavoriteCounts,
 } from '../queries/book_favorite'
 import Book_favorite from '../interfaces/book_favorite.interface'
 
@@ -79,6 +80,17 @@ router.get(
       } else {
         res.status(404).json({ error: 'Book not found' })
       }
+    } catch (err) {
+      next(err)
+    }
+  }
+)
+
+router.get(
+  '/counts',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.json(await getAllFavoriteCounts())
     } catch (err) {
       next(err)
     }

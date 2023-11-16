@@ -7,7 +7,7 @@ const user1: User = {
   username: 't1',
   email: 't1@t.est',
   passw: 'p1',
-  administrator: false,
+  administrator: true,
   deleted: false,
 }
 const user2: User = {
@@ -15,7 +15,7 @@ const user2: User = {
   username: 't2',
   email: 't2@t.est',
   passw: 'p2',
-  administrator: true,
+  administrator: false,
   deleted: false,
 }
 const user3: User = {
@@ -26,9 +26,9 @@ const user3: User = {
   administrator: false,
   deleted: true,
 }
-const mockUserData = [user1, user2, user3]
+export const mockUserData = [user1, user2, user3]
 
-export const querySelectAllExistingUsers = async (userId: string) => {
+export const getAllActiveUsers = async () => {
   let array: Array<User> = []
   mockUserData.forEach((element) => {
     if (!element.deleted) {
@@ -38,11 +38,11 @@ export const querySelectAllExistingUsers = async (userId: string) => {
   return array as Array<User>
 }
 
-export const querySelectAllUsers = async () => {
+export const getAllUsers = async () => {
   return mockUserData as Array<User>
 }
 
-export const querySelectUser = async (userId: number) => {
+export const getUserById = async (userId: number) => {
   for (let index = 0; index < mockUserData.length; index++) {
     if (mockUserData[index].id === userId) {
       return mockUserData[index]
@@ -51,11 +51,11 @@ export const querySelectUser = async (userId: number) => {
   return null
 }
 
-export const querySelectUserBySessionId = async (sessionId: number) => {
-  return mockUserData[1]
+export const getUserBySessionId = async (sessionId: number) => {
+  return mockUserData[0]
 }
 
-export const querySelectUserByUsername = async (username: string) => {
+export const getUserByUsername = async (username: string) => {
   for (let index = 0; index < mockUserData.length; index++) {
     if (mockUserData[index].username === username) {
       return mockUserData[index]
@@ -64,15 +64,15 @@ export const querySelectUserByUsername = async (username: string) => {
   return null
 }
 
-export const queryHardDeleteUser = async (userId: string) => {
+export const deleteUserHard = async (userId: string) => {
   return true
 }
 
-export const querySoftDeleteUser = async (userId: string) => {
+export const deleteUserSoft = async (userId: string) => {
   return true
 }
 
-export const queryInsertUser = async (
+export const insertUser = async (
   username: string,
   email: string,
   password: string,
@@ -89,6 +89,6 @@ export const queryInsertUser = async (
     : null
 }
 
-export const queryUpdateUser = async (user: User) => {
+export const updateUser = async (user: User) => {
   return user.username === 'testy'
 }

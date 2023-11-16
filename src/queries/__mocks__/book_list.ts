@@ -32,11 +32,11 @@ const getBook_list = (id: number) => {
   return null
 }
 
-export const querySelectAllLists = async () => {
+export const getAllLists = async () => {
   return mockBook_listData as Array<Book_list>
 }
 
-export const querySelectListByUser = async (userId: number) => {
+export const getListsByUser = async (userId: number) => {
   let array: Array<Book_list> = []
   mockBook_listData.forEach((element) => {
     if (element.user == userId) {
@@ -46,11 +46,11 @@ export const querySelectListByUser = async (userId: number) => {
   return array as Array<Book_list>
 }
 
-export const querySelectList = async (listId: number) => {
+export const getListById = async (listId: number) => {
   return getBook_list(listId)
 }
 
-export const queryInsertNewList = async (
+export const insertNewList = async (
   userId: number,
   listName: string
 ): Promise<Boolean> => {
@@ -62,7 +62,7 @@ export const queryInsertNewList = async (
   return true
 }
 
-export const queryDeleteList = async (listId: number) => {
+export const deleteList = async (listId: number) => {
   let deleted = false
   mockBook_listData = mockBook_listData.filter((book_list) => {
     if (book_list.id == listId) deleted = true
@@ -71,7 +71,7 @@ export const queryDeleteList = async (listId: number) => {
   return deleted
 }
 
-export const queryUpdateList = async (book_list: Book_list) => {
+export const updateList = async (book_list: Book_list) => {
   const editedBook_list = getBook_list(book_list.id)
   if (editedBook_list) {
     editedBook_list.name = book_list.name

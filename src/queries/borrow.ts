@@ -122,3 +122,14 @@ export const getDetailedExpiredBorrows = async (): Promise<
   )
   return rows as DetailedExpiredBorrow[]
 }
+
+export const userHasBooksInLoan = async (userId: number): Promise<boolean> => {
+  const promisePool = pool.promise()
+  const [rows] = await promisePool.query<RowDataPacket[]>(
+    'SELECT COUNT(*) AS bookCount FROM borrowing WHERE library_user = ? AND returned = 0',
+    [userId]
+  )
+
+  const bookCount = rows[0]?.bookCount || 0
+  return bookCount > 0
+}

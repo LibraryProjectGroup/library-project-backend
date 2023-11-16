@@ -131,6 +131,13 @@ router.post('/login', async (req: Request, res: Response) => {
       message: 'Invalid Email or Password',
     })
 
+  if (user.deleted) {
+    return res.status(403).json({
+      ok: false,
+      message: 'Something went wrong, try again later',
+    })
+  }
+
   let session = await createSession(user.id)
   if (session == null) return res.status(500).json({ ok: false })
 

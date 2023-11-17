@@ -1218,6 +1218,19 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "/favorite/counts(GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/favorite/counts{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["favorite", "counts{{token}}{{secret}}"]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -1283,6 +1296,19 @@
               "raw": "{{BACKEND_URL}}/review/average{{token}}{{secret}}",
               "host": ["{{BACKEND_URL}}"],
               "path": ["review", "average{{token}}{{secret}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/review/reviews(GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BACKEND_URL}}/review/reviews{{token}}{{secret}}",
+              "host": ["{{BACKEND_URL}}"],
+              "path": ["review", "reviews{{token}}{{secret}}"]
             }
           },
           "response": []

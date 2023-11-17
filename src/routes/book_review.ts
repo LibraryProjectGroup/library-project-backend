@@ -7,6 +7,7 @@ import {
   getAverageRatingForBook,
   updateReview,
   insertReview,
+  getAllAverageRatingsForBooks,
 } from '../queries/book_review'
 
 const router = Router()
@@ -18,6 +19,17 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
     next(err)
   }
 })
+
+router.get(
+  '/reviews',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.json(await getAllAverageRatingsForBooks())
+    } catch (err) {
+      next(err)
+    }
+  }
+)
 
 router.get('/book', async (req: Request, res: Response, next: NextFunction) => {
   try {

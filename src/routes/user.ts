@@ -7,14 +7,17 @@ import {
   updateUser,
   updateUserByAdmin,
   deleteUserHard,
+  getAllUsers,
 } from '../queries/user'
 import User from '../interfaces/user.interface'
+import { userHasBooksInLoan } from '../queries/borrow'
+import { cancelUsersAllReservations } from '../queries/book_reservation'
 
 const router = Router()
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await getAllActiveUsers()
+    const users = await getAllUsers()
     const formattedUsers = []
     for (const user of users) {
       formattedUsers.push({
@@ -22,6 +25,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
         username: user.username,
         email: user.email,
         administrator: user.administrator,
+        deleted: user.deleted,
         homeOfficeId: user.homeOfficeId,
       })
     }
@@ -65,8 +69,20 @@ router.get(
 
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (req.sessionUser.administrator) {
-      res.json({ ok: await deleteUserHard(Number(req.body.id)) })
+    const booksInLoan = await userHasBooksInLoan(Number(req.body.id))
+
+    if (req.sessionUser.administrator || req.sessionUser) {
+      if (booksInLoan) {
+        res.status(400).json({
+          ok: false,
+          message: 'Please return borrowed books before deleting the user.',
+        })
+      } else {
+        const softDeleteResult = await deleteUserSoft(Number(req.body.id))
+        await cancelUsersAllReservations(Number(req.body.id))
+
+        return res.json({ ok: softDeleteResult })
+      }
     } else {
       res.status(403).json({ ok: false })
     }
@@ -74,6 +90,21 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
     next(err)
   }
 })
+
+router.delete(
+  '/admin/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (req.sessionUser.administrator) {
+        res.json({ ok: await deleteUserHard(Number(req.body.id)) })
+      } else {
+        res.status(403).json({ ok: false })
+      }
+    } catch (err) {
+      next(err)
+    }
+  }
+)
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {

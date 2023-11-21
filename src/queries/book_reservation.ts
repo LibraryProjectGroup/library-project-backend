@@ -134,3 +134,14 @@ export const getUserCurrentExtendedReservations = async (
     ? (validReservations as ExtendedReservation[])
     : null
 }
+
+export const cancelUsersAllReservations = async (
+  userId: number
+): Promise<boolean> => {
+  const promisePool = pool.promise()
+  const [rows] = await promisePool.query<ResultSetHeader>(
+    'UPDATE book_reservation SET canceled=true WHERE userId = ?',
+    [userId]
+  )
+  return rows.affectedRows != 0
+}

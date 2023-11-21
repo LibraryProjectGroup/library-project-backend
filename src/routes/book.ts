@@ -68,23 +68,29 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await insertNewBook(
-      req.sessionUser.id,
-      req.body.title,
-      req.body.image,
-      req.body.author,
-      req.body.year,
-      req.body.isbn,
-      req.body.topic,
-      req.body.homeOfficeId
-    )
-    if (await result) {
-      const books = await getAllExistingBooks()
+    if (req.sessionUser.administrator) {
+      const result = await insertNewBook(
+        req.sessionUser.id,
+        req.body.title,
+        req.body.image,
+        req.body.author,
+        req.body.year,
+        req.body.isbn,
+        req.body.topic,
+        req.body.description,
+        req.body.language,
+        req.body.homeOfficeId
+      )
+      if (await result) {
+        const books = await getAllExistingBooks()
 
-      res.json({
-        ok: result,
-        books: await books,
-      })
+        res.json({
+          ok: result,
+          books: await books,
+        })
+      }
+    } else {
+      res.status(403).json({ ok: false })
     }
   } catch (err) {
     next(err)

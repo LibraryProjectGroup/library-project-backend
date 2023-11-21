@@ -53,3 +53,19 @@ export const getFavoriteCountForBook = async (
   )
   return rows[0].favoriteCount
 }
+
+export const getAllFavoriteCounts = async (): Promise<
+  { bookId: number; favoriteCount: number }[]
+> => {
+  const promisePool = pool.promise()
+  const [rows] = await promisePool.query<RowDataPacket[]>(
+    'SELECT book_id, COUNT(*) as favoriteCount FROM favorite_books GROUP BY book_id'
+  )
+
+  const allFavoriteCounts = rows.map((row) => ({
+    bookId: row.book_id,
+    favoriteCount: row.favoriteCount,
+  }))
+
+  return allFavoriteCounts
+}

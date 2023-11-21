@@ -55,18 +55,20 @@ INSERT INTO `library_user` (`id`, `username`, `email`, `passw`, `administrator`)
 DROP TABLE IF EXISTS `book`;
 CREATE TABLE IF NOT EXISTS `book` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `library_user` int(11) NOT NULL,
+  `library_user` int(11),
   `title` varchar(250) NOT NULL,
   `image` varchar(500),
   `author` varchar(250) NOT NULL,
   `year` YEAR NOT NULL,
   `isbn` varchar(20) NOT NULL,
   `topic` varchar(50) NOT NULL,
+  `description` TEXT,
+  `language` varchar(3),
   `location` varchar(20) NOT NULL,
   `deleted` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `FK_book_library_user` (`library_user`),
-  CONSTRAINT `FK_book_library_user` FOREIGN KEY (`library_user`) REFERENCES `library_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_book_library_user` FOREIGN KEY (`library_user`) REFERENCES `library_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table efilibrarydb.book: ~3 rows (approximately)

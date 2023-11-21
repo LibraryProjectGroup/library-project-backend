@@ -6,7 +6,7 @@ Library     String
 *** Test Cases ***
 Verify that user can add favorite
     &{data}=    Create dictionary
-    ...    { bookId=3 }
+    ...    { bookId=1 }
     ${response}=    POST    url=${URL}/favorite?${bearerToken}    expected_status=200
     Should Be True    ${response.json()['ok']}
 
@@ -15,7 +15,7 @@ Verify that user can get counts for all favorited books
 
 Verify that user can delete book from favorites
     &{data}=    Create dictionary
-    ...    { bookId=3 }
+    ...    { bookId=1 }
     ${response}=    DELETE    url=${URL}/favorite?${bearerToken}    expected_status=200
     Should Be True    ${response.json()['ok']}
 

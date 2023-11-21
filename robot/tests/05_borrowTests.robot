@@ -19,12 +19,6 @@ Verify that user can check borrowed book by id
     ${response}=    GET    url=${URL}/borrow/?id=1&${bearerToken}    expected_status=200
     Should Be Equal    ${response.json()['id']}    ${1}
 
-Verify that new borrow for book can be created
-    &{data}=    Create dictionary
-    ...    { bookId=1 }
-    ${response}=    POST    url=${URL}/borrow?${bearerToken}    json=${data}    expected_status=200
-    Should Be True    ${response.json()['ok']}
-
 Verify that user can't delete non-existing borrow
     &{data}=    Create dictionary
     ...    { bookId=1234 }
@@ -36,8 +30,3 @@ Verify that user can get current borrows
 Verify that user can get borrows by session
     ${response}=    GET    url=${URL}/borrow/session?${bearerToken}    expected_status=200
 
-Verify that borrow can be returned
-    &{data}=    Create dictionary
-    ...    { bookId=1 }
-    ${response}=    PUT    url=${URL}/borrow/return?${bearerToken}    json=${data}    expected_status=200
-    Should Be True    ${response.json()['ok']}

@@ -10,7 +10,7 @@
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "mock": "jest",
-    "prepare": "husky install"
+    "prepare": "if [ -f node_modules/.bin/husky ]; then husky install; fi"
   },
   "husky": {
     "hooks": {

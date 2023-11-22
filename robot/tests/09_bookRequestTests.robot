@@ -10,7 +10,7 @@ Verify that user can add request
     ...    isbn=234-123-345
     ...    title=Lizard Disco
     ...    reason=Great book, easy to read 
-    ${response}=    POST   url=${URL}/bookrequest?${bearerToken}    expected_status=200
+    ${response}=    POST   url=${URL}/bookrequest?${bearerToken}    json=${data}    expected_status=200
 
 Verify that user can check all users booklists
     ${response}=    GET    url=${URL}/bookrequest/all?${bearerToken}    expected_status=200

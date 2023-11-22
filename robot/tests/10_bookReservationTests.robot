@@ -10,7 +10,7 @@ ${okFalseJson}    {"ok":false}
 *** Test Cases ***
 Verify that user can add reservations
     ${data}=    Create dictionary
-    ...    bookId=1     
+    ...    bookId=2     
     ${response}=    POST   url=${URL}/bookreservation?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
 
@@ -32,7 +32,7 @@ Verify that user can check all extended reservations
 
 Verify that user can check reservation based on bookId
     ${data}=    Create dictionary
-    ...    bookId=1     
+    ...    bookId=2     
     ${response}=    GET   url=${URL}/bookreservation/book?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal    ${response.json()['bookId']}    ${1}
 
@@ -44,7 +44,7 @@ Verify that user can't check reservation based on non-existing bookId
 
 Verify that user can cancel reservation
     ${data}=    Create dictionary
-    ...    bookId=1    
+    ...    bookId=2    
     ${response}=    POST   url=${URL}/bookreservation/cancel?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
     
@@ -55,7 +55,7 @@ Verify that user can check all current reservations
 
 Verify that user can loan reservation
     ${data}=    Create dictionary
-    ...    bookId=1    
+    ...    bookId=2    
     ${response}=    POST   url=${URL}/bookreservation/loan?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
 

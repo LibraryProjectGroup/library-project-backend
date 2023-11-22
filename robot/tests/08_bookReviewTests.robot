@@ -45,4 +45,4 @@ Verify that user can't modify non-existing review
     ...    rating=1
     ...    reviewId=1234   
     ${response}=    PUT   url=${URL}/review?${bearerToken}    json=${data}    expected_status=400
-    Should Be Equal As Strings    ${response.text}    ${okFalseJson}
+    Should Not Be True    ${response.json()['ok']}

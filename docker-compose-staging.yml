@@ -6,8 +6,6 @@ services:
     image: ${IMAGE_NAME}
     build:
       context: .
-      dockerfile: Dockerfile.staging
-    env_file:
-      - .env
+      dockerfile: Dockerfile
     ports:
       - 3002:3002

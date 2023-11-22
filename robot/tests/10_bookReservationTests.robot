@@ -64,4 +64,4 @@ Verify that user can see their current reservations
     ...    userId=${userId}    
     ${response}=    POST   url=${URL}/bookreservation/user/current?${bearerToken}    json=${data}    expected_status=200
     ${list}=    Evaluate    json.loads('''${response.text}''')
-    Length Should Be    ${list}    0
+    Should Be Equal    ${response.json()}    ${none}

@@ -6,7 +6,6 @@ Library     String
 *** Variables ***
 ${okTrueJson}    {"ok":true}
 ${okFalseJson}    {"ok":false}
-${reviewId}    {EMPTY}    #For modified value
 
 
 *** Test Cases ***
@@ -28,8 +27,6 @@ Verify that user can't add review to non-existing book
 
 Verify that user can check all reviews
     ${response}=    GET   url=${URL}/review/all?${bearerToken}    expected_status=200
-    ${json_response}=  Evaluate  json.loads('''${response.text}''')  json
-    ${reviewId}=  Set Variable  ${json_response[-1]['reviewId']}
 
 Verify that user can check reviews for all books
     ${response}=    GET   url=${URL}/review/reviews?${bearerToken}    expected_status=200   
@@ -38,7 +35,7 @@ Verify that user can modify review
     ${data}=    Create dictionary
     ...    comment='Modified book'
     ...    rating=1
-    ...    reviewId=${reviewId}   
+    ...    reviewId=1   
     ${response}=    POST   url=${URL}/review?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
 

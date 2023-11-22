@@ -6,19 +6,15 @@ Library     String
 *** Variables ***
 ${okTrueJson}    {"ok":true}
 ${okFalseJson}    {"ok":false}
-${listId}    {EMPTY}
-
 
 *** Test Cases ***
 Verify that user can add booklists
     ${data}=    Create dictionary
-    ...    { name='Testlist' }    
+    ...    name='Testlist'     
     ${response}=    POST   url=${URL}/booklist?${bearerToken}    json=${data}    expected_status=200
     
 Verify that user can check all booklists
     ${response}=    GET    url=${URL}/booklist/all?${bearerToken}    expected_status=200
-    ${json_response}=  Evaluate  json.loads('''${response.text}''')  json
-    ${listId}=  Set Variable  ${json_response[-1]['id']}
 
 Verify that user can check all users booklists
     ${response}=    GET    url=${URL}/booklist/user?${bearerToken}    expected_status=200
@@ -50,12 +46,12 @@ Verify that user can get all booklistentrys
     ${response}=    GET   url=${URL}/booklistentry/all?${bearerToken}   expected_status=200
     
 Verify that user get all booklistentrys based on listId
-    ${response}=    GET   url=${URL}/booklistentry/list?id=${listId}${bearerToken}    expected_status=200
+    ${response}=    GET   url=${URL}/booklistentry/list?${bearerToken}?id=1    expected_status=200
     ${bookList}=    Evaluate    json.loads('''${response.text}''')
     Length Should Be    ${bookList}    1
      
 Verify that user get all books in list based on listId
-    ${response}=    GET   url=${URL}/booklist/books?id=${listId}${bearerToken}    expected_status=200
+    ${response}=    GET   url=${URL}/booklist/books?${bearerToken}?id=1    expected_status=200
     ${bookList}=    Evaluate    json.loads('''${response.text}''')
     Length Should Be    ${bookList}    1
 

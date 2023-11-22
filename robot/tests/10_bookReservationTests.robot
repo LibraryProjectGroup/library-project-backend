@@ -44,7 +44,7 @@ Verify that user can't check reservation based on non-existing bookId
 
 Verify that user can cancel reservation
     ${data}=    Create dictionary
-    ...    id=2    
+    ...    bookId=1    
     ${response}=    POST   url=${URL}/bookreservation/cancel?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
     
@@ -55,7 +55,7 @@ Verify that user can check all current reservations
 
 Verify that user can loan reservation
     ${data}=    Create dictionary
-    ...    id=2    
+    ...    bookId=1    
     ${response}=    POST   url=${URL}/bookreservation/loan?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
 

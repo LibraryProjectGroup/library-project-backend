@@ -10,7 +10,7 @@ ${okFalseJson}    {"ok":false}
 *** Test Cases ***
 Verify that user can add booklists
     ${data}=    Create dictionary
-    ...    name='Testlist'     
+    ...     name=Testlist     
     ${response}=    POST   url=${URL}/booklist?${bearerToken}    json=${data}    expected_status=200
     
 Verify that user can check all booklists
@@ -46,26 +46,26 @@ Verify that user can get all booklistentrys
     ${response}=    GET   url=${URL}/booklistentry/all?${bearerToken}   expected_status=200
     
 Verify that user get all booklistentrys based on listId
-    ${response}=    GET   url=${URL}/booklistentry/list?${bearerToken}?id=1    expected_status=200
+    ${response}=    GET   url=${URL}/booklistentry/list?${bearerToken}&id=1    expected_status=200
     ${bookList}=    Evaluate    json.loads('''${response.text}''')
     Length Should Be    ${bookList}    1
      
 Verify that user get all books in list based on listId
-    ${response}=    GET   url=${URL}/booklist/books?${bearerToken}?id=1    expected_status=200
+    ${response}=    GET   url=${URL}/booklist/books?${bearerToken}&id=1    expected_status=200
     ${bookList}=    Evaluate    json.loads('''${response.text}''')
     Length Should Be    ${bookList}    1
 
 Verify that user can modify booklist
     ${data}=    Create dictionary
     ...    id=1
-    ...    name='New name'  
+    ...    name=New name  
     ${response}=    PUT   url=${URL}/booklist?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
 
 Verify that user can't modify non-existing booklist
     ${data}=    Create dictionary
     ...    id=12345
-    ...    name='Wrong list'  
+    ...    name=Wrong list  
     ${response}=    PUT   url=${URL}/booklist?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okFalseJson}
 

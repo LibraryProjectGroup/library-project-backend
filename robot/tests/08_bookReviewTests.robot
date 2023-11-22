@@ -36,7 +36,7 @@ Verify that user can modify review
     ...    comment='Modified book'
     ...    rating=1
     ...    reviewId=1   
-    ${response}=    POST   url=${URL}/review?${bearerToken}    json=${data}    expected_status=200
+    ${response}=    PUT   url=${URL}/review?${bearerToken}    json=${data}    expected_status=200
     Should Be Equal As Strings    ${response.text}    ${okTrueJson}
 
 Verify that user can't modify non-existing review
@@ -44,5 +44,5 @@ Verify that user can't modify non-existing review
     ...    comment='Again wrong book'
     ...    rating=1
     ...    reviewId=1234   
-    ${response}=    POST   url=${URL}/review?${bearerToken}    json=${data}    expected_status=400
+    ${response}=    PUT   url=${URL}/review?${bearerToken}    json=${data}    expected_status=400
     Should Be Equal As Strings    ${response.text}    ${okFalseJson}

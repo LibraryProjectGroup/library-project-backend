@@ -18,6 +18,8 @@ FROM node:alpine
 
 WORKDIR /app
 
+# Copy SQL scripts for database initialization MAYBE NOT NEEDED in production/staging
+COPY sql /app/sql
 # Copy built assets from builder stage
 COPY --from=builder /app/build ./build
 # Only copy the necessary files for runtime

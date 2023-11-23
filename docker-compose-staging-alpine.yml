@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  efilibrary-backend-staging:
+    container_name: efilibrary-backend-staging
+    image: ${IMAGE_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile.staging
+    ports:
+      - 3002:3002

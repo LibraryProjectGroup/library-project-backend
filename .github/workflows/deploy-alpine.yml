@@ -1,12 +1,12 @@
-name: Deploy backend to staging
+name: Deploy backend using alpine version and multistage build
 
 on:
   push:
-    branches: ['development', 'gh-actions']
+    branches: ['development', 'gh-actions', 's23-docker-compose-tests']
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ghcr.io/libraryprojectgroup/library-project-backend:latest
+  IMAGE_NAME: ghcr.io/libraryprojectgroup/library-project-backend:alpine
 
 jobs:
   deploy:

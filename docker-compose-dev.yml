@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+  efilibrary-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+
+    #    stdin_open: true
+
+    environment:
+      DATABASE_SERVER: ${DATABASE_SERVER}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      OIDC_AUTH_BACKLINK_URL: ${OIDC_AUTH_BACKLINK_URL}
+      OIDC_AUTH_REDIRECT_URL: ${OIDC_AUTH_REDIRECT_URL}
+      PORT: 3002
+    ports:
+      - 3002:3002
+    volumes:
+      - ./src:/app/src
+  efilibrary-mysql:
+    image: mysql
+
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      #- efilibrary-db:/var/lib/mysql
+
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    ports:
+      - 3306:3306
+
+    expose:
+      - 3306
+#volumes:
+#  efilibrary-db:

@@ -28,7 +28,7 @@ You will need to run the backend application and the database. You can have them
 
 Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder. [docker-compose-test.yml](docker-compose-test.yml) also contains the database credentials for local development as environment variables. These must only be used for local development.
 
-If you have Windows, make you have Docker Desktop running before running the command.
+If you have Windows, make sure you have Docker Desktop running before running the command.
 
 ```
 docker-compose -f docker-compose-test.yml up -d
@@ -58,16 +58,6 @@ Use `npm ci` or `npm install` to install node modules.
 
 Start the backend by running `npm start`.
 
-## What the previous team used:
-
-To make SQL queries from backend, a local database isn't necessary: the backend can access remote database via PuTTY and tunneling. <br> To set up tunneling in PuTTY, have _Host Name_ set as **javaohjelmointi.net** and _Port_ as **22**. Under _Connection-> SSH -> Tunnels_, set _Source port_ as **3306** and _Destination_ as **localhost:3306**. After that, select _Session_ again, name the session under _Saved Session_, save it, select it from the list, and press **Open**. <br>
-After connecting, input proper credentials from **#secrets**. The database is then available on localhost:3306.
-
-### Using DevContainers
-
-> Note: These files have not been used or updated in a while so it's possible that this does not work.
-
-The [.devcontainer](.devcontainer/) folder contains files for developing the backend in a [VS Code Container](https://code.visualstudio.com/docs/remote/containers). See installation and usage instructions at [code.visualstudio.com](https://code.visualstudio.com/docs/remote/containers).
 
 <br>
 
@@ -75,8 +65,15 @@ The [.devcontainer](.devcontainer/) folder contains files for developing the bac
 
 There are two workflows files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
 
-The Node.js CI workflow runs on every push and pull request to development or main so it will tell you if the new code can be merged.
-First thing it checks for is the formatting using Prettier, so remember to use `npm run fmt`. After that it will spin up the backend and use wait-on to check when the URL is available. If that times out, it's most likely a problem with building the container/app. Then it runs the robot tests. If those fail, update the code, or update the tests.
+The Node.js CI workflow is designed to ensure code quality and functionality before changes are merged. It triggers on every push or when a pull request is made to `development`, `main`, or `s23-staging` branches. Here's a step-by-step breakdown of the workflow:
+
+1. **Code Formatting Check**: Utilizes Prettier to ensure code is following the project's formatting standards.
+2. **Backend Spin-up**: Initiates the backend and employs `wait-on` to verify when the URL is available. A timeout here often indicates an issue with container/app build.
+3. **Robot Tests**: Executes robot tests to verify code functionality. If tests fail, review and update your code or the tests accordingly.
+
+## The Prettier workflow
+
+The Prettier workflow is setup in the code with Pretty-quick (https://github.com/azz/pretty-quick) and Husky (https://typicode.github.io/husky/) to ensure consistent formatting. Pretty-Quick checks formatting when a developer tries to commit to the repo, and fixes formatting using our prettier config (.prettierrc.json file in the root of the project). Husky ensures that the pre-commit checks works with a pre-commit hook. Make sure you have all dependencies installed by running: `npm install` before you start. In your code editor, you can also set prettier checks on save, which will help the process.
 
 # Endpoints
 
@@ -84,19 +81,24 @@ First thing it checks for is the formatting using Prettier, so remember to use `
 
 Endpoints that use body will be in JSON format. Endpoint requires either query or body, if query is present, the body section will not be shown and vice versa.
 <br>
+
+[Postman files](https://github.com/LibraryProjectGroup/library-project-backend/tree/s23-refactor/docs/postman)
+
 If not separately mentioned, On Success Response schema is:
 
 ```JSON
+
 {
-  "ok": true
+"ok": true
 }
+
 ```
 
 If not separately mentioned, On Fail Response schema is:
 
 ```JSON
 {
-  "ok": fail
+"ok": false
 }
 ```
 
@@ -1221,11 +1223,177 @@ Body:
 
 </Details>
 
-# Database Diagram (outdated)
+## FavoriteBooks
 
 <Details>
     <Summary>
-        Show Diagram
+        Show Endpoints
     </Summary>
-    <img src="dbdiagram.png"></img>
+
+### /favorite/check (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "isFavorited": boolean
+}
+```
+
+### /favorite/count (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "count": number
+}
+```
+
+### /favorite (DELETE)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /favorite (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number 
+}
+```
+
 </Details>
+
+
+## BookReview
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /review/all (GET)
+
+On Success Response schema:
+
+```JSON
+[
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
+]
+```
+
+### /review/book (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+[
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
+]
+```
+
+### /review/average (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "averageRating": number
+}
+```
+
+
+### /review (DELETE)
+
+Body:
+
+```JSON
+{
+    "reviewId": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number,
+    "comment": string,
+    "rating": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{ 
+    "comment": string,
+    "rating": number,
+    "reviewId": number
+}
+```
+
+</Details>
+
+# Database Documentation
+
+[Database Diagram and Documentation](./sql/readme.md)
+

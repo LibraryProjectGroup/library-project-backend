@@ -1,0 +1,33 @@
+# Stage 1: Build
+FROM node:alpine as builder
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy project files to docker
+COPY . .
+
+# Build project
+RUN npm run build
+
+# Stage 2: Run
+FROM node:alpine
+
+WORKDIR /app
+
+# Copy built assets from builder stage
+COPY --from=builder /app/build ./build
+# Only copy the necessary files for runtime
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm install --only=production
+
+# Expose port 3002 to host
+EXPOSE 3002
+
+# Run the project
+CMD ["node", "build/server.js"]

@@ -193,35 +193,14 @@ On Fail Response schema:
 
 </Details>
 
-## Book List Entry
+## Book
 
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
-    
-### /booklistentry/all (GET)
-On Success Response schema:
-```JSON
-[
-  {
-    "id": number,
-    "list": number,
-    "book": number
-  }
-]
-```
 
-On Fail Response schema:
-
-```JSON
-{
-  "ok": false,
-  "status": 500
-}
-```
-
-### /booklistentry/list?id={id} (GET)
+### /book/all (GET)
 
 On Success Response schema:
 
@@ -229,90 +208,140 @@ On Success Response schema:
 [
   {
     "id": number,
-    "list": number,
-    "book": number
+    "library_user": number,
+    "title": string,
+    "image": string,
+    "author": string,
+    "year": number,
+    "topic": string,
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
 
-On Fail Response schema:
+### /book/page?page={page}&pageSize={pageSize} (GET)
+
+pageSize is optional
+
+On Success Response schema:
 
 ```JSON
-{
-  "ok": false,
-  "status": 500
-}
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "image": string,
+    "author": string,
+    "year": number,
+    "topic": string,
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
+  }
+]
 ```
 
-### /booklistentry?id={id} (GET)
+### /book/count (GET)
+
+On Success Response schema:
+
+```JSON
+number
+```
+
+### /book?id={id} (GET)
 
 On Success Response schema:
 
 ```JSON
 {
   "id": number,
-  "list": number,
-  "book": number
+  "library_user": number,
+  "title": string,
+  "image": string,
+  "author": string,
+  "year": number,
+  "topic": string,
+  "isbn": string,
+  "deleted": boolean,
+  "homeOfficeId": number,
+  "homeOfficeName": string,
+  "homeOfficeCountry": string
 }
 ```
 
-On Fail Response schema:
+### /book?id={id} (DELETE)
+
+On Success Response schema:
 
 ```JSON
 {
-  "ok": false,
-  "status": 500
+  "id": number,
 }
 ```
 
-### /booklistentry (POST)
+### /book (POST)
 
 Body:
 
 ```JSON
 {
-  "list": number,
-  "book": number
+  "userId": number,
+  "title": string,
+  "image": string,
+  "author": string,
+  "year": number,
+  "isbn": string,
+  "topic": string,
+  "homeOfficeId": string
 }
 ```
 
-On Fail Response schema:
-
-```JSON
-{
-  "ok": false,
-  "status": 500
-}
-```
-
-### /booklistentry (DELETE)
+### /book (PUT)
 
 Body:
 
 ```JSON
 {
-  "id": number
+  "id": number,
+  "title": string,
+  "image": string,
+  "author": string,
+  "year": number,
+  "isbn": string,
+  "topic": string,
+  "homeOfficeId": string,
 }
 ```
 
-On Fail Response schema:
+### /book/all/reserved (GET)
+
+On Success Response schema:
 
 ```JSON
-{
-  "ok": false,
-  "status": 500
-}
-```
-
-### /booklistentry/book (DELETE)
-
-Body:
-
-```JSON
-{
-  "listId": number,
-  "bookId": number
-}
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "image": string,
+    "author": string,
+    "year": number,
+    "topic": string,
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
+  }
+]
 ```
 
 </Details>
@@ -484,6 +513,134 @@ On Fail Response schema:
 ```
 
 </Details>
+
+
+
+## Book List Entry
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+    
+### /booklistentry/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "list": number,
+    "book": number
+  }
+]
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry/list?id={id} (GET)
+
+On Success Response schema:
+
+```JSON
+[
+  {
+    "id": number,
+    "list": number,
+    "book": number
+  }
+]
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry?id={id} (GET)
+
+On Success Response schema:
+
+```JSON
+{
+  "id": number,
+  "list": number,
+  "book": number
+}
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry (POST)
+
+Body:
+
+```JSON
+{
+  "list": number,
+  "book": number
+}
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry (DELETE)
+
+Body:
+
+```JSON
+{
+  "id": number
+}
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry/book (DELETE)
+
+Body:
+
+```JSON
+{
+  "listId": number,
+  "bookId": number
+}
+```
+
+</Details>
+
+
 
 ## Book Request
 
@@ -687,155 +844,108 @@ Body:
 
 </Details>
 
-## Book
+
+
+## BookReview
 
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
-### /book/all (GET)
+### /review/all (GET)
 
 On Success Response schema:
 
 ```JSON
 [
-  {
-    "id": number,
-    "library_user": number,
-    "title": string,
-    "image": string,
-    "author": string,
-    "year": number,
-    "topic": string,
-    "isbn": string,
-    "deleted": boolean,
-    "homeOfficeId": number,
-    "homeOfficeName": string,
-    "homeOfficeCountry": string
-  }
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
 ]
 ```
 
-### /book/page?page={page}&pageSize={pageSize} (GET)
-
-pageSize is optional
-
-On Success Response schema:
-
-```JSON
-[
-  {
-    "id": number,
-    "library_user": number,
-    "title": string,
-    "image": string,
-    "author": string,
-    "year": number,
-    "topic": string,
-    "isbn": string,
-    "deleted": boolean,
-    "homeOfficeId": number,
-    "homeOfficeName": string,
-    "homeOfficeCountry": string
-  }
-]
-```
-
-### /book/count (GET)
-
-On Success Response schema:
-
-```JSON
-number
-```
-
-### /book?id={id} (GET)
-
-On Success Response schema:
-
-```JSON
-{
-  "id": number,
-  "library_user": number,
-  "title": string,
-  "image": string,
-  "author": string,
-  "year": number,
-  "topic": string,
-  "isbn": string,
-  "deleted": boolean,
-  "homeOfficeId": number,
-  "homeOfficeName": string,
-  "homeOfficeCountry": string
-}
-```
-
-### /book?id={id} (DELETE)
-
-On Success Response schema:
-
-```JSON
-{
-  "id": number,
-}
-```
-
-### /book (POST)
+### /review/book (GET)
 
 Body:
 
 ```JSON
 {
-  "userId": number,
-  "title": string,
-  "image": string,
-  "author": string,
-  "year": number,
-  "isbn": string,
-  "topic": string,
-  "homeOfficeId": string
+  "bookId": number
 }
 ```
-
-### /book (PUT)
-
-Body:
-
-```JSON
-{
-  "id": number,
-  "title": string,
-  "image": string,
-  "author": string,
-  "year": number,
-  "isbn": string,
-  "topic": string,
-  "homeOfficeId": string,
-}
-```
-
-### /book/all/reserved (GET)
 
 On Success Response schema:
 
 ```JSON
 [
-  {
-    "id": number,
-    "library_user": number,
-    "title": string,
-    "image": string,
-    "author": string,
-    "year": number,
-    "topic": string,
-    "isbn": string,
-    "deleted": boolean,
-    "homeOfficeId": number,
-    "homeOfficeName": string,
-    "homeOfficeCountry": string
-  }
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
 ]
+```
+
+### /review/average (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "averageRating": number
+}
+```
+
+
+### /review (DELETE)
+
+Body:
+
+```JSON
+{
+    "reviewId": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number,
+    "comment": string,
+    "rating": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{ 
+    "comment": string,
+    "rating": number,
+    "reviewId": number
+}
 ```
 
 </Details>
@@ -1034,6 +1144,73 @@ Body:
 ```
 
 </Details>
+
+
+## FavoriteBooks
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /favorite/check (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "isFavorited": boolean
+}
+```
+
+### /favorite/count (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "count": number
+}
+```
+
+### /favorite (DELETE)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /favorite (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number 
+}
+```
+
+</Details>
+
 
 ## Health
 
@@ -1234,175 +1411,7 @@ Body:
 
 </Details>
 
-## FavoriteBooks
 
-<Details>
-    <Summary>
-        Show Endpoints
-    </Summary>
-
-### /favorite/check (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-{
-    "isFavorited": boolean
-}
-```
-
-### /favorite/count (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-{
-    "count": number
-}
-```
-
-### /favorite (DELETE)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-### /favorite (POST)
-
-Body:
-
-```JSON
-{
-    "bookId": number 
-}
-```
-
-</Details>
-
-
-## BookReview
-
-<Details>
-    <Summary>
-        Show Endpoints
-    </Summary>
-
-### /review/all (GET)
-
-On Success Response schema:
-
-```JSON
-[
-{
-        "id": number,
-        "user_id": number,
-        "book_id": number,
-        "comment": string,
-        "rating": number,
-        "review_date": Date
-}
-]
-```
-
-### /review/book (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-[
-{
-        "id": number,
-        "user_id": number,
-        "book_id": number,
-        "comment": string,
-        "rating": number,
-        "review_date": Date
-}
-]
-```
-
-### /review/average (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-{
-    "averageRating": number
-}
-```
-
-
-### /review (DELETE)
-
-Body:
-
-```JSON
-{
-    "reviewId": number
-}
-```
-
-### /review (POST)
-
-Body:
-
-```JSON
-{
-    "bookId": number,
-    "comment": string,
-    "rating": number
-}
-```
-
-### /review (POST)
-
-Body:
-
-```JSON
-{ 
-    "comment": string,
-    "rating": number,
-    "reviewId": number
-}
-```
-
-</Details>
 
 # Database Documentation
 

@@ -204,6 +204,8 @@ Definition: A book that’s been registered to the library
 |                  | year             | Year published                    | Year | NOT NULL         |
 |                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
 | not implemented                 | topic             | Books topic taken from Topic    | Varchar(50)  | FK              |
+|                  | description       | Books topic taken from Topic    | Varchar(50)  |(TEXT)            |
+|                  | language          | Books topic taken from Topic    | Varchar(50)  | varchar(3)              |
 |                  | location          | Location of book                | Varchar(20)  | NOT NULL        |
 |                  | deleted    | Determines if book has been deleted      | Bit(1)                          |              |
 
@@ -290,7 +292,7 @@ Definition: A borrow card that shows if a book is borrowed, by who, and until wh
 ##
 
 ### Name: favorite_book
-Definition: Offices and locations
+Definition: User can mark the book as a favorite
 | Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL  |
 |------------------|------------------------------|---------------------------------|--------------|-----------------|
 |                  | id                           |                                 | Integer      | PK              |
@@ -354,18 +356,6 @@ Definition: Helper table that binds keywords to books.
 
 ##
 
-### Name: recommendation (not implemented)
-Definition: A recommendation that is given to a book by a user.
-
-
-| Properties | Name           | Description                                | Type    | PK/FK/NOT NULL |
-| ---------- | -------------- | ------------------------------------------ | ------- | -------------- |
-|            | id             |                                            | Integer | PK             |
-|            | book           | id of the book that’s being rated          | Integer | FK             |
-|            | library_user   | id of user who is doing the recommendation | Integer | FK             |
-|            | recommendation | Is the book recommended or not             | Bit(1)  | NOT NULL       |
-
-##
 
 ### CREATE TABLE Queries
 Not updated

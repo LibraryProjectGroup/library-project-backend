@@ -30,17 +30,17 @@ Database initialization is handled automatically on creation using the _\*.sql_ 
 
 If you have Windows, make sure you have Docker Desktop running before running the command.
 
-## For development
+### For development
 
 ```
 docker-compose -f docker-compose-dev.yml up -d
 ```
-## For staging
+### For staging
 
 ```
 docker-compose -f docker-compose-staging.yml up -d
 ```
-## For tests
+### For tests
 ```
 docker-compose -f docker-compose-test.yml up -d
 ```

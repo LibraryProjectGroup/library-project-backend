@@ -10,7 +10,7 @@ The sql file can be found in teams under database folder.
 (Full table creation, inserting queries and table dropping queries are in the bottom of the document.)
 
 ## Relation Schema
-Updated 3.11.2023
+Updated 27.11.2023
 
 ```mermaid
 
@@ -37,13 +37,16 @@ classDiagram
   oauth_challenge_storage "0..*" -- "1" oidc_issuer
 
   home_office "1" -- "0..*" book 
-  home_office -- library_user
+  home_office "1" -- "0..*" library_user
 
-  book_review -- book
-  book_review -- library_user
+  book_review "0..*" -- "1" book
+  book_review "0..*" -- "1" library_user
 
-  favorite_book -- book
-  favorite_book -- library_user
+  favorite_book "0..*" -- "1" book
+  favorite_book "0..*" -- "1" library_user
+  
+  library_user "1" -- "0..*" book_request
+
 
   class library_user{
     id	[PK]
@@ -65,6 +68,8 @@ classDiagram
     year
     isbn
     topic
+    description
+    language
     deleted
   }
 

@@ -174,7 +174,7 @@ classDiagram
 ```
 
 # Tables
-Updated: 11.10.2023
+Updated: 27.11.2023
 
 ##
 
@@ -190,9 +190,9 @@ Definition: A book that’s been registered to the library
 |                  | author            | Name of author                  | Varchar(250) | NOT NULL        |
 |                  | year             | Year published                    | Year | NOT NULL         |
 |                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
-| not implemented                 | topic             | Books topic taken from Topic    | Varchar(50)  | FK              |
-|                  | description       | Books topic taken from Topic    | Varchar(50)  |(TEXT)            |
-|                  | language          | Books topic taken from Topic    | Varchar(50)  | varchar(3)              |
+|                  | topic             | Topic of the book               | Varchar(50)  |               |
+|                  | description       | Books topic taken from Topic    | TEXT         |            |
+|                  | language          | Languagecode of the book longuage   | Varchar(3)  |              |
 |                  | location          | Location of book                | Varchar(20)  | NOT NULL        |
 |                  | deleted    | Determines if book has been deleted      | Bit(1)                          |              |
 

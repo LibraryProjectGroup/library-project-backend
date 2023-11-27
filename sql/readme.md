@@ -161,19 +161,6 @@ classDiagram
     favorited_at
   }
 
-
-
-    class topic {
-    topic [PK]
-  }
-
-  class recommendation{
-    id [PK]
-	  book [FK]
-	  library_user [FK]
-	  recommendation
-  }
-
   class book_request {
     id [PK]
     userId [FK]
@@ -323,33 +310,3 @@ Definition: A user of the software
 |                  | administrator    | Determines admin status      | Bit(1)                          |              |
 |                  | deleted    | Determines if user has been deleted      | Bit(1)                          |              |
 
-##
-
-## not implemented
-
-### Name: topic (not implemented)
-Definition: Contains topics for books.
-
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | topic             | Topic names for books           | Varchar(50)  | PK              |
-
-##
-
-### Name: keyword (not implemented)
-Definition: Table contains a list of keywords that books can be labeled with. Useful for keyword searches.
-
-| Properties | Name    | Description                     | Type        | PK/FK/NOT NULL |
-| ---------- | ------- | ------------------------------- | ----------- | -------------- |
-|            | keyword | The keyword to label books with | Varchar(30) | PK             |
-
-##
-
-### Name: book_keyword (not implemented)
-Definition: Helper table that binds keywords to books.
-
-| Properties | Name    | Description                        | Type        | PK/FK/NOT NULL |
-| ---------- | ------- | ---------------------------------- | ----------- | -------------- |
-|            | id      |                                    | Integer     | PK             |
-|            | book    | id of a book taken from Book table | Integer     | FK             |
-|            | keyword | keyword taken from Keyword table   | Varchar(30) | FK             |

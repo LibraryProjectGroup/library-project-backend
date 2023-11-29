@@ -3,52 +3,47 @@ import request from 'supertest'
 import { app, pool } from '../../src'
 
 jest.mock('../../src/queries/session')
-jest.mock('../../src/queries/book_list_entry')
+jest.mock('../../src/queries/office')
 jest.mock('../../src/queries/user')
 
-describe('basic endpoint testing for /booklistentry', () => {
-  test('get /booklistentry/all', async () => {
+describe('basic endpoint testing for /office', () => {
+  test('get all offices /office/all', async () => {
     return request(app)
-      .get('/booklistentry/all')
+      .get('/office/all')
       .set('Authorization', `Bearer 123`)
       .expect(200)
       .expect('Content-Type', /json/)
   })
 
-  test('get /booklistentry/list', async () => {
+  test('get office based on id /office/:homeOfficeId', async () => {
     return request(app)
-      .get('/booklistentry/list?id=1')
+      .get('/office/1')
       .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
+      .expect({ id: 1, name: 'Home Office 1', countryCode: 'USA' })
   })
 
-  test('get /booklistentry', async () => {
+  test('delete office /office/:homeOfficeId', async () => {
     return request(app)
-      .get('/booklistentry?id=1')
+      .delete('/office/2')
       .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect('Content-Type', /json/)
+      .expect('true')
   })
 
-  test('post /booklistentry', async () => {
+  test('update office /office/:homeOfficeId', async () => {
     return request(app)
-      .post('/booklistentry')
-      .send({
-        list: 1,
-        book: 3,
-      })
+      .put('/office/1')
+      .send({ name: 'Uzbekistan', countryCode: 'UZB' })
       .set('Authorization', `Bearer 123`)
       .expect(200)
       .expect({ ok: true })
   })
 
-  test('delete /booklistentry', async () => {
+  test('insert office /office', async () => {
     return request(app)
-      .delete('/booklistentry')
-      .send({
-        id: 1,
-      })
+      .post('/office/')
+      .send({ name: 'Tadzikistan', countryCode: 'TZK' })
       .set('Authorization', `Bearer 123`)
       .expect(200)
       .expect({ ok: true })

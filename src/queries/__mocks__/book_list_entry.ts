@@ -36,11 +36,11 @@ const getBook_list_entry = (id: number) => {
   return null
 }
 
-export const querySelectAllEntries = async () => {
+export const getAllEntries = async () => {
   return mockBook_list_entryData as Array<Book_list_entry>
 }
 
-export const querySelectAllEntriesByList = async (listId: number) => {
+export const getEntriesByList = async (listId: number) => {
   let array: Array<Book_list_entry> = []
   mockBook_list_entryData.forEach((element) => {
     if (element.list == listId) array.push(element)
@@ -48,11 +48,11 @@ export const querySelectAllEntriesByList = async (listId: number) => {
   return array as Array<Book_list_entry>
 }
 
-export const querySelectEntry = async (entryId: number) => {
+export const getEntryById = async (entryId: number) => {
   return getBook_list_entry(entryId)
 }
 
-export const queryInsertEntry = async (book_list_entry: Book_list_entry) => {
+export const insertNewEntry = async (book_list_entry: Book_list_entry) => {
   mockBook_list_entryData.push({
     id: idCounter++,
     list: book_list_entry.list,
@@ -61,7 +61,7 @@ export const queryInsertEntry = async (book_list_entry: Book_list_entry) => {
   return true
 }
 
-export const queryRemoveFromList = async (entryId: number) => {
+export const removeEntryById = async (entryId: number) => {
   let deleted = false
   mockBook_list_entryData = mockBook_list_entryData.filter(
     (book_list_entry) => {

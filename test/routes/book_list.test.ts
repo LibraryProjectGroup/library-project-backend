@@ -4,6 +4,7 @@ import { app, pool } from '../../src'
 
 jest.mock('../../src/queries/session')
 jest.mock('../../src/queries/book_list')
+jest.mock('../../src/queries/user')
 
 describe('basic endpoint testing for /booklist', () => {
   test('get /booklist/all', async () => {

@@ -56,7 +56,7 @@ const detailedExpiredBorrow1: DetailedExpiredBorrow = {
   userId: borrow4.library_user,
 }
 
-let mockBorrowData = [borrow1, borrow2, borrow3, borrow4]
+export let mockBorrowData = [borrow1, borrow2, borrow3, borrow4]
 let mockDetailedExpiredBorrowData = [detailedExpiredBorrow1]
 let idCounter = 4
 
@@ -69,11 +69,11 @@ const getBorrow = (id: number) => {
   return null
 }
 
-export const querySelectAllBorrows = async (): Promise<Borrow[]> => {
+export const getAllBorrows = async (): Promise<Borrow[]> => {
   return mockBorrowData as Array<Borrow>
 }
 
-export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
+export const getAllCurrentBorrows = async (): Promise<Borrow[]> => {
   let array: Array<Borrow> = []
   mockBorrowData.forEach((element) => {
     if (!element.returned) {
@@ -83,7 +83,7 @@ export const querySelectAllCurrentBorrows = async (): Promise<Borrow[]> => {
   return array as Array<Borrow>
 }
 
-export const querySelectAllCurrentBorrows2 = async () => {
+export const getAllCurrentDetailedBorrows = async () => {
   let array: {
     username: string
     title: string
@@ -105,15 +105,13 @@ export const querySelectAllCurrentBorrows2 = async () => {
   return array
 }
 
-export const querySelectBorrow = async (
+export const getBorrowById = async (
   borrowingId: number
 ): Promise<Borrow | null> => {
   return getBorrow(borrowingId)
 }
 
-export const queryDeleteBorrow = async (
-  borrowingId: number
-): Promise<boolean> => {
+export const deleteBorrow = async (borrowingId: number): Promise<boolean> => {
   let deleted = false
   mockBorrowData = mockBorrowData.filter((borrow) => {
     if (borrow.id == borrowingId) deleted = true
@@ -122,7 +120,7 @@ export const queryDeleteBorrow = async (
   return deleted
 }
 
-export const queryInsertBorrow = async (
+export const insertBorrow = async (
   userId: number,
   bookId: number,
   dueDate: Date,
@@ -140,7 +138,7 @@ export const queryInsertBorrow = async (
   return true
 }
 
-export const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
+export const updateBorrow = async (borrow: Borrow): Promise<boolean> => {
   const editedBorrow = getBorrow(borrow.id)
   if (editedBorrow) {
     editedBorrow.book = borrow.book
@@ -152,9 +150,7 @@ export const queryUpdateBorrow = async (borrow: Borrow): Promise<boolean> => {
   return false
 }
 
-export const queryBookIsAvailable = async (
-  bookId: number
-): Promise<boolean> => {
+export const isBookAvailable = async (bookId: number): Promise<boolean> => {
   const borrow = getBorrow(bookId)
   let availCheck = 0
   if (borrow) {
@@ -165,9 +161,7 @@ export const queryBookIsAvailable = async (
   return availCheck == 0
 }
 
-export const queryBorrowsByUserId = async (
-  userId: number
-): Promise<Borrow[]> => {
+export const getBorrowsByUserId = async (userId: number): Promise<Borrow[]> => {
   let array: Array<Borrow> = []
   const borrow = getBorrow(userId)
   if (borrow) {
@@ -178,7 +172,7 @@ export const queryBorrowsByUserId = async (
   return array as Array<Borrow>
 }
 
-export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
+export const getExpiredBorrows = async (): Promise<Borrow[]> => {
   let array: Array<Borrow> = []
   mockBorrowData.forEach((element) => {
     if (!element.returned && new Date() > element.dueDate) {
@@ -188,7 +182,7 @@ export const queryExpiredBorrows = async (): Promise<Borrow[]> => {
   return array as Array<Borrow>
 }
 
-export const queryDetailedExpiredBorrows = async (): Promise<
+export const getDetailedExpiredBorrows = async (): Promise<
   DetailedExpiredBorrow[]
 > => {
   return mockDetailedExpiredBorrowData as Array<DetailedExpiredBorrow>

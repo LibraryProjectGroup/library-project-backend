@@ -13,40 +13,20 @@ Database connection doesn't work without **.env** in **root** folder. .env is se
 Here's an example of a .env file you can use:
 
 ```env
-version:
-
-services:
-  efilibrary-backend:
-    build:
-      context:
-      dockerfile:
-
-    environment:
-      DATABASE_SERVER:
-      DATABASE_NAME:
-      DATABASE_USER:
-      DATABASE_PASSWORD:
-      OIDC_AUTH_BACKLINK_URL:
-      OIDC_AUTH_REDIRECT_URL:
-      PORT:
-
-    ports:
-      - 
-
-  efilibrary-mysql:
-    image:
-    volumes:
-      - 
-    environment:
-      MYSQL_DATABASE:
-      MYSQL_USER:
-      MYSQL_PASSWORD:
-      MYSQL_ROOT_PASSWORD:
-
-    ports:
-      - 
-    expose:
-      - 
+    #Backend
+DATABASE_SERVER=
+DATABASE_NAME=
+DATABASE_USER=
+DATABASE_PASSWORD=
+OIDC_AUTH_BACKLINK_URL=
+OIDC_AUTH_REDIRECT_URL=
+BACKEND_PORT=
+#MySQL
+MYSQL_DATABASE=
+MYSQL_USER=app
+MYSQL_PASSWORD=
+MYSQL_ROOT_PASSWORD=
+MYSQL_PORT=
 ```
 
 # How to run

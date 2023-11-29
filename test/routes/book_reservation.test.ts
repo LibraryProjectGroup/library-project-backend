@@ -61,7 +61,7 @@ describe('basic endpoint testing for /bookreservation', () => {
   test('cancel reservation /bookreservation/cancel', async () => {
     return request(app)
       .post('/bookreservation/cancel')
-      .send({ bookId: 1 })
+      .send({ reservationId: 1 })
       .set('Authorization', `Bearer 123`)
       .expect(200)
       .expect({ ok: true })
@@ -70,7 +70,7 @@ describe('basic endpoint testing for /bookreservation', () => {
   test('loan reservation /bookreservation/loan', async () => {
     return request(app)
       .post('/bookreservation/loan')
-      .send({ bookId: 3 })
+      .send({ reservationId: 3 })
       .set('Authorization', `Bearer 123`)
       .expect(200)
       .expect({ ok: true })

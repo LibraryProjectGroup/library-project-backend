@@ -8,7 +8,7 @@ Clone the repository on your computer. Detailed instructions can be found [here]
 
 ## Environment variables
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. You will not need this if you're using docker-compose. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
 
 Here's an example of a .env file you can use:
 

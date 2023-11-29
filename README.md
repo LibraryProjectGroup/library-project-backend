@@ -56,22 +56,6 @@ docker-compose -f docker-compose-test.yml up -d
 
 The -f flag specifies the file since there are different ones. The -d flag (detach) runs the container in the background allowing you to close the terminal without killing the process.
 
-## Creating the database separately
-
-Having the database and the node project separately is more convenient if you want to make changes to the code.
-
-### Setting up the local database
-
-You can use Docker to create the MariaDB container:
-
-```cmd
-docker run -d --name efilibrary-mariadb -p "3306:3306" --env MARIADB_ROOT_PASSWORD=admin --volume efilbirary-mariadb-data:/var/lib/mysql mariadb:latest
-```
-
-Each time you start up the project, you can just start the existing container, you don't have to create a new database every time.
-
-Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder. [Here's a video](https://youtu.be/POcHaIwmAhw) on how to do it in MySQL Workbench, but you can also use DataGrip or another database explorer.
-
 ### Running the node project
 
 Use `npm ci` or `npm install` to install node modules.

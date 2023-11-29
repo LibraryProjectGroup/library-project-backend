@@ -53,7 +53,9 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     let bookAvailable = await isBookAvailable(req.body.bookId)
-    let bookReservationStatus = await getCurrentReservationForBook(req.body.bookId)
+    let bookReservationStatus = await getCurrentReservationForBook(
+      req.body.bookId
+    )
     if (bookAvailable && bookReservationStatus == null) {
       let dueDate = new Date()
       dueDate.setDate(dueDate.getDate() + BORROW_LENGTH)

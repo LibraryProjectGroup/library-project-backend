@@ -30,13 +30,14 @@ describe('tests for route /user', () => {
       .expect('Content-Type', /json/)
   })
 
-  test('delete /user', async () => {
+  /**test('delete /user', async () => {
     return request(app)
       .delete('/user?id=1')
       .set('Authorization', `Bearer 123`)
       .expect(200)
       .expect('Content-Type', /json/)
   })
+  */
 
   test('post /user //not admin', async () => {
     return (

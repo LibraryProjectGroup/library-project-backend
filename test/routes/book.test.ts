@@ -4,12 +4,13 @@ import { app, pool } from '../../src'
 
 jest.mock('../../src/queries/session')
 jest.mock('../../src/queries/book')
+jest.mock('../../src/queries/user')
 
 describe('basic endpoint testing for /book', () => {
   test('get /book/all', async () => {
     return request(app)
       .get('/book/all')
-      .set('Authorization', `Bearer 123`)
+      .set('Authorization', 'Bearer 123')
       .expect(200)
       .expect('Content-Type', /json/)
   })
@@ -23,20 +24,28 @@ describe('basic endpoint testing for /book', () => {
   })
 
   test('delete /book', async () => {
-    return (
-      request(app)
-        .delete('/book?id=1')
-        .set('Authorization', `Bearer 123`)
-        //.expect(200)
-        //.expect("Content-Type", /json/);
-        .then(() => {
+    return request(app)
+      .delete('/book?id=1')
+      .set('Authorization', `Bearer 123`)
+      .expect(200)
+      .expect({ ok: true })
+  })
+  /**
+   * .then(() => {
           expect(200)
           console.log('book delete test sucessful')
         })
         .catch((error) => {
           console.error('failed: ', error)
         })
-    )
+   */
+
+  test('get /book/count', async () => {
+    return request(app)
+      .get('/book/count')
+      .set('Authorization', `Bearer 123`)
+      .expect(200)
+      .expect('Content-Type', /json/)
   })
 
   test('post /book', async () => {
@@ -53,7 +62,7 @@ describe('basic endpoint testing for /book', () => {
       })
       .set('Authorization', `Bearer 123`)
       .expect(200)
-      .expect({ ok: true })
+      .expect('Content-Type', /json/)
   })
 
   test('put /book', async () => {

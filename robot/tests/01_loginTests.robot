@@ -33,4 +33,6 @@ Verify user can login
     ${response}=    POST    ${URL}/auth/login    json=${data}    expected_status=200
     Should Be True    ${response.json()['ok']}
     Set Global Variable    ${bearerToken}    access_token=${response.json()['secret']}
+    Set Global Variable    ${userId}    ${response.json()['userId']}
     Log To Console    ${bearerToken}
+    Log To Console    ${userId}

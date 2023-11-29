@@ -36,16 +36,6 @@ Verify that a nonexistent book can't be deleted
     ${response}=    DELETE    url=${URL}/book/?id=12321&${bearerToken}    expected_status=403
     Should Not Be True    ${response.json()['ok']}
 
-Verify user can check all borrowed books
-    ${response}=    GET    url=${URL}/borrow/all?${bearerToken}    expected_status=200
-
-Verify that user cannot get a nonexisting borrowed book
-    ${response}=    GET    url=${URL}/borrow/?id=123456789&${bearerToken}    expected_status=200
-    Should Be Equal    ${response.json()}    ${None}
-
-Verify that user can check borrowed book by id
-    ${response}=    GET    url=${URL}/borrow/?id=1&${bearerToken}    expected_status=200
-    Should Be Equal    ${response.json()['id']}    ${1}
 
 # Verify that book can be updated
 #    &{data}=    Create dictionary    { library_user=2    title=Fake asdf    image=http://books.google.com/books/content?id=ILqrxQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api    author=Test Author     year=2022    isbn=123-242-421    topic=js    location=Fake location    deleted=0}

@@ -8,3 +8,5 @@ ${BACKENDTESTPASSWORD}      default
 
 # this will be set in initial login test
 ${bearerToken}              default
+${userId}                   default 
+

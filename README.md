@@ -37,7 +37,7 @@ You will need to run the backend application and the database. You can have them
 
 Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder.
 
-If you have Windows, make sure you have Docker Desktop running before running the command.
+If you have Windows, make sure you have Docker Desktop running before running the command. https://www.docker.com/products/docker-desktop/
 
 ### For development
 

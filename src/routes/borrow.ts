@@ -13,6 +13,7 @@ import {
   getDetailedExpiredBorrows,
 } from '../queries/borrow'
 import Borrow from '../interfaces/borrow.interface'
+import { getCurrentReservationForBook } from '../queries/book_reservation'
 
 const BORROW_LENGTH = 10
 
@@ -52,7 +53,8 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     let bookAvailable = await isBookAvailable(req.body.bookId)
-    if (bookAvailable) {
+    let bookReservationStatus = await getCurrentReservationForBook(req.body.bookId)
+    if (bookAvailable && bookReservationStatus == null) {
       let dueDate = new Date()
       dueDate.setDate(dueDate.getDate() + BORROW_LENGTH)
       res.json({

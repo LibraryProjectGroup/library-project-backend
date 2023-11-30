@@ -24,7 +24,7 @@ const borrow2: Borrow = {
   borrowDate: new Date(),
   dueDate: new Date(tenDaysAhead),
   returnDate: null,
-  returned: false,
+  returned: true,
 }
 
 const borrow3: Borrow = {

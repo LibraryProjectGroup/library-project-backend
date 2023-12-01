@@ -5,7 +5,7 @@ import Book from '../interfaces/book.interface'
 export const getBookById = async (bookId: number): Promise<Book | null> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query<RowDataPacket[]>(
-    'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book JOIN home_office ho USING (home_office_id) WHERE book.id = ?',
+    'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book LEFT JOIN home_office ho USING (home_office_id) WHERE book.id = ?',
     [bookId]
   )
   return rows.length > 0 ? (rows[0] as Book) : null
@@ -14,7 +14,7 @@ export const getBookById = async (bookId: number): Promise<Book | null> => {
 export const getAllExistingBooks = async (): Promise<Book[]> => {
   const promisePool = pool.promise()
   const [rows] = await promisePool.query(
-    'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book JOIN home_office ho USING (home_office_id) WHERE deleted != 1;'
+    'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book LEFT JOIN home_office ho USING (home_office_id) WHERE deleted != 1;'
   )
   return rows as Book[]
 }
@@ -27,7 +27,7 @@ export const getAllBooksPaged = async (
   let start = (page - 1) * size
   const promisePool = pool.promise()
   const [rows] = await promisePool.query(
-    'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book JOIN home_office ho USING (home_office_id) WHERE deleted != 1 limit ? offset ?',
+    'SELECT book.*, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry FROM book LEFT JOIN home_office ho USING (home_office_id) WHERE deleted != 1 limit ? offset ?',
     [size, start]
   )
   return rows as Book[]
@@ -124,4 +124,16 @@ export const getAllReservedBooks = async (): Promise<Book[]> => {
     'select book.id, book.library_user, book.title, book.image, book.author, book.year, book.isbn, book.topic, book.description, book.language, book.deleted, ho.home_office_id AS homeOfficeId, ho.name AS homeOfficeName, ho.country_code AS homeOfficeCountry from book JOIN book_reservation AS reservation ON reservation.bookId = book.id JOIN home_office ho USING (home_office_id) WHERE reservation.canceled = 0 AND reservation.loaned = 0 AND book.deleted != 1;'
   )
   return rows as Book[]
+}
+
+export const updateBooksOffice = async (
+  newOfficeId: number,
+  oldOfficeId: number
+): Promise<boolean> => {
+  const query = 'UPDATE book SET home_office_id = ? WHERE home_office_id = ?'
+  const values = [newOfficeId, oldOfficeId]
+
+  const promisePool = pool.promise()
+  const [rows] = await promisePool.query<ResultSetHeader>(query, values)
+  return rows.affectedRows !== 0
 }

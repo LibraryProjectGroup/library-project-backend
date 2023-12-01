@@ -10,7 +10,7 @@ The sql file can be found in teams under database folder.
 (Full table creation, inserting queries and table dropping queries are in the bottom of the document.)
 
 ## Relation Schema
-Updated 3.11.2023
+Updated 27.11.2023
 
 ```mermaid
 
@@ -37,13 +37,16 @@ classDiagram
   oauth_challenge_storage "0..*" -- "1" oidc_issuer
 
   home_office "1" -- "0..*" book 
-  home_office -- library_user
+  home_office "1" -- "0..*" library_user
 
-  book_review -- book
-  book_review -- library_user
+  book_review "0..*" -- "1" book
+  book_review "0..*" -- "1" library_user
 
-  favorite_book -- book
-  favorite_book -- library_user
+  favorite_book "0..*" -- "1" book
+  favorite_book "0..*" -- "1" library_user
+  
+  library_user "1" -- "0..*" book_request
+
 
   class library_user{
     id	[PK]
@@ -65,6 +68,8 @@ classDiagram
     year
     isbn
     topic
+    description
+    language
     deleted
   }
 
@@ -156,19 +161,6 @@ classDiagram
     favorited_at
   }
 
-
-
-    class topic {
-    topic [PK]
-  }
-
-  class recommendation{
-    id [PK]
-	  book [FK]
-	  library_user [FK]
-	  recommendation
-  }
-
   class book_request {
     id [PK]
     userId [FK]
@@ -182,7 +174,7 @@ classDiagram
 ```
 
 # Tables
-Updated: 11.10.2023
+Updated: 27.11.2023
 
 ##
 
@@ -198,7 +190,9 @@ Definition: A book that’s been registered to the library
 |                  | author            | Name of author                  | Varchar(250) | NOT NULL        |
 |                  | year             | Year published                    | Year | NOT NULL         |
 |                  | isbn              | The book's ISBN                  | Varchar(20)  | NOT NULL        |
-| not implemented                 | topic             | Books topic taken from Topic    | Varchar(50)  | FK              |
+|                  | topic             | Topic of the book               | Varchar(50)  |               |
+|                  | description       | Books topic taken from Topic    | TEXT         |            |
+|                  | language          | Languagecode of the book longuage   | Varchar(3)  |              |
 |                  | location          | Location of book                | Varchar(20)  | NOT NULL        |
 |                  | deleted    | Determines if book has been deleted      | Bit(1)                          |              |
 
@@ -285,7 +279,7 @@ Definition: A borrow card that shows if a book is borrowed, by who, and until wh
 ##
 
 ### Name: favorite_book
-Definition: Offices and locations
+Definition: User can mark the book as a favorite
 | Properties       | Name                         | Description                     | Type         | PK/FK/NOT NULL  |
 |------------------|------------------------------|---------------------------------|--------------|-----------------|
 |                  | id                           |                                 | Integer      | PK              |
@@ -316,94 +310,3 @@ Definition: A user of the software
 |                  | administrator    | Determines admin status      | Bit(1)                          |              |
 |                  | deleted    | Determines if user has been deleted      | Bit(1)                          |              |
 
-##
-
-## not implemented
-
-### Name: topic (not implemented)
-Definition: Contains topics for books.
-
-| Properties       | Name              | Description                    | Type         | PK/FK/NOT NULL |
-|------------------|-------------------|--------------------------------|--------------|-----------------|
-|                  | topic             | Topic names for books           | Varchar(50)  | PK              |
-
-##
-
-### Name: keyword (not implemented)
-Definition: Table contains a list of keywords that books can be labeled with. Useful for keyword searches.
-
-| Properties | Name    | Description                     | Type        | PK/FK/NOT NULL |
-| ---------- | ------- | ------------------------------- | ----------- | -------------- |
-|            | keyword | The keyword to label books with | Varchar(30) | PK             |
-
-##
-
-### Name: book_keyword (not implemented)
-Definition: Helper table that binds keywords to books.
-
-| Properties | Name    | Description                        | Type        | PK/FK/NOT NULL |
-| ---------- | ------- | ---------------------------------- | ----------- | -------------- |
-|            | id      |                                    | Integer     | PK             |
-|            | book    | id of a book taken from Book table | Integer     | FK             |
-|            | keyword | keyword taken from Keyword table   | Varchar(30) | FK             |
-
-##
-
-### Name: recommendation (not implemented)
-Definition: A recommendation that is given to a book by a user.
-
-
-| Properties | Name           | Description                                | Type    | PK/FK/NOT NULL |
-| ---------- | -------------- | ------------------------------------------ | ------- | -------------- |
-|            | id             |                                            | Integer | PK             |
-|            | book           | id of the book that’s being rated          | Integer | FK             |
-|            | library_user   | id of user who is doing the recommendation | Integer | FK             |
-|            | recommendation | Is the book recommended or not             | Bit(1)  | NOT NULL       |
-
-##
-
-### CREATE TABLE Queries
-Not updated
-
-```sql
-CREATE TABLE book (
-  id INTEGER PRIMARY KEY,
-  library_user INTEGER NOT NULL,
-  topic VARCHAR(50) NOT NULL,
-  title VARCHAR(250) NOT NULL,
-  author VARCHAR(250) NOT NULL,
-  isbn VARCHAR(20) NOT NULL,
-  location VARCHAR(20) NOT NULL
-);
-
-CREATE TABLE library_user (
-  id INTEGER PRIMARY KEY,
-  username VARCHAR(50) NOT NULL,
-  passw VARCHAR(150) NOT NULL,
-  administrator BOOLEAN
-);
-
-ALTER TABLE library_user ADD CONSTRAINT UQ_libary_user_username UNIQUE(username);
-ALTER TABLE book ADD CONSTRAINT FK_book_library_user FOREIGN KEY(library_user) REFERENCES library_user(id)
-```
-
-### INSERT INTO Queries
-
-```sql
-INSERT INTO library_user VALUES (
-  1, "mikkomallikas", "1234", TRUE
-);
-
-INSERT INTO book VALUES (
-  1, 1, "JS", "JS For Dummies", "JS Teacher", "12345-67-89", "MERICA"
-);
-```
-
-### DROP TABLE Queries
-
-```sql
-DROP TABLE book;
-DROP TABLE library_user;
-```
-
-```

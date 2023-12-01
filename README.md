@@ -1,4 +1,4 @@
-# library-project-backend
+ # library-project-backend
 
 ## Installing the project
 
@@ -8,16 +8,25 @@ Clone the repository on your computer. Detailed instructions can be found [here]
 
 ## Environment variables
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. You will not need this if you're using docker-compose. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable.
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. Make sure backeend and frontend are using different ports.
 
 Here's an example of a .env file you can use:
 
 ```env
-    DATABASE_SERVER=localhost
-    DATABASE_NAME=efilibrarydb
-    DATABASE_USER=root
-    DATABASE_PASSWORD=admin <<< This should be whatever your root password is
-    PORT=3002
+#Backend
+DATABASE_SERVER=
+DATABASE_NAME=
+DATABASE_USER=
+DATABASE_PASSWORD=
+OIDC_AUTH_BACKLINK_URL=
+OIDC_AUTH_REDIRECT_URL=
+BACKEND_PORT=
+#MySQL
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_ROOT_PASSWORD=
+MYSQL_PORT=
 ```
 
 # How to run
@@ -26,31 +35,26 @@ You will need to run the backend application and the database. You can have them
 
 ## Using docker-compose
 
-Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder. [docker-compose-test.yml](docker-compose-test.yml) also contains the database credentials for local development as environment variables. These must only be used for local development.
+Database initialization is handled automatically on creation using the _\*.sql_ files in the [/sql](./sql/) folder.
 
-If you have Windows, make sure you have Docker Desktop running before running the command.
+If you have Windows, make sure you have Docker Desktop running before running the command. https://www.docker.com/products/docker-desktop/
 
+### For development
+
+```
+docker-compose -f docker-compose-dev.yml up -d
+```
+### For staging
+
+```
+docker-compose -f docker-compose-staging.yml up -d
+```
+### For tests
 ```
 docker-compose -f docker-compose-test.yml up -d
 ```
 
 The -f flag specifies the file since there are different ones. The -d flag (detach) runs the container in the background allowing you to close the terminal without killing the process.
-
-## Creating the database separately
-
-Having the database and the node project separately is more convenient if you want to make changes to the code.
-
-### Setting up the local database
-
-You can use Docker to create the MariaDB container:
-
-```cmd
-docker run -d --name efilibrary-mariadb -p "3306:3306" --env MARIADB_ROOT_PASSWORD=admin --volume efilbirary-mariadb-data:/var/lib/mysql mariadb:latest
-```
-
-Each time you start up the project, you can just start the existing container, you don't have to create a new database every time.
-
-Once you have the database up and running, you need to execute the scripts in the [/sql](./sql/) folder. [Here's a video](https://youtu.be/POcHaIwmAhw) on how to do it in MySQL Workbench, but you can also use DataGrip or another database explorer.
 
 ### Running the node project
 
@@ -182,35 +186,14 @@ On Fail Response schema:
 
 </Details>
 
-## Book List Entry
+## Book
 
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
-    
-### /booklistentry/all (GET)
-On Success Response schema:
-```JSON
-[
-  {
-    "id": number,
-    "list": number,
-    "book": number
-  }
-]
-```
 
-On Fail Response schema:
-
-```JSON
-{
-  "ok": false,
-  "status": 500
-}
-```
-
-### /booklistentry/list?id={id} (GET)
+### /book/all (GET)
 
 On Success Response schema:
 
@@ -218,90 +201,140 @@ On Success Response schema:
 [
   {
     "id": number,
-    "list": number,
-    "book": number
+    "library_user": number,
+    "title": string,
+    "image": string,
+    "author": string,
+    "year": number,
+    "topic": string,
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
   }
 ]
 ```
 
-On Fail Response schema:
+### /book/page?page={page}&pageSize={pageSize} (GET)
+
+pageSize is optional
+
+On Success Response schema:
 
 ```JSON
-{
-  "ok": false,
-  "status": 500
-}
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "image": string,
+    "author": string,
+    "year": number,
+    "topic": string,
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
+  }
+]
 ```
 
-### /booklistentry?id={id} (GET)
+### /book/count (GET)
+
+On Success Response schema:
+
+```JSON
+number
+```
+
+### /book?id={id} (GET)
 
 On Success Response schema:
 
 ```JSON
 {
   "id": number,
-  "list": number,
-  "book": number
+  "library_user": number,
+  "title": string,
+  "image": string,
+  "author": string,
+  "year": number,
+  "topic": string,
+  "isbn": string,
+  "deleted": boolean,
+  "homeOfficeId": number,
+  "homeOfficeName": string,
+  "homeOfficeCountry": string
 }
 ```
 
-On Fail Response schema:
+### /book?id={id} (DELETE)
+
+On Success Response schema:
 
 ```JSON
 {
-  "ok": false,
-  "status": 500
+  "id": number,
 }
 ```
 
-### /booklistentry (POST)
+### /book (POST)
 
 Body:
 
 ```JSON
 {
-  "list": number,
-  "book": number
+  "library_user": number,
+  "title": string,
+  "image": string,
+  "author": string,
+  "year": number,
+  "isbn": string,
+  "topic": string,
+  "homeOfficeId": string
 }
 ```
 
-On Fail Response schema:
-
-```JSON
-{
-  "ok": false,
-  "status": 500
-}
-```
-
-### /booklistentry (DELETE)
+### /book (PUT)
 
 Body:
 
 ```JSON
 {
-  "id": number
+  "id": number,
+  "title": string,
+  "image": string,
+  "author": string,
+  "year": number,
+  "isbn": string,
+  "topic": string,
+  "homeOfficeId": string,
 }
 ```
 
-On Fail Response schema:
+### /book/all/reserved (GET)
+
+On Success Response schema:
 
 ```JSON
-{
-  "ok": false,
-  "status": 500
-}
-```
-
-### /booklistentry/book (DELETE)
-
-Body:
-
-```JSON
-{
-  "listId": number,
-  "bookId": number
-}
+[
+  {
+    "id": number,
+    "library_user": number,
+    "title": string,
+    "image": string,
+    "author": string,
+    "year": number,
+    "topic": string,
+    "isbn": string,
+    "deleted": boolean,
+    "homeOfficeId": number,
+    "homeOfficeName": string,
+    "homeOfficeCountry": string
+  }
+]
 ```
 
 </Details>
@@ -473,6 +506,134 @@ On Fail Response schema:
 ```
 
 </Details>
+
+
+
+## Book List Entry
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+    
+### /booklistentry/all (GET)
+On Success Response schema:
+```JSON
+[
+  {
+    "id": number,
+    "list": number,
+    "book": number
+  }
+]
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry/list?id={id} (GET)
+
+On Success Response schema:
+
+```JSON
+[
+  {
+    "id": number,
+    "list": number,
+    "book": number
+  }
+]
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry?id={id} (GET)
+
+On Success Response schema:
+
+```JSON
+{
+  "id": number,
+  "list": number,
+  "book": number
+}
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry (POST)
+
+Body:
+
+```JSON
+{
+  "list": number,
+  "book": number
+}
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry (DELETE)
+
+Body:
+
+```JSON
+{
+  "id": number
+}
+```
+
+On Fail Response schema:
+
+```JSON
+{
+  "ok": false,
+  "status": 500
+}
+```
+
+### /booklistentry/book (DELETE)
+
+Body:
+
+```JSON
+{
+  "listId": number,
+  "bookId": number
+}
+```
+
+</Details>
+
+
 
 ## Book Request
 
@@ -676,155 +837,108 @@ Body:
 
 </Details>
 
-## Book
+
+
+## BookReview
 
 <Details>
     <Summary>
         Show Endpoints
     </Summary>
 
-### /book/all (GET)
+### /review/all (GET)
 
 On Success Response schema:
 
 ```JSON
 [
-  {
-    "id": number,
-    "library_user": number,
-    "title": string,
-    "image": string,
-    "author": string,
-    "year": number,
-    "topic": string,
-    "isbn": string,
-    "deleted": boolean,
-    "homeOfficeId": number,
-    "homeOfficeName": string,
-    "homeOfficeCountry": string
-  }
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
 ]
 ```
 
-### /book/page?page={page}&pageSize={pageSize} (GET)
-
-pageSize is optional
-
-On Success Response schema:
-
-```JSON
-[
-  {
-    "id": number,
-    "library_user": number,
-    "title": string,
-    "image": string,
-    "author": string,
-    "year": number,
-    "topic": string,
-    "isbn": string,
-    "deleted": boolean,
-    "homeOfficeId": number,
-    "homeOfficeName": string,
-    "homeOfficeCountry": string
-  }
-]
-```
-
-### /book/count (GET)
-
-On Success Response schema:
-
-```JSON
-number
-```
-
-### /book?id={id} (GET)
-
-On Success Response schema:
-
-```JSON
-{
-  "id": number,
-  "library_user": number,
-  "title": string,
-  "image": string,
-  "author": string,
-  "year": number,
-  "topic": string,
-  "isbn": string,
-  "deleted": boolean,
-  "homeOfficeId": number,
-  "homeOfficeName": string,
-  "homeOfficeCountry": string
-}
-```
-
-### /book?id={id} (DELETE)
-
-On Success Response schema:
-
-```JSON
-{
-  "id": number,
-}
-```
-
-### /book (POST)
+### /review/book (GET)
 
 Body:
 
 ```JSON
 {
-  "userId": number,
-  "title": string,
-  "image": string,
-  "author": string,
-  "year": number,
-  "isbn": string,
-  "topic": string,
-  "homeOfficeId": string
+  "bookId": number
 }
 ```
-
-### /book (PUT)
-
-Body:
-
-```JSON
-{
-  "id": number,
-  "title": string,
-  "image": string,
-  "author": string,
-  "year": number,
-  "isbn": string,
-  "topic": string,
-  "homeOfficeId": string,
-}
-```
-
-### /book/all/reserved (GET)
 
 On Success Response schema:
 
 ```JSON
 [
-  {
-    "id": number,
-    "library_user": number,
-    "title": string,
-    "image": string,
-    "author": string,
-    "year": number,
-    "topic": string,
-    "isbn": string,
-    "deleted": boolean,
-    "homeOfficeId": number,
-    "homeOfficeName": string,
-    "homeOfficeCountry": string
-  }
+{
+        "id": number,
+        "user_id": number,
+        "book_id": number,
+        "comment": string,
+        "rating": number,
+        "review_date": Date
+}
 ]
+```
+
+### /review/average (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "averageRating": number
+}
+```
+
+
+### /review (DELETE)
+
+Body:
+
+```JSON
+{
+    "reviewId": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number,
+    "comment": string,
+    "rating": number
+}
+```
+
+### /review (POST)
+
+Body:
+
+```JSON
+{ 
+    "comment": string,
+    "rating": number,
+    "reviewId": number
+}
 ```
 
 </Details>
@@ -1024,6 +1138,73 @@ Body:
 
 </Details>
 
+
+## FavoriteBooks
+
+<Details>
+    <Summary>
+        Show Endpoints
+    </Summary>
+
+### /favorite/check (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "isFavorited": boolean
+}
+```
+
+### /favorite/count (GET)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+On Success Response schema:
+
+```JSON
+{
+    "count": number
+}
+```
+
+### /favorite (DELETE)
+
+Body:
+
+```JSON
+{
+  "bookId": number
+}
+```
+
+### /favorite (POST)
+
+Body:
+
+```JSON
+{
+    "bookId": number 
+}
+```
+
+</Details>
+
+
 ## Health
 
 <Details>
@@ -1161,6 +1342,7 @@ On Success Response schema:
   "username": string,
   "email": string,
   "administrator": boolean,
+  "deleted": boolean,
   "homeOfficeId?": number
   }
 ]
@@ -1207,191 +1389,25 @@ Body:
 
 Body:
 
-```JSON
-{
-  "username": string,
-  "email": string,
-  "password": string,
-  "administrator": boolean,
-  "deleted": boolean
-}
+```
+/user?username={username}&email={email}&password={password}&administrator={administrator}
 ```
 
-### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
+### /user (PUT)
 
-### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
-
-</Details>
-
-## FavoriteBooks
-
-<Details>
-    <Summary>
-        Show Endpoints
-    </Summary>
-
-### /favorite/check (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
+```
+/user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
 ```
 
-On Success Response schema:
+### /user (PUT)
 
-```JSON
-{
-    "isFavorited": boolean
-}
 ```
-
-### /favorite/count (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-{
-    "count": number
-}
-```
-
-### /favorite (DELETE)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-### /favorite (POST)
-
-Body:
-
-```JSON
-{
-    "bookId": number 
-}
+/user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
 ```
 
 </Details>
 
 
-## BookReview
-
-<Details>
-    <Summary>
-        Show Endpoints
-    </Summary>
-
-### /review/all (GET)
-
-On Success Response schema:
-
-```JSON
-[
-{
-        "id": number,
-        "user_id": number,
-        "book_id": number,
-        "comment": string,
-        "rating": number,
-        "review_date": Date
-}
-]
-```
-
-### /review/book (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-[
-{
-        "id": number,
-        "user_id": number,
-        "book_id": number,
-        "comment": string,
-        "rating": number,
-        "review_date": Date
-}
-]
-```
-
-### /review/average (GET)
-
-Body:
-
-```JSON
-{
-  "bookId": number
-}
-```
-
-On Success Response schema:
-
-```JSON
-{
-    "averageRating": number
-}
-```
-
-
-### /review (DELETE)
-
-Body:
-
-```JSON
-{
-    "reviewId": number
-}
-```
-
-### /review (POST)
-
-Body:
-
-```JSON
-{
-    "bookId": number,
-    "comment": string,
-    "rating": number
-}
-```
-
-### /review (POST)
-
-Body:
-
-```JSON
-{ 
-    "comment": string,
-    "rating": number,
-    "reviewId": number
-}
-```
-
-</Details>
 
 # Database Documentation
 

@@ -8,6 +8,7 @@ import {
   getAllReservedBooks,
   getAllBooksPaged,
   getCountOfAllBooks,
+  updateBooksOffice,
 } from '../queries/book'
 import Book from '../interfaces/book.interface'
 
@@ -127,5 +128,20 @@ router.get(
     }
   }
 )
+
+router.put('/', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { newOfficeId, oldOfficeId } = req.body
+
+    if (req.sessionUser.administrator) {
+      const ok = await updateBooksOffice(newOfficeId, oldOfficeId)
+      res.json({ ok })
+    } else {
+      res.status(403).json({ ok: false })
+    }
+  } catch (err) {
+    next(err)
+  }
+})
 
 export default router

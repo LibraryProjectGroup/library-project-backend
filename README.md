@@ -1342,6 +1342,7 @@ On Success Response schema:
   "username": string,
   "email": string,
   "administrator": boolean,
+  "deleted": boolean,
   "homeOfficeId?": number
   }
 ]
@@ -1388,19 +1389,21 @@ Body:
 
 Body:
 
-```JSON
-{
-  "username": string,
-  "email": string,
-  "password": string,
-  "administrator": boolean,
-  "deleted": boolean
-}
+```
+/user?username={username}&email={email}&password={password}&administrator={administrator}
 ```
 
-### /user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
+### /user (PUT)
 
-### /user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
+```
+/user?id={id}&username={username}&email={email}&password={password}&administrator={administrator} (PUT)
+```
+
+### /user (PUT)
+
+```
+/user/admin?id={id}&username={username}&email={email}&administrator={administrator} (PUT)
+```
 
 </Details>
 

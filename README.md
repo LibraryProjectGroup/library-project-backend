@@ -286,7 +286,7 @@ Body:
 
 ```JSON
 {
-  "userId": number,
+  "library_user": number,
   "title": string,
   "image": string,
   "author": string,

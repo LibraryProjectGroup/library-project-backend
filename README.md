@@ -8,7 +8,7 @@ Clone the repository on your computer. Detailed instructions can be found [here]
 
 ## Environment variables
 
-Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. Make sure backeend and frontend are using different ports.
+Database connection doesn't work without **.env** in **root** folder. .env is set to be ignored by git with .gitignore, so create one locally. By default the backend server will start on port 3000, which can be changed by setting `PORT` environment variable. Make sure backend and frontend are using different ports.
 
 Here's an example of a .env file you can use:
 
@@ -20,7 +20,7 @@ DATABASE_USER=
 DATABASE_PASSWORD=
 OIDC_AUTH_BACKLINK_URL=
 OIDC_AUTH_REDIRECT_URL=
-BACKEND_PORT=
+PORT=
 #MySQL
 MYSQL_DATABASE=
 MYSQL_USER=
@@ -67,7 +67,7 @@ Start the backend by running `npm start`.
 
 # Workflows
 
-There are two workflows files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
+There are two workflow files that run on this repository: [node.js.yml](/.github/workflows/node.js.yml) and [deploy-staging.yml](/.github/workflows/deploy-staging.yml).
 
 The Node.js CI workflow is designed to ensure code quality and functionality before changes are merged. It triggers on every push or when a pull request is made to `development`, `main`, or `s23-staging` branches. Here's a step-by-step breakdown of the workflow:
 
@@ -77,7 +77,7 @@ The Node.js CI workflow is designed to ensure code quality and functionality bef
 
 ## The Prettier workflow
 
-The Prettier workflow is setup in the code with Pretty-quick (https://github.com/azz/pretty-quick) and Husky (https://typicode.github.io/husky/) to ensure consistent formatting. Pretty-Quick checks formatting when a developer tries to commit to the repo, and fixes formatting using our prettier config (.prettierrc.json file in the root of the project). Husky ensures that the pre-commit checks works with a pre-commit hook. Make sure you have all dependencies installed by running: `npm install` before you start. In your code editor, you can also set prettier checks on save, which will help the process.
+The Prettier workflow is set up in the code with Pretty-quick (https://github.com/azz/pretty-quick) and Husky (https://typicode.github.io/husky/) to ensure consistent formatting. Pretty-Quick checks formatting when a developer tries to commit to the repo, and fixes formatting using our prettier config (.prettierrc.json file in the root of the project). Husky ensures that the pre-commit checks works with a pre-commit hook. Make sure you have all dependencies installed by running: `npm install` before you start. In your code editor, you can also set prettier checks on save, which will help the process.
 
 # Endpoints
 

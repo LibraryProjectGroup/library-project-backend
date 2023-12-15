@@ -70,7 +70,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json({
-        ok: await cancelReservation(req.body.bookId),
+        ok: await cancelReservation(req.body.reservationId),
       })
     } catch (err) {
       next(err)
@@ -83,7 +83,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.json({
-        ok: await loanReservation(req.body.bookId),
+        ok: await loanReservation(req.body.reservationId),
       })
     } catch (err) {
       next(err)

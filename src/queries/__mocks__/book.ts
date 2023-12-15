@@ -70,7 +70,7 @@ let book4: Book = {
   deleted: false,
 }
 
-let mockBookData = [book1, book2, book3, book4]
+export let mockBookData = [book1, book2, book3, book4]
 let idCounter = 4
 
 const getBook = (id: number) => {
@@ -82,11 +82,11 @@ const getBook = (id: number) => {
   return null
 }
 
-export const querySelectBook = async (bookId: number): Promise<Book | null> => {
+export const getBookById = async (bookId: number): Promise<Book | null> => {
   return getBook(bookId)
 }
 
-export const querySelectAllBooks = async (): Promise<Book[]> => {
+export const getAllExistingBooks = async (): Promise<Book[]> => {
   let array: Array<Book> = []
   mockBookData.forEach((element) => {
     if (!element.deleted) {
@@ -95,11 +95,19 @@ export const querySelectAllBooks = async (): Promise<Book[]> => {
   })
   return array as Array<Book>
 }
-export const querySelectAllExistingBooks = async (): Promise<Book[]> => {
+export const getAllBooks = async (): Promise<Book[]> => {
   return mockBookData as Array<Book>
 }
 
-export const queryHardDeleteBook = async (bookId: number): Promise<boolean> => {
+export const getCountOfAllBooks = async (): Promise<number> => {
+  let count = 0
+  for (let index = 0; index < mockBookData.length; index++) {
+    count++
+  }
+  return count
+}
+
+export const deleteBook = async (bookId: number): Promise<boolean> => {
   let deleted = false
   mockBookData = mockBookData.filter((book) => {
     if (book.id == bookId) deleted = true
@@ -108,7 +116,7 @@ export const queryHardDeleteBook = async (bookId: number): Promise<boolean> => {
   return deleted
 }
 
-export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
+export const markBookAsDeleted = async (bookId: number): Promise<boolean> => {
   const book = getBook(bookId)
   if (book) {
     book.deleted = true
@@ -117,7 +125,7 @@ export const querySoftDeleteBook = async (bookId: number): Promise<boolean> => {
   return false
 }
 
-export const queryInsertBook = async (
+export const insertNewBook = async (
   userId: number,
   title: string,
   image: string,
@@ -150,7 +158,7 @@ export const queryInsertBook = async (
   return true
 }
 
-export const queryUpdateBook = async (book: Book): Promise<boolean> => {
+export const updateBook = async (book: Book): Promise<boolean> => {
   const editedBook = getBook(book.id)
   if (editedBook) {
     editedBook.title = book.title
